@@ -98,9 +98,88 @@ class AuthController extends Controller
     
     }
     
+    public function edit(Request $request) {
+       try {
+        //code...
+       $input = $request->all();
+       $validator = Validator::make($input, [
+        'nom' => 'string',
+        'prenom' => 'string',
+        'ville' => 'string',
+        'date_naissance' => 'string',
+        'numero_tel' => 'string',
+        'type_compte' => 'string', 
+        'photo' => 'nullable|string',
+       ]);
+       if ($validator->fails()) {
+        # code...
+        return response()->json([
+            "status"=>false,
+            "message"=>"Erreur de Validation",
+            "errors"=> $validator->errors(),  
+        ], 422);
 
+       }
+       $request->user()->update($input);
+       return response()->json([
+        "status"=>true,
+        "message"=>"Utilisateur Modifier avec succès.",
+        "errors"=> $request->user(),  
+       ]);
+       } catch (\Throwable $th) {
+        //throw $th;
+        return response()->json([
+            "status"=>false,
+            "message"=>$th->getMessage(),
+      
+        ], 500,);
+       }
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validation de l'image
+        ]);
+
+        if ($request->hasFile('photo')) {
+            $image = $request->file('photo');
+            $imageData = base64_encode(file_get_contents($image)); // Encodage de l'image en base64
+
+            $user = new User();
+            $user->photo = $imageData;
+            $user->save();
+
+            return response()->json(['success' => 'Image téléchargée avec succès et enregistrée en base de données.']);
+        }
+
+        return response()->json(['error' => 'Une erreur s\'est produite lors du téléchargement de l\'image.']);
+    }
+
+    public function getUserDetails()
+    {
+        // Récupérer l'utilisateur actuellement authentifié ou tout autre utilisateur dont vous avez besoin les détails
+        $user = auth()->user();
+    
+        // Vérifier si l'utilisateur existe
+        if ($user) {
+            // Retourner les détails de l'utilisateur
+            return response()->json([
+                'prenom' => $user->firstName,
+                'nom' => $user->lastName,
+                'numero_tel' => $user->phoneNumber,
+                'date_naissance' => $user->dateOfBirth,
+                'ville' => $user->residence,
+                'type_compte' => $user->accountType,
+            ]);
+        } else {
+            // Retourner une réponse indiquant que l'utilisateur n'est pas trouvé
+            return response()->json(['message' => 'Utilisateur non trouvé'], 404);
+        }
+    }
+    
     public function who(Request $request) {
-        return response()->json([Auth::user()]);
+        return response()->json(Auth::user());
     }
 
     public function checkPhoneNumber(Request $request)

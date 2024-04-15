@@ -17,11 +17,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+    
 });
 
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('/who',[AuthController::class,'who']);
+    Route::put('/edit-profil',  [AuthController::class, 'edit']);
+    Route::put('/photoImport',  [AuthController::class, 'store']);
+    Route::get('/getUser',  [AuthController::class, 'getUserDetails']);
+   
 });
 
 Route::post('/register', [AuthController::class,'register']);
@@ -30,4 +35,3 @@ Route::post('/checkPhoneNumber', [AuthController::class, 'checkPhoneNumber']);
 Route::post('/savetoken',  [AuthController::class, 'saveToken']);
 
 
-Route::post('/verifyotp', [AuthController::class,'verifyOtp']);
