@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\AuthAdminController;
 use App\Http\Controllers\Admin\ProfilController;
+use App\Http\Controllers\Admin\UtilisateurController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,10 +70,19 @@ Route::get('/supper_admin/camions/en_attent', [PageController::class, 'en_attent
 // Affichage des pages Chats
 // Route pour afficher la page chat Chargeur 
 Route::get('/supper_admin/chats/chargeur', [PageController::class, 'chat_chargeur'])->name('chats.chargeur');
+// Route pour enregistrer de nouvel fret
+Route::post('/supper_admin/chats/chargeur/enregistrer', [UtilisateurController::class, 'fret_enregister'])->name('fret.enregister');
 
 
+// Route de la page Gestion des demandes
 // Route pour afficher la page de Gestion des demandes
 Route::get('/supper_admin/gestion_demande', [PageController::class, 'gestion_demande'])->name('gestion_demande');
+// Route pour afficher la page de Gestion des frets
+Route::get('/supper_admin/gestion_fret', [PageController::class, 'gestion_fret'])->name('gestion_fret');
+// Route pour afficher la page des frets disponibles
+Route::get('/supper_admin/fret_diponible', [PageController::class, 'fret_diponible'])->name('fret_diponible');
+// Route pour enregistrer une demande de fret
+Route::post('/supper_admin/gestion_fret/demande', [UtilisateurController::class, 'demande'])->name('demande');
 
 
 // Route pour afficher la page du Traking 

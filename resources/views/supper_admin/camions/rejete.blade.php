@@ -54,8 +54,8 @@
                                                      <span class="badge bg-label-danger me-1">Rejeté</span>
                                                    </td>
                                                    <td>
-                                                      <a href="#" class="btn btn-primary">Voir <span class="tf-icon bx bx-plus bx-xs me-1"></span></a>
-                                                   </td>
+                                                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#plusModal">Voir <span class="tf-icon bx bx-plus bx-xs me-1"></span></a>
+                                                  </td>
                                                  </tr>
                                              </tbody>
                                          </table>

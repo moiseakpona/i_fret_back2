@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,3 +32,13 @@ Route::post('/savetoken',  [AuthController::class, 'saveToken']);
 
 
 Route::post('/verifyotp', [AuthController::class,'verifyOtp']);
+
+
+
+Route::middleware('auth:api')->group(function () {
+    Route::put('/update_user_api', [UserController::class, 'update']);
+
+    // Endpoint pour récupérer les informations de l'utilisateur connecté
+    Route::get('/utilisateur', [UserController::class, 'getUtilisateur']);
+});
+

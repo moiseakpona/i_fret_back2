@@ -12,6 +12,25 @@
                   <div class="container-xxl flex-grow-1 container-p-y">
 
 
+                  @if (session()->has('message'))
+                     <div class="alert alert-success">
+                        <button type="button" class="close" data-dismiss="alert">
+                           ×
+                        </button>
+                        {{session()->get('message')}}
+                     </div> 
+                  @endif
+
+                  @if (session()->has('error'))
+                     <div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert">
+                           ×
+                        </button>
+                        {{session()->get('error')}}
+                     </div> 
+                  @endif
+
+
                      <div class="container-xxl flex-grow-1 container-p-y">
                         <div class="app-chat overflow-hidden card">
                            <div class="row g-0">
@@ -164,11 +183,7 @@
                                                 <i class="bx bx-dots-vertical-rounded fs-4"></i>
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="chat-header-actions">
-                                                   <a class="dropdown-item" href="javascript:void(0);">View Contact</a>
-                                                   <a class="dropdown-item" href="javascript:void(0);">Mute Notifications</a>
-                                                   <a class="dropdown-item" href="javascript:void(0);">Block Contact</a>
-                                                   <a class="dropdown-item" href="javascript:void(0);">Clear Chat</a>
-                                                   <a class="dropdown-item" href="javascript:void(0);">Report</a>
+                                                   <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#exampleModal">Ajouter fret</a>
                                                 </div>
                                              </div>
                                           </div>
@@ -298,6 +313,84 @@
                            </div>
                         </div>
                      </div>
+
+
+
+
+
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                     <div class="modal-dialog">
+                       <div class="modal-content">
+                         <div class="modal-header">
+                           <h5 class="modal-title" id="exampleModalLabel">Formulaire d'ajout de fret</h5>
+                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                         </div>
+
+                         <form class="form-repeater" method="POST" action="{{ route('fret.enregister') }}">
+                           @csrf
+
+                         <div class="modal-body">
+                               <div data-repeater-list="group-a">
+                                 <div data-repeater-item>
+
+                                    <div class="row mb-3 mt-3">
+                                       <div class="col">
+                                         <label for="description" class="form-label">Description du fret</label>
+                                         <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                                       </div>
+                                     </div>
+ 
+                                   <div class="row mb-3">
+                                     <div class="col">
+                                       <label for="lieu_depart" class="form-label"> Lieu de depart </label>
+                                       <select class="form-select" id="lieu_depart" name="lieu_depart">
+                                         <option selected disabled>Select City</option>
+                                         <option value="Cotonou">Cotonou</option>
+                                         <option value="Porto-Novo">Porto-Novo</option>
+                                         <option value="Parakou">Parakou</option>
+                                         <option value="Abomey-Calavi">Abomey-Calavi</option>
+                                       </select>
+                                     </div>
+
+                                     <div class="col">
+                                       <label for="lieu_arrive" class="form-label">Lieu d'arrivée</label>
+                                       <select class="form-select" id="lieu_arrive" name="lieu_arrive">
+                                         <option selected disabled>Select City</option>
+                                         <option value="Cotonou">Cotonou</option>
+                                         <option value="Porto-Novo">Porto-Novo</option>
+                                         <option value="Parakou">Parakou</option>
+                                         <option value="Abomey-Calavi">Abomey-Calavi</option>
+                                       </select>
+                                     </div>
+                                   </div>
+ 
+                                   <div class="row mb-3">
+                                     <div class="col">
+                                       <label for="montant" class="form-label">Montant (F CFA)</label>
+                                       <input type="number" class="form-control" id="montant" name="montant" placeholder="1 000 000">
+                                     </div>
+                                     <div class="col">
+                                     </div>
+                                   </div>  
+ 
+                                 </div>
+                               </div>
+
+                         </div>
+                         <div class="modal-footer">
+                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                           <button type="submit" class="btn btn-primary">Enregistrer</button>
+                         </div>
+                        </form> 
+                       </div>
+                     </div>
+                   </div>
+                  <!--/ Modal -->
+ 
+
+
 
 
                   </div>

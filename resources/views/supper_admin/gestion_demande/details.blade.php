@@ -12,8 +12,8 @@
                   <div class="container-xxl flex-grow-1 container-p-y">
                     
                      <h4 class="py-3 mb-4">
-                        <span class="text-muted fw-light">Gestion des demandes /</span> Details
-                        <a href="{{ route('gestion_demande')}}" class="btn btn-primary float-end">< Retour</a>
+                        <span class="text-muted fw-light">Gestion frets /</span> Details
+                        <a href="{{ route('gestion_fret')}}" class="btn btn-primary float-end">< Retour</a>
                      </h4>
 
 
@@ -111,45 +111,52 @@
                             <tbody>
                               <tr>
                                 <div class="mb-3">
-                                  <td><label for="truckBrand" style="font-weight: 600; ">Photo camion</label></td> 
-                                  <td><span id="truckBrand" style="font-weight: 600; color:green;">h5kjc8khkh687jd</span></td> 
-                                </div>
-                              </tr>
-                              <tr>
-                                <div class="mb-3">
-                                  <td><label for="truckBrand" style="font-weight: 600">Carte grise</label></td>
-                                  <td><span id="truckBrand" style="font-weight: 600; color:green;">h5kjc8khkh687jd</span></td>
-                                </div>
-                              </tr>
-                              <tr>
-                                <div class="mb-3">
                                   <td><label for="truckBrand" style="font-weight: 600">Modèle</label></td>
                                   <td><span id="truckBrand" style="font-weight: 600; color:green;">Fourgonnette 0 - 10 Tonnes</span></td>
+                                  <td></td>
                                 </div>
                               </tr>
                               <tr>
                                 <div class="mb-3">
-                                  <td><label for="truckBrand" style="font-weight: 600; ">Numéro de plaque</label></td> 
-                                  <td><span id="truckBrand" style="font-weight: 600; color:green;">DC 3467</span></td> 
-                                </div>
-                              </tr>
-                              <tr>
-                                <div class="mb-3">
-                                  <td><label for="truckBrand" style="font-weight: 600">Visite Technique</label></td>
-                                  <td><a href="#"><span id="truckBrand" style="font-weight: 600; color:green;">h5kjc8khkh687jd</span></a></td>
-                                </div>
-                              </tr>
-                              <tr>
-                                <div class="mb-3">
-                                  <td><label for="truckBrand" style="font-weight: 600">Assurance</label></td>
-                                  <td><a href="#"><span id="truckBrand" style="font-weight: 600; color:red;">h5kjc8khkh687jd</span></a></td>
+                                  <td><label for="truckBrand" style="font-weight: 600; ">Numéro Matricule</label></td> 
+                                  <td><span id="truckBrand" style="font-weight: 600; color:green;">DC 3467</span></td>
+                                  <td></td>
                                 </div>
                               </tr>
                               <tr>
                                 <div class="mb-3">
                                   <td><label for="truckBrand" style="font-weight: 600; ">Localisation du véhicule</label></td> 
-                                  <td><span id="truckBrand" style="font-weight: 600; color:green;">Dassa</span></td> 
+                                  <td><span id="truckBrand" style="font-weight: 600; color:green;">Dassa</span></td>
+                                  <td></td>
                                 </div>
+                              </tr>
+                              <tr>
+                                <td>Photo du véhicule</td>
+                                <td><a href="{{ asset('images/Fadil_page-0001.jpg') }}" target="_blank">Avec php récupérer le nom du fichier dans la base de données</a></td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td>Carte Grise</td>
+                                <td><a href="{{ asset('images/1.pdf') }}" target="_blank">Avec php récupérer le nom du fichier dans la base de données</a></td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td>Visite Technique</td>
+                                <td><a href="{{ asset('images/1.pdf') }}" target="_blank">Avec php récupérer le nom du fichier dans la base de données</a></td>
+                                <td>
+                                   
+                                  <label for="date">Date d'expiration :</label>
+                                  <input class="form-control" type="date" id="date" name="date">
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Assurance</td>
+                                <td><a href="{{ asset('images/1.pdf') }}" target="_blank">Avec php récupérer le nom du fichier dans la base de données</a></td>
+                                <td>
+                                   
+                                  <label for="date">Date d'expiration :</label>
+                                  <input class="form-control" type="date" id="date" name="date">
+                                </td>
                               </tr>
                             </tbody>
                           </table>
@@ -166,14 +173,8 @@
                             <tbody>
                               <tr>
                                 <div class="mb-3">
-                                  <td><label for="truckBrand" style="font-weight: 600; ">Nom</label></td> 
-                                  <td><span id="truckBrand" style="font-weight: 600; color:green;">MOUTAKILOU</span></td> 
-                                </div>
-                              </tr>
-                              <tr>
-                                <div class="mb-3">
-                                  <td><label for="truckBrand" style="font-weight: 600">Prénom</label></td>
-                                  <td><span id="truckBrand" style="font-weight: 600; color:green;">Walide</span></td>
+                                  <td><label for="truckBrand" style="font-weight: 600; ">Profil :</label></td> 
+                                  <td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2"><img src="../../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle"></div></div><div class="d-flex flex-column"><a href="{{ route('utilisateurs.details_transporteur') }}" spellcheck="false"><span class="fw-medium">Yank Luddy</span></a><small class="text-muted">Transporteur</small></div></div></td> 
                                 </div>
                               </tr>
                               <tr>
@@ -197,14 +198,8 @@
                             <tbody>
                               <tr>
                                 <div class="mb-3">
-                                  <td><label for="truckBrand" style="font-weight: 600; ">Nom</label></td> 
-                                  <td><span id="truckBrand" style="font-weight: 600; color:green;">MOUTAKILOU</span></td> 
-                                </div>
-                              </tr>
-                              <tr>
-                                <div class="mb-3">
-                                  <td><label for="truckBrand" style="font-weight: 600">Prénom</label></td>
-                                  <td><span id="truckBrand" style="font-weight: 600; color:green;">Walide</span></td>
+                                  <td><label for="truckBrand" style="font-weight: 600; ">Profil :</label></td> 
+                                      <td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2"><img src="../../assets/img/avatars/17.png" alt="Avatar" class="rounded-circle"></div></div><div class="d-flex flex-column"><a href="{{ route('utilisateurs.details_chauffeur') }}" spellcheck="false"><span class="fw-medium">Yank Luddy</span></a><small class="text-muted">Chauffeur</small></div></div></td> 
                                 </div>
                               </tr>
                               <tr>
@@ -221,8 +216,8 @@
                               </tr>
                               <tr>
                                 <div class="mb-3">
-                                  <td><label for="truckBrand" style="font-weight: 600">Permis de conduire</label></td>
-                                  <td><span id="truckBrand" style="font-weight: 600; color:green;">h5kjc8khkh687jd</span></td>
+                                  <td><label for="truckBrand" style="font-weight: 600">Fichier</label></td>
+                                  <td><a href="{{ asset('images/Fadil_page-0001.jpg') }}" target="_blank">Avec php récupérer le nom du fichier dans la base de données</a></td>
                                 </div>
                               </tr>
                             </tbody>

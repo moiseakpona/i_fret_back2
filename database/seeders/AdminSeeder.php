@@ -20,7 +20,7 @@ class AdminSeeder extends Seeder
             'prenom' => 'Harouna',
             'ville' => 'Cotonou',
             'date_naissance' => '30/03/1995',
-            'numero_tel' => '90270469',
+            'numero_tel' => '+22990270469',
             'email' => 'contact@group-ilt.com',
             'password' => Hash::make('@Admin_ILT_2024'),
             'type_compte' => 'Admin',

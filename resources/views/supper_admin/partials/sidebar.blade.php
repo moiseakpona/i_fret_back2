@@ -212,10 +212,10 @@
         </ul>
       </li>
 
-      <li class="menu-item {{ Request::is('supper_admin/gestion_demande') ? 'active' : '' }} {{ Request::is('supper_admin/gestion_demande/details') ? 'active open' : '' }}">
+      <li class="menu-item {{ Request::is('supper_admin/gestion_demande') ? 'active' : '' }} {{ Request::is('supper_admin/gestion_demande/details') ? 'active open' : '' }} {{ Request::is('supper_admin/gestion_fret') ? 'active open' : '' }} {{ Request::is('supper_admin/fret_diponible') ? 'active open' : '' }}">
         <a href="{{ route('gestion_demande') }}" class="menu-link">
           <i class="menu-icon tf-icons bx bx-food-menu"></i>
-          <div class="text-truncate" data-i18n="Gestion demande">Gestion demande</div>
+          <div class="text-truncate" data-i18n="Gestion">Gestion</div>
         </a>
         <ul class="menu-sub">
         </ul>
