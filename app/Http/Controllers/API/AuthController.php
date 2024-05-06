@@ -83,6 +83,32 @@ class AuthController extends Controller
         ], 201);
     }
 
+    public function EnregistrementCamion(Request $request)
+    {
+        // Valider les données envoyées par la requête
+        $validatedData = $request->validate([
+            'matricule' => 'required|string',
+            'photo_camion' => 'required|image', // Exemple pour un fichier image
+            'carte_grise' => 'required|image',
+            'visite_technique' => 'required|image',
+            'assurance' => 'required|image',
+        ]);
+
+        // Enregistrer les données dans la base de données
+        $enregistrement = new Enregistrement();
+        $enregistrement->matricule = $validatedData['matricule'];
+
+        // Enregistrer les fichiers
+        $enregistrement->photo_camion = $request->file('photo_camion')->EnregistrementCamion('photos');
+        $enregistrement->carte_grise = $request->file('carte_grise')->EnregistrementCamion('documents');
+        $enregistrement->visite_technique = $request->file('visite_technique')->EnregistrementCamion('documents');
+        $enregistrement->assurance = $request->file('assurance')->EnregistrementCamion('documents');
+
+        $enregistrement->save();
+
+        return response()->json(['message' => 'Enregistrement réussi'], 201);
+    }
+
     public function login(Request $request) {
         
     
@@ -141,20 +167,27 @@ class AuthController extends Controller
         $request->validate([
             'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validation de l'image
         ]);
-
-        if ($request->hasFile('photo')) {
-            $image = $request->file('photo');
-            $imageData = base64_encode(file_get_contents($image)); // Encodage de l'image en base64
-
-            $user = new User();
-            $user->photo = $imageData;
-            $user->save();
-
-            return response()->json(['success' => 'Image téléchargée avec succès et enregistrée en base de données.']);
+    
+        try {
+            if ($request->hasFile('photo')) {
+                $image = $request->file('photo');
+                $imageName = time().'.'.$image->getClientOriginalExtension(); // Génération d'un nom de fichier unique
+                $image->move(public_path('images'), $imageName); // Déplacement de l'image vers le répertoire de destination
+    
+                // Enregistrement du chemin de l'image en base de données
+                $user = new User();
+                $user->photo = '/images/'.$imageName; // Chemin relatif vers l'image
+                $user->save();
+    
+                return response()->json(['success' => 'Image téléchargée avec succès et enregistrée en base de données.']);
+            } else {
+                return response()->json(['error' => 'Aucune image n\'a été téléchargée.'], 400);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Une erreur s\'est produite lors du téléchargement de l\'image.'], 500);
         }
-
-        return response()->json(['error' => 'Une erreur s\'est produite lors du téléchargement de l\'image.']);
     }
+    
 
     public function getUserDetails()
     {

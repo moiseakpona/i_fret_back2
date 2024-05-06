@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 use App\Http\Controllers\API\AuthController;
 use Illuminate\Http\Request;
@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function(){
 });
 
 Route::post('/register', [AuthController::class,'register']);
+Route::post('/enregistrementCamion', [AuthController::class,'EnregistrementCamion']);
 Route::post('/login', [AuthController::class,'login']);
 Route::post('/checkPhoneNumber', [AuthController::class, 'checkPhoneNumber']);
 Route::post('/savetoken',  [AuthController::class, 'saveToken']);
