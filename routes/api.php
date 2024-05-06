@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\UserController;
@@ -18,27 +18,23 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+    
 });
 
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('/who',[AuthController::class,'who']);
+    Route::put('/edit-profil',  [AuthController::class, 'edit']);
+    Route::put('/photoImport',  [AuthController::class, 'store']);
+    Route::get('/getUser',  [AuthController::class, 'getUserDetails']);
+   
 });
 
 Route::post('/register', [AuthController::class,'register']);
+Route::post('/enregistrementCamion', [AuthController::class,'EnregistrementCamion']);
 Route::post('/login', [AuthController::class,'login']);
 Route::post('/checkPhoneNumber', [AuthController::class, 'checkPhoneNumber']);
 Route::post('/savetoken',  [AuthController::class, 'saveToken']);
 
 
 Route::post('/verifyotp', [AuthController::class,'verifyOtp']);
-
-
-
-Route::middleware('auth:api')->group(function () {
-    Route::put('/update_user_api', [UserController::class, 'update']);
-
-    // Endpoint pour récupérer les informations de l'utilisateur connecté
-    Route::get('/utilisateur', [UserController::class, 'getUtilisateur']);
-});
-
