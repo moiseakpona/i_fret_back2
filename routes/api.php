@@ -27,11 +27,12 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::put('/edit-profil',  [AuthController::class, 'edit']);
     Route::put('/photoImport',  [AuthController::class, 'store']);
     Route::get('/getUser',  [AuthController::class, 'getUserDetails']);
+    Route::post('/enregistrementCamion', [AuthController::class,'enregistrerCamion']);
    
 });
 
 Route::post('/register', [AuthController::class,'register']);
-Route::post('/enregistrementCamion', [AuthController::class,'EnregistrementCamion']);
+
 Route::post('/login', [AuthController::class,'login']);
 Route::post('/checkPhoneNumber', [AuthController::class, 'checkPhoneNumber']);
 Route::post('/savetoken',  [AuthController::class, 'saveToken']);
