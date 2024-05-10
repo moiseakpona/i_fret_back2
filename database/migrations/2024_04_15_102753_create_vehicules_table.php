@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('vehicules', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('matricule')->unique();
-            $table->string('photo');
-            $table->string('carte_grise');
-            $table->string('visite_technique');
+            $table->string('photo_camion')->nullable(); // Store the image path
+            $table->string('carte_grise')->nullable(); // Store the image path
+            $table->string('visite_technique')->nullable(); // Store the image path
+            $table->string('assurance')->nullable(); // Store the image path
             $table->date('visite_exp')->nullable();
-            $table->string('assurance');
             $table->date('assurance_exp')->nullable();
             $table->string('statut')->nullable();
             $table->string('numero_tel');

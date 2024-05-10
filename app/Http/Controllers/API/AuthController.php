@@ -9,6 +9,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Enregistrement; // Assurez-vous d'importer la classe Enregistrement ici
+
+
 use Illuminate\Support\Facades\Log; // Importez la classe Log
 
 class AuthController extends Controller
@@ -83,32 +86,53 @@ class AuthController extends Controller
         ], 201);
     }
 
-    public function EnregistrementCamion(Request $request)
+    public function enregistrerCamion(Request $request)
     {
-        // Valider les données envoyées par la requête
+        // Verify user authentication
+        if (!Auth::check()) {
+            return response()->json([
+                'message' => 'Accès non autorisé. Veuillez vous connecter d\'abord.',
+            ], 401);
+        }
+
+        // Récupération du numéro de téléphone de l'utilisateur connecté
+        $user = Auth::user();
+        $numeroTel = $user->numero_tel;
+
+        // Validate the incoming data
         $validatedData = $request->validate([
-            'matricule' => 'required|string',
-            'photo_camion' => 'required|image', // Exemple pour un fichier image
-            'carte_grise' => 'required|image',
-            'visite_technique' => 'required|image',
-            'assurance' => 'required|image',
+            'matricule' => 'required|string|unique:vehicules,matricule', // Ensure unique matricule
+            'photo_camion' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Example for an image file
+            'carte_grise' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'visite_technique' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'assurance' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Enregistrer les données dans la base de données
-        $enregistrement = new Enregistrement();
-        $enregistrement->matricule = $validatedData['matricule'];
 
-        // Enregistrer les fichiers
-        $enregistrement->photo_camion = $request->file('photo_camion')->EnregistrementCamion('photos');
-        $enregistrement->carte_grise = $request->file('carte_grise')->EnregistrementCamion('documents');
-        $enregistrement->visite_technique = $request->file('visite_technique')->EnregistrementCamion('documents');
-        $enregistrement->assurance = $request->file('assurance')->EnregistrementCamion('documents');
+        try {
+            // Save the data to the database
+            $enregistrement = new Enregistrement();
+            $enregistrement->matricule = $validatedData['matricule'];
 
-        $enregistrement->save();
+            // Save the uploaded files with unique names
+            $photoPath = $request->file('photo_camion')->store('camion_images');
+            $carteGrisePath = $request->file('carte_grise')->store('camion_images');
+            $visiteTechniquePath = $request->file('visite_technique')->store('camion_images');
+            $assurancePath = $request->file('assurance')->store('camion_images');
+            $enregistrement->numero_tel = $numeroTel;
 
-        return response()->json(['message' => 'Enregistrement réussi'], 201);
+            $enregistrement->photo_camion = $photoPath;
+            $enregistrement->carte_grise = $carteGrisePath;
+            $enregistrement->visite_technique = $visiteTechniquePath;
+            $enregistrement->assurance = $assurancePath;
+
+            $enregistrement->save();
+
+            return response()->json(['message' => 'Enregistrement réussi', 'data' => $enregistrement], 201);
+        } catch (\Exception $e) {
+            Log::error('Erreur lors de l\'enregistrement du camion: ' . $e->getMessage());
+        }
     }
-
     public function login(Request $request) {
         
     
