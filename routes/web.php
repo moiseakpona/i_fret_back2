@@ -53,11 +53,11 @@ Route::get('/supper_admin/utilisateurs/chauffeur', [PageController::class, 'chau
 
 // Affichage des pages utilisateurs
 // Route pour afficher les details de la page chargeur 
-Route::get('/supper_admin/utilisateurs/details_chargeur', [PageController::class, 'details_chargeur'])->name('utilisateurs.details_chargeur');
+Route::get('/supper_admin/utilisateurs/details_chargeur/{numero_tel}', [PageController::class, 'details_chargeur'])->name('utilisateurs.details_chargeur');
 // Route pour afficher les details de la page chargeur 
-Route::get('/supper_admin/utilisateurs/details_transporteur', [PageController::class, 'details_transporteur'])->name('utilisateurs.details_transporteur');
+Route::get('/supper_admin/utilisateurs/details_transporteur/{numero_tel}', [PageController::class, 'details_transporteur'])->name('utilisateurs.details_transporteur');
 // Route pour afficher les details de la page chargeur 
-Route::get('/supper_admin/utilisateurs/details_chauffeur', [PageController::class, 'details_chauffeur'])->name('utilisateurs.details_chauffeur');
+Route::get('/supper_admin/utilisateurs/details_chauffeur/{numero_tel}', [PageController::class, 'details_chauffeur'])->name('utilisateurs.details_chauffeur');
 
 // Affichage des pages camion
 // Route pour afficher la page Rejetés 
@@ -97,6 +97,8 @@ Route::get('/supper_admin/parametre/securite', [ProfilController::class, 'securi
 Route::post('/supper_admin/parametre/securite', [ProfilController::class, 'changePassword'])->name('password.update');
 // Route pour changer la photo de profil 
 Route::post('/supper_admin/parametre/profil', [ProfilController::class, 'upload'])->name('image.upload');
+// Route pour modifier le profil de l'admin 
+Route::post('/supper_admin/parametre/profil/update/{id}', [ProfilController::class, 'update_admin'])->name('update_admin');
 
 
 

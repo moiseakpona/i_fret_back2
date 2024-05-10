@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('visite_exp')->nullable();
             $table->string('assurance');
             $table->date('assurance_exp')->nullable();
-            $table->date('statut')->nullable();
+            $table->string('statut')->nullable();
             $table->string('numero_tel');
             $table->foreign('numero_tel')->references('numero_tel')->on('users');
             $table->timestamps();

@@ -113,7 +113,7 @@
                                                 @endif
                                               </div>
                                           </div>
-                                          <div class="d-flex flex-column"><a href="{{ route('utilisateurs.details_chargeur') }}" spellcheck="false"><span class="fw-medium"><span id="nom"></span> <span id="prenom"></span></span></a><small class="text-muted"><span id="type_compte"></span></small>
+                                          <div class="d-flex flex-column"><a href="#" spellcheck="false"><span class="fw-medium"><span id="nom"></span> <span id="prenom"></span></span></a><small class="text-muted"><span id="type_compte"></span></small>
                                           </div>
                                       </div>
                                   </td> 

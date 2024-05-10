@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Fret;
 use App\Models\Demande;
 use App\Models\Vehicule;
+use App\Models\DetailChauffeur;
 
 class PageController extends Controller
 {
@@ -45,47 +46,126 @@ class PageController extends Controller
           return view('supper_admin.utilisateurs.chargeur', ['liste_chargeur' => $liste_chargeur]);
     }
 
-    public function details_chargeur()
+    public function details_chargeur(Request $request, $numero)
     {
+        // Récupérer l'utilisateur avec le numéro de téléphone spécifié
+        $chargeur = User::where('numero_tel', $numero)->first();
+
         // Retourner la vue details du chargeur
-        return view('supper_admin.utilisateurs.details_chargeur');
+        return view('supper_admin.utilisateurs.details_chargeur', ['chargeur' => $chargeur]);
     }
 
     public function transporteur()
     {
-        // Récupérer la liste des utilisateurs dont le type de compte est "transporteur"
-        $liste_transporteur = User::where('type_compte', 'transporteur')->get();
+        // Récupérer tous les transporteurs
+        $transporteurs = User::where('type_compte', 'transporteur')->get();
+
+        // Initialiser un tableau pour stocker les informations sur les transporteurs et leurs véhicules
+        $transporteursDetails = [];
+
+        // Pour chaque transporteur, récupérer les véhicules rejetés et validés
+        foreach ($transporteurs as $transporteur) {
+            $vehiculesRejetes = Vehicule::where('numero_tel', $transporteur->numero_tel)
+                                        ->where('statut', 'Rejeté')
+                                        ->count();
+
+            $vehiculesValides = Vehicule::where('numero_tel', $transporteur->numero_tel)
+                                        ->where('statut', 'Validé')
+                                        ->count();
+
+            // Stocker les informations dans le tableau
+            $transporteursDetails[] = [
+                'transporteur' => $transporteur,
+                'vehiculesRejetes' => $vehiculesRejetes,
+                'vehiculesValides' => $vehiculesValides,
+            ];
+        }
 
         // Retourner la vue avec la liste des utilisateurs chargeurs
-        return view('supper_admin.utilisateurs.transporteur', ['liste_transporteur' => $liste_transporteur]);
+        return view('supper_admin.utilisateurs.transporteur', ['transporteursDetails' => $transporteursDetails]);
     }
 
-    public function details_transporteur()
+
+
+    public function details_transporteur(Request $request, $numero) 
     {
-        // Retourner la vue details du Transporteur
-        return view('supper_admin.utilisateurs.details_transporteur');
+        // Récupérer l'utilisateur avec le numéro de téléphone spécifié
+        $transporteur = User::where('numero_tel', $numero)->first();
+
+        // Récupérer l'utilisateur avec le numéro de téléphone spécifié
+        $transporteur = User::where('numero_tel', $numero)->first();
+
+        // Récupérer les détails de transporteur correspondant
+        $details = DetailChauffeur::where('numero_tel', $transporteur->numero_tel)->first();
+
+        // Compter le nombre de véhicules rejetés du transporteur
+        $vehiculesRejetes = Vehicule::where('numero_tel', $numero)
+                                        ->where('statut', 'Rejeté')
+                                        ->count();
+
+        // Compter le nombre de véhicules validés du transporteur
+        $vehiculesValides = Vehicule::where('numero_tel', $numero)
+                                        ->where('statut', 'Validé')
+                                        ->count();
+
+        // Retourner la vue details du Transporteur avec les données nécessaires
+        return view('supper_admin.utilisateurs.details_transporteur', [
+            'transporteur' => $transporteur,
+            'details' => $details,
+            'vehiculesRejetes' => $vehiculesRejetes,
+            'vehiculesValides' => $vehiculesValides,
+        ]);
     }
+
+
 
     public function chauffeur()
     {
-        // Récupérer la liste des utilisateurs dont le type de compte est "chauffeur"
-        $liste_chauffeur = User::where('type_compte', 'chauffeur')->get();
+        // Récupérer tous les utilisateurs de type_compte "chauffeur"
+        $chauffeurs = User::where('type_compte', 'chauffeur')->get();
+
+        // Tableau pour stocker les détails des chauffeurs
+        $chauffeursAvecDetails = [];
+
+        // Pour chaque chauffeur, récupérer ses détails de chauffeur
+        foreach ($chauffeurs as $chauffeur) {
+            $details = DetailChauffeur::where('numero_tel', $chauffeur->numero_tel)->first();
+                // Ajouter les au tableau
+                $chauffeursAvecDetails[] = [
+                    'chauffeur' => $chauffeur,
+                    'details' => $details
+                ];
+        }
 
         // Retourner la vue avec la liste des utilisateurs chauffeurs
-        return view('supper_admin.utilisateurs.chauffeur', ['liste_chauffeur' => $liste_chauffeur]);
+        return view('supper_admin.utilisateurs.chauffeur', ['chauffeursAvecDetails' => $chauffeursAvecDetails]);
     }
 
-    public function details_chauffeur()
+
+
+    public function details_chauffeur(Request $request, $numero)
     {
+        // Récupérer l'utilisateur avec le numéro de téléphone spécifié
+        $chauffeur = User::where('numero_tel', $numero)->first();
+
+        // Récupérer les détails de chauffeur correspondant
+        $details = DetailChauffeur::where('numero_tel', $chauffeur->numero_tel)->first();
+
         // Retourner la vue details du Chauffeur
-        return view('supper_admin.utilisateurs.details_chauffeur');
+        return view('supper_admin.utilisateurs.details_chauffeur', ['chauffeur' => $chauffeur, 'details' => $details]);
     }
+
+
 
     public function rejete()
     {
+        // Récupérer la liste des véhicules dont le statut est "rejete"
+        $rejete = Vehicule::where('statut', 'Rejeté')->get();
+
         // Retourner la vue des camions Rejetés
-        return view('supper_admin.camions.rejete');
+        return view('supper_admin.camions.rejete', ['rejete' => $rejete]);
     }
+
 
     public function valide()
     {

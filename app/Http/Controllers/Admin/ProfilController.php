@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class ProfilController extends Controller
@@ -12,10 +13,11 @@ class ProfilController extends Controller
 
     public function profil()
     {
-        // Retourner la vue profil du paramètre de l'admin
-        
+        // Récupérer l'utilisateur connecté
+        $admin = auth()->user();
 
-        return view('supper_admin.parametre.profil');
+        // Retourner la vue profil du paramètre de l'admin
+        return view('supper_admin.parametre.profil', ['admin' => $admin]);
     }
 
     public function securite()
@@ -62,6 +64,34 @@ class ProfilController extends Controller
 
         return redirect('supper_admin/parametre/profil')->with('success', 'Photo mis à jour avec succès');
     }
+    
+
+
+    public function update_admin(Request $request, $id)
+    {
+        // Trouver l'utilisateur à mettre à jour
+        $user = User::findOrFail($id);
+
+        // Mettre à jour les informations de l'utilisateur avec les données du formulaire
+        $user->nom = $request->input('nom');
+        $user->prenom = $request->input('prenom');
+        $user->email = $request->input('email');
+        $user->ville = $request->input('ville');
+        // Vérifier si le champ date_naissance n'est pas nul avant de le mettre à jour
+        $date_naissance = $request->input('date_naissance');
+        if ($date_naissance) {
+            $user->date_naissance = $date_naissance;
+        }
+            $user->numero_tel = $request->input('numero_tel');
+        $user->type_compte = $request->input('type_compte');
+
+        // Sauvegarder les modifications dans la base de données
+        $user->save();
+
+        // Retourner une réponse de succès
+        return back()->with('message', 'Informations mises à jour avec succès.');
+    }
+
 
 
 }

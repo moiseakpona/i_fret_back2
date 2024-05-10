@@ -29,7 +29,7 @@
                                             <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
-                                                        <th></th>
+                                                        {{-- <th></th> --}}
                                                         <th>Nom & Prénoms</th>
                                                         <th>Contact</th>
                                                         <th>Data de naissance</th>
@@ -39,33 +39,33 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach ($liste_transporteur as $transporteur)
+                                                    @foreach($transporteursDetails as $details)
                                                     <tr>
-                                                        <td>
+                                                        {{-- <td>
                                                             <button type="button" class="btn btn-xs btn-primary plus-btn" data-bs-toggle="modal" data-bs-target="#plusModal" data-nom="{{ $transporteur->nom }}" data-prenom="{{ $transporteur->prenom }}" data-type_compte="{{ $transporteur->type_compte }}" data-numero_tel="{{ $transporteur->numero_tel }}" data-date_naissance="{{ $transporteur->date_naissance }}" data-ville="{{ $transporteur->ville }}" data-photo="{{ $transporteur->photo }}" >
                                                             <span class="tf-icon bx bx-plus bx-xs me-1"></span>
                                                             </button>
-                                                        </td>
+                                                        </td> --}}
                                                         <td class="sorting_1">
                                                         <div class="d-flex justify-content-start align-items-center customer-name">
                                                             <div class="avatar-wrapper">
                                                                 <div class="avatar me-2">
-                                                                    @if ($transporteur->photo)
-                                                                        <img src="{{ $transporteur->photo }}" alt="Photo de profil" class="rounded-circle">
+                                                                    @if ( $details['transporteur']->photo )
+                                                                        <img src="{{$details['transporteur']->photo }}" alt="Photo de profil" class="rounded-circle">
                                                                     @else
                                                                         <img src="{{ asset('images/default_profile_photo.png') }}" alt="Photo de profil" class="rounded-circle">
                                                                     @endif
                                                                 </div>
                                                             </div>
-                                                            <div class="d-flex flex-column"><a href="{{ route('utilisateurs.details_transporteur') }}" spellcheck="false"><span class="fw-medium">{{ $transporteur->nom }} {{ $transporteur->prenom }}</span></a><small class="text-muted">{{ $transporteur->type_compte }}</small>
+                                                            <div class="d-flex flex-column"><a href="{{ route('utilisateurs.details_transporteur', ['numero_tel' => $details['transporteur']->numero_tel]) }}" spellcheck="false"><span class="fw-medium">{{ $details['transporteur']->nom }} {{ $details['transporteur']->prenom }}</span></a><small class="text-muted">{{ $details['transporteur']->type_compte }}</small>
                                                             </div>
                                                         </div>
                                                         </td>
-                                                        <td>{{ $transporteur->numero_tel }}</td>
-                                                        <th>{{ $transporteur->date_naissance }}</th>
-                                                        <td>{{ $transporteur->ville }}</td>
-                                                        <td>O</td>
-                                                        <td>1</td>
+                                                        <td>{{ $details['transporteur']->numero_tel }}</td>
+                                                        <th>{{ $details['transporteur']->date_naissance }}</th>
+                                                        <td>{{ $details['transporteur']->ville }}</td>
+                                                        <td>{{ $details['vehiculesValides'] }}</td>
+                                                        <td>{{ $details['vehiculesRejetes'] }}</td>
                                                     </tr>
                                                 @endforeach
                                                     
@@ -81,7 +81,7 @@
 
 
 
-                    <!-- Le modal Plus -->
+                    {{-- <!-- Le modal Plus -->
                   <div class="modal fixed-right fade" id="plusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-slideout">
                     <div class="modal-content">
@@ -104,8 +104,8 @@
                                         <div class="d-flex justify-content-start align-items-center customer-name">
                                             <div class="avatar-wrapper">
                                                 <div class="avatar me-2">
-                                                    @if ($transporteur->photo)
-                                                        <img src="{{ $transporteur->photo }}" alt="Photo de profil" class="rounded-circle">
+                                                    @if (isset($chargeur) && $chargeur->photo)
+                                                        <img src="{{ $chargeur->photo }}" alt="Photo de profil" class="rounded-circle">
                                                     @else
                                                         <img src="{{ asset('images/default_profile_photo.png') }}" alt="Photo de profil" class="rounded-circle">
                                                     @endif
@@ -190,7 +190,7 @@
                     function closeModal() {
                         document.getElementById('plusModal').style.display = 'none';
                     }
-                </script>
+                </script> --}}
                    
                    
 

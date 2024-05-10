@@ -15,13 +15,31 @@
                         <span class="text-muted fw-light">Utilisateurs /</span> details chargeur
                      </h4>
 
+                     @if (session()->has('message'))
+                        <div class="alert alert-success">
+                            <button type="button" class="close" data-dismiss="alert">
+                              ×
+                            </button>
+                            {{session()->get('message')}}
+                        </div> 
+                      @endif
+
+                      @if (session()->has('error'))
+                        <div class="alert alert-danger">
+                            <button type="button" class="close" data-dismiss="alert">
+                              ×
+                            </button>
+                            {{session()->get('error')}}
+                        </div> 
+                      @endif
+
                      <div class="d-flex flex-column flex-sm-row align-items-center justify-content-sm-between mb-4 text-center text-sm-start gap-2">
                         <div class="mb-2 mb-sm-0">
                           <h4 class="mb-1">
                             Date de création 
                           </h4>
                           <p class="mb-0">
-                            13/01/2024 à 14:20:56
+                            {{ $chargeur->created_at }}
                           </p>
                         </div>
                         <button type="button" class="btn btn-label-danger delete-customer">Supprimer le compte</button>
@@ -36,30 +54,43 @@
                             <div class="card-body">
                               <div class="customer-avatar-section">
                                 <div class="d-flex align-items-center flex-column">
-                                  <img class="img-fluid rounded my-3" src="../../assets/img/avatars/17.png" height="110" width="110" alt="User avatar" />
+                                  @if ($chargeur->photo)
+                                    <img class="img-fluid rounded my-3" src="{{ $chargeur->photo }}" height="110" width="110" alt="User avatar">
+                                  @else
+                                    <img class="img-fluid rounded my-3" src="{{ asset('images/default_profile_photo.png') }}" height="110" width="110" alt="User avatar">
+                                  @endif
                                   <div class="customer-info text-center">
-                                    <h4 class="mb-1">Yank Luddy</h4>
+                                    <h4 class="mb-1">{{ $chargeur->nom }} {{ $chargeur->prenom }}</h4>
                                     <small>Chargeur</small>
                                   </div>
                                 </div>
                               </div>
                               <div class="info-container">
-                                <small class="d-block pt-4 border-top fw-normal text-uppercase text-muted my-3">DETAILS</small>
-                                <ul class="list-unstyled">
-                                  <li class="mb-3">
-                                    <span class="fw-medium me-2">Contact:</span>
-                                    <span>+229 90270532</span>
-                                  </li>
-                                  <li class="mb-3">
-                                    <span class="fw-medium me-2">Date de naissance:</span>
-                                    <span>30/03/2000</span>
-                                  </li>
-                                  <li class="mb-3">
-                                    <span class="fw-medium me-2">Vile:</span>
-                                    <span>Parakou</span>
-                                  </li>
-                                </ul>
-                                <div class="d-flex justify-content-center">
+                                <small class="d-block pt-2 border-top fw-normal text-uppercase text-muted my-2"></small>
+
+                                <div>
+                                  <table class="table table-borderless">
+                                  <tbody>
+                                      <tr>
+                                          <td> Contact </td>
+                                          <td>:</td>
+                                          <td style="font-weight: 600">{{ $chargeur->numero_tel }}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>Date de Naissance </td>
+                                        <td>:</td>
+                                        <td style="font-weight: 600">{{ $chargeur->date_naissance }}</td>
+                                      </tr>
+                                      <tr>
+                                        <td> Ville </td>
+                                        <td>:</td>
+                                        <td style="font-weight: 600">{{ $chargeur->ville }}</td>
+                                      </tr>
+                                  </tbody>
+                                  </table>
+                                </div>
+
+                                <div class="d-flex justify-content-center mt-3">
                                   <a href="javascript:;" class="btn btn-primary me-3" data-bs-target="#editUser" data-bs-toggle="modal">Modifier Profil</a>
                       
                                 </div>
@@ -256,6 +287,7 @@
                         </div><!-- .animated -->
                     </div><!-- .content -->
                     <!--/ Fixed Header -->
+
                       
                       <!-- Modal -->
                       <!-- Edit User Modal -->
@@ -266,40 +298,40 @@
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                               <div class="text-center mb-4">
                                 <h3>Formulaire de modification</h3>
-                                <p>Modifier profil de l'utilisateur.</p>
+                                <p>Modifier le profil de l'utilisateur</p>
                               </div>
-                              <form id="editUserForm" class="row g-3" onsubmit="return false">
+                              <form id="editUserForm" class="row g-3" method="POST" action="{{ route('update_admin', $chargeur->id) }}">
+                                @csrf
                                 <div class="col-12 col-md-6">
-                                  <label class="form-label" for="modalEditUserFirstName">Nom</label>
-                                  <input type="text" id="modalEditUserFirstName" name="modalEditUserFirstName" class="form-control" placeholder="John" />
+                                  <label class="form-label" for="FirstName">Nom</label>
+                                  <input type="text" id="FirstName" name="nom" class="form-control" value="{{ $chargeur->nom }}" />
                                 </div>
                                 <div class="col-12 col-md-6">
-                                  <label class="form-label" for="modalEditUserLastName">Prénom</label>
-                                  <input type="text" id="modalEditUserLastName" name="modalEditUserLastName" class="form-control" placeholder="Doe" />
+                                  <label class="form-label" for="LastName">Prénom</label>
+                                  <input type="text" id="LastName" name="prenom" class="form-control" value="{{ $chargeur->prenom }}" />
                                 </div>
                                 <div class="col-12 col-md-6">
-                                  <label class="form-label" for="modalEditUserEmail">Date de maissance</label>
-                                  <input type="date" id="modalEditUserEmail" name="modalEditUserEmail" class="form-control" placeholder="example@domain.com" />
+                                  <label class="form-label" for="DateNaissance">Date de maissance</label>
+                                  <input type="date" id="DateNaissance" name="date_naissance" class="form-control" value="{{ $chargeur->date_naissance }}" />
                                 </div>
                                 <div class="col-12 col-md-6">
-                                  <label class="form-label" for="modalEditUserStatus">Type de compte</label>
-                                  <select id="modalEditUserStatus" name="modalEditUserStatus" class="form-select" aria-label="Default select example">
-                                    <option selected>Chargeur</option>
-                                    <option value="1">Tranporteur</option>
-                                    <option value="2">Chauffeur</option>
+                                  <label class="form-label" for="Compte">Type de compte</label>
+                                  <select id="Compte" name="type_compte" class="form-select"  value="{{ $chargeur->type_compte }}" >
+                                    <option value="Chargeur">Chargeur</option>
+                                    <option value="Transporteur">Transporteur</option>
+                                    <option value="Chauffeur">Chauffeur</option>
                                   </select>
                                 </div>
                                 <div class="col-12 col-md-6">
-                                  <label class="form-label" for="modalEditUserPhone">Contact</label>
+                                  <label class="form-label" for="Phone">Contact</label>
                                   <div class="input-group input-group-merge">
-                                    <span class="input-group-text">+229</span>
-                                    <input type="text" id="modalEditUserPhone" name="modalEditUserPhone" class="form-control phone-number-mask" placeholder="202 555 0111" />
+                                    <input type="text" id="Phone" name="numero_tel" class="form-control phone-number-mask" value="{{ $chargeur->numero_tel }}" />
                                   </div>
                                 </div>
                                 <div class="col-12 col-md-6">
-                                  <label class="form-label" for="modalEditUserCountry">Ville</label>
-                                  <select id="modalEditUserCountry" name="modalEditUserCountry" class="select2 form-select" data-allow-clear="true">
-                                    <option value="">Select</option>
+                                  <label class="form-label" for="Country">Ville</label>
+                                  <select id="Country" name="ville" class="select2 form-select" data-allow-clear="true">
+                                    <option value="{{ $chargeur->ville }}">{{ $chargeur->ville }}</option>
                                     <option value="Parakou">Parakou</option>
                                     <option value="Cotonou">Cotonou</option>
                                     <option value="Djougou">Djougou</option>

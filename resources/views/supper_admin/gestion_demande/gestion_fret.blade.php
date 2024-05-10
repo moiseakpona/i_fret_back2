@@ -147,7 +147,7 @@
                                       const nom = document.createElement('tr');
                                       nom.innerHTML = `
                                           <td><label style="font-weight: 600; ">Profil :</label></td> 
-                                          <td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2">${chargeurPhoto ? `<img src="${chargeurPhoto}" alt="Photo de profil" class="rounded-circle">` : `<img src="{{ asset('images/default_profile_photo.png') }}" alt="Photo de profil par défaut" class="rounded-circle">`}</div></div><div class="d-flex flex-column"><a href="{{ route('utilisateurs.details_chargeur') }}" spellcheck="false"><span class="fw-medium">${utilisateur.nom} ${utilisateur.prenom}</span></a><small class="text-muted">${utilisateur.type_compte}</small></div></div></td> `;
+                                          <td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2">${chargeurPhoto ? `<img src="${chargeurPhoto}" alt="Photo de profil" class="rounded-circle">` : `<img src="{{ asset('images/default_profile_photo.png') }}" alt="Photo de profil par défaut" class="rounded-circle">`}</div></div><div class="d-flex flex-column"><a href="#" spellcheck="false"><span class="fw-medium">${utilisateur.nom} ${utilisateur.prenom}</span></a><small class="text-muted">${utilisateur.type_compte}</small></div></div></td> `;
                                       modalBody.appendChild(nom);
                       
                                       const numeroTel = document.createElement('tr');
@@ -197,8 +197,9 @@
                         const chargeurNom = "{{ isset($chargeur) ? $chargeur->nom : '' }}";
                         const chargeurPrenom = "{{ isset($chargeur) ? $chargeur->prenom : '' }}";
                         const typeCompte = "{{ isset($chargeur) ? $chargeur->type_compte : '' }}";
-                        const detailsChargeurRoute = "{{ route('utilisateurs.details_chargeur') }}";
+                        const detailsChargeurRoute = "#";
                       </script>
+                      {{-- const detailsChargeurRoute = "{{ route('utilisateurs.details_chargeur') }}"; --}}
                       
                       
                   </div>

@@ -14,6 +14,24 @@
                     <h4 class="py-3 mb-4">
                         <span class="text-muted fw-light">Paramètres /</span> Profil
                       </h4>
+
+                      @if (session()->has('message'))
+                        <div class="alert alert-success">
+                            <button type="button" class="close" data-dismiss="alert">
+                              ×
+                            </button>
+                            {{session()->get('message')}}
+                        </div> 
+                      @endif
+
+                      @if (session()->has('error'))
+                        <div class="alert alert-danger">
+                            <button type="button" class="close" data-dismiss="alert">
+                              ×
+                            </button>
+                            {{session()->get('error')}}
+                        </div> 
+                      @endif
                       
                       <div class="row">
                         <div class="col-md-12">
@@ -75,52 +93,49 @@
                             </div>
                             <hr class="my-0">
                             <div class="card-body">
-                              <form id="formAccountSettings" method="GET" onsubmit="return false">
-                                <div class="row">
 
-                                  <div class="mb-3 col-md-6">
-                                    <label for="firstName" class="form-label">NOM</label>
-                                    <input class="form-control" type="text" id="firstName" name="firstName" value="John" autofocus />
-                                  </div>
-
-                                  <div class="mb-3 col-md-6">
-                                    <label for="lastName" class="form-label">PRÉNOM</label>
-                                    <input class="form-control" type="text" name="lastName" id="lastName" value="Doe" />
-                                  </div>
-                                  
-                                  <div class="mb-3 col-md-6">
-                                    <label for="email" class="form-label">E-mail</label>
-                                    <input class="form-control" type="text" id="email" name="email" value="john.doe@example.com" placeholder="john.doe@example.com" />
-                                  </div>
-
-                                  <div class="mb-3 col-md-6">
-                                    <label for="address" class="form-label">Addresse</label>
-                                    <input type="text" class="form-control" id="address" name="address" placeholder="Address" />
-                                  </div>
-
-                                  <div class="mb-3 col-md-6">
-                                    <label for="date" class="form-label">Date de Naissance</label>
-                                    <input class="form-control" type="date" id="date" name="date" placeholder="30/03/1994" />
-                                  </div>
-
-                                  <div class="mb-3 col-md-6">
-                                    <label class="form-label" for="phoneNumber">NUMÉRO DE TÉLÉPHONE</label>
-                                    <div class="input-group input-group-merge">
-                                      <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" placeholder="+229 90 270 560" />
-                                    </div>
-                                  </div>
-
-                                  <div class="mb-3 col-md-6">
-                                    <label for="type" class="form-label">Type de compte</label>
-                                    <input class="form-control" type="text" id="type" name="type" value="Admin" autofocus />
-                                  </div>
-                                 
+                              <form id="editUserForm" class="row g-3" method="POST" action="{{ route('update_admin', $admin->id ) }}">
+                                @csrf
+                                <div class="col-12 col-md-6">
+                                  <label class="form-label" for="FirstName">Nom</label>
+                                  <input type="text" id="FirstName" name="nom" class="form-control" value="{{ $admin->nom }}" />
                                 </div>
-                                <div class="mt-2">
-                                  <button type="submit" class="btn btn-primary me-2">Sauvegarder les modifications</button>
-                                  <button type="reset" class="btn btn-label-secondary">Annuler</button>
+                                <div class="col-12 col-md-6">
+                                  <label class="form-label" for="LastName">Prénom</label>
+                                  <input type="text" id="LastName" name="prenom" class="form-control" value="{{ $admin->prenom }}" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                  <label for="email" class="form-label">E-mail</label>
+                                  <input class="form-control" type="text" id="email" name="email" value="{{ $admin->email }}" required/>
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                  <label for="address" class="form-label">Addresse</label>
+                                  <input type="text" class="form-control" id="address" name="ville" value="{{ $admin->ville }}" required/>
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                  <label for="date" class="form-label">Date de Naissance</label>
+                                  <input class="form-control" type="date" id="date" name="date_naissance" value="{{ $admin->date_naissance }}" required/>
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                  <label class="form-label" for="phoneNumber">NUMÉRO DE TÉLÉPHONE</label>
+                                  <div class="input-group input-group-merge">
+                                    <input type="text" id="phoneNumber" name="numero_tel" class="form-control" value="{{ $admin->numero_tel }}" required/>
+                                  </div>
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                  <label for="type" class="form-label">Type de compte</label>
+                                  <input class="form-control" type="text" id="type" name="type_compte" value="{{ $admin->type_compte }}" readonly />
+                                </div>
+                                <div class="col-12 text-center">
+                                  <button type="submit" class="btn btn-primary me-sm-3 me-1">Enregistrer</button>
+                                  <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">Annuler</button>
                                 </div>
                               </form>
+
                             </div>
                             <!-- /Account -->
                           </div>

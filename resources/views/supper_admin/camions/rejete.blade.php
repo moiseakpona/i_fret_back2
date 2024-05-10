@@ -29,34 +29,25 @@
                                          <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
                                              <thead>
                                                  <tr>
-                                                     <th>#</th>
                                                      <th>Numéro matricule</th>
+                                                     <th>Date d'ajout</th>
                                                      <th>Statut</th>
                                                      <th>Action</th>
                                                  </tr>
                                              </thead>
                                              <tbody>
-                                                 <tr>
-                                                   <td>1</td>
-                                                   <td>immatriculation</td>
-                                                   <td>
-                                                     <span class="badge bg-label-danger me-1">Rejeté</span>
-                                                   </td>
-                                                   <td>
-                                                      <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#plusModal">Voir <span class="tf-icon bx bx-plus bx-xs me-1"></span></a>
-                                                    </td>
-                                                 </tr>
-
-                                                 <tr>
-                                                   <td>2</td>
-                                                   <td>immatriculation</td>
-                                                   <td>
-                                                     <span class="badge bg-label-danger me-1">Rejeté</span>
-                                                   </td>
-                                                   <td>
-                                                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#plusModal">Voir <span class="tf-icon bx bx-plus bx-xs me-1"></span></a>
+                                              @foreach ($rejete as $rejetes)
+                                                <tr>
+                                                  <td>{{ $rejetes->matricule }}</td>
+                                                  <td>{{ $rejetes->created_at }}</td>
+                                                  <td>
+                                                    <span class="badge bg-label-danger me-1">{{ $rejetes->statut}}</span>
                                                   </td>
-                                                 </tr>
+                                                  <td>
+                                                      <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#plusModal" data-matricule="{{ $rejetes->matricule }}" data-photo="{{ $rejetes->photo }}" data-carte_grise="{{ $rejetes->carte_grise }}" data-visite_technique="{{ $rejetes->visite_technique }}" data-assurance="{{ $rejetes->assurance }}" data-id="{{ $rejetes->id }}">Voir <span class="tf-icon bx bx-plus bx-xs me-1"></span></a>
+                                                    </td>
+                                                </tr>
+                                                @endforeach
                                              </tbody>
                                          </table>
                                      </div>
@@ -81,7 +72,7 @@
 
                       
                       <div class="card">
-                        <h5 class="card-header">#1</h5>
+                        <h5 class="card-header"></h5>
                         <div class="card-body">
                           <div class="table-responsive">
                             <table class="table ">
@@ -95,22 +86,22 @@
                               <tbody>
                                 <tr>
                                   <td>Numéro matricule</td>
-                                  <td>3467479682787</td>
+                                  <td id="matricule"></td>
                                   <td><textarea class="form-control"></textarea></td>
                                 </tr>
                                 <tr>
                                   <td>Photo du véhicule</td>
-                                  <td><a href="{{ asset('images/Fadil_page-0001.jpg') }}" target="_blank">Avec php récupérer le nom du fichier dans la base de données</a></td>
+                                  <td><a id="photo_link" href="#" target="_blank"></a></td>
                                   <td><textarea class="form-control"></textarea></td>
                                 </tr>
                                 <tr>
                                   <td>Carte Grise</td>
-                                  <td><a href="{{ asset('images/1.pdf') }}" target="_blank">Avec php récupérer le nom du fichier dans la base de données</a></td>
+                                  <td><a id="carte_grise_link" href="#" target="_blank"></a></td>
                                   <td><textarea class="form-control"></textarea></td>
                                 </tr>
                                 <tr>
                                   <td>Visite Technique</td>
-                                  <td><a href="{{ asset('images/1.pdf') }}" target="_blank">Avec php récupérer le nom du fichier dans la base de données</a></td>
+                                  <td><a id="visite_technique_link" href="#" target="_blank"></a></td>
                                   <td>
                                     <textarea class="form-control"></textarea> 
                                     <label for="date">Date d'expiration :</label>
@@ -119,7 +110,7 @@
                                 </tr>
                                 <tr>
                                   <td>Assurance</td>
-                                  <td><a href="{{ asset('images/1.pdf') }}" target="_blank">Avec php récupérer le nom du fichier dans la base de données</a></td>
+                                  <td><a id="assurance_link" href="#" target="_blank"></a></td>
                                   <td>
                                     <textarea class="form-control"></textarea> 
                                     <label for="date">Date d'expiration :</label>
@@ -142,6 +133,29 @@
                    </div>
                  </div>
                </div>
+
+
+               <script>
+                document.querySelectorAll('.plus-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const matricule = btn.getAttribute('data-matricule');
+                        const photo = btn.getAttribute('data-photo');
+                        const carte_grise = btn.getAttribute('data-carte_grise');
+                        const visite_technique = btn.getAttribute('data-visite_technique');
+                        const assurance = btn.getAttribute('data-assurance');
+            
+                        // Afficher les données dans les champs appropriés
+                        document.getElementById('matricule').innerText = matricule;
+                        document.getElementById('photo_link').href = photo;
+                        document.getElementById('carte_grise_link').href = carte_grise;
+                        document.getElementById('visite_technique_link').href = visite_technique;
+                        document.getElementById('assurance_link').href = assurance;
+            
+                        document.getElementById('plusModal').style.display = 'block';
+                    });
+                });
+            </script>
+            
 
                   </div>
                   <!-- / Content -->
