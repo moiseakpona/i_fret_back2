@@ -42,7 +42,31 @@
                             {{ $chauffeur->created_at }}
                           </p>
                         </div>
-                        <button type="button" class="btn btn-label-danger delete-customer">Supprimer le compte</button>
+                        <button type="button" class="btn btn-label-danger delete-customer" data-bs-toggle="modal" data-bs-target="#confirmationModal">Supprimer le compte</button>
+                      </div>
+
+
+                      <!-- Modal confirmation de Suppression de compte-->
+                      <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="confirmationModalLabel">Confirmation de suppression</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              Êtes-vous sûr de vouloir supprimer cet utilisateur ?
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                              <form action="{{ route('supprimer_chauffeur', $chauffeur->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                       
                       
@@ -89,14 +113,23 @@
                                         <td style="font-weight: 600">{{ $chauffeur->ville }}</td>
                                       </tr>
                                       <tr>
-                                        <td> Permis </td>
+                                        <td>N° Permis </td>
                                         <td>:</td>
+                                        @if ($details)
+                                          <td style="font-weight: 600">{{ $details->num_permis }}</td>
+                                        @else
+                                          <td style="font-weight: 600">N/A</td>
+                                        @endif
                                         <td style="font-weight: 600">{{ $details->num_permis }}</td>
                                       </tr>
                                       <tr>
-                                        <td> Fichier </td>
+                                        <td> Permis de conduire </td>
                                         <td>:</td>
-                                        <td style="font-weight: 600"><a href="{{ $details->permis }}" target="_blank">Permis de conduire</a></td>
+                                        @if ($details)
+                                          <td style="font-weight: 600"><a href="{{ $details->permis }}" target="_blank">Fichier </a></td>
+                                        @else
+                                          <td style="font-weight: 600">N/A</td>
+                                        @endif
                                       </tr>
                                   </tbody>
                                   </table>

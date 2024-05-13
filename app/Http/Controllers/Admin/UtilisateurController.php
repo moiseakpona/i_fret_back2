@@ -13,9 +13,9 @@ use App\Models\Demande;
 class UtilisateurController extends Controller
 {
 
-    public function fret_enregister(Request $request)
+    public function fret_enregister(Request $request, $numero)
     {
-        // Valide les données envoyées par le formulaire
+       // Valide les données envoyées par le formulaire
         $request->validate([
             'lieu_depart' => 'required|string',
             'lieu_arrive' => 'required|string',
@@ -24,8 +24,8 @@ class UtilisateurController extends Controller
         ]);
 
          // Vérifie si le numéro de téléphone existe dans la table "users"
-         //$user = User::where('numero_tel', $request->numero_tel)->first();
-         $user = User::where('numero_tel', '+22990270530')->first();
+         $user = User::where('numero_tel', $request->numero_tel)->first();
+         //$user = User::where('numero_tel', $chargeur)->first();
 
          // Si l'utilisateur correspondant au numéro de téléphone est trouvé
          if ($user) {
@@ -37,7 +37,7 @@ class UtilisateurController extends Controller
              $fret->description = $request->description;
              $fret->statut = 'En attente';
              //$fret->numero_tel = $request->numero_tel;
-             $fret->numero_tel = '+22990270530';
+             $fret->numero_tel = $numero;
  
              // Sauvegarde l'enregistrement dans la base de données
              if ($fret->save()) {

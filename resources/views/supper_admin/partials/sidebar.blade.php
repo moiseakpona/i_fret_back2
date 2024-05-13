@@ -129,10 +129,10 @@
 </svg>
 
 </span>
-        <span class="app-brand-text demo menu-text fw-bold ms-2"><img src="../../assets/img/logo/2.jpg" class="h-auto" style="width: 100px"></span>
+        <span class="app-brand-text demo menu-text fw-bold ms-2"><img src="{{ url('assets/img/logo/2.jpg') }}" class="h-auto" style="width: 100px"></span>
     </a>
 
-    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+    <a href="{{ route('dashboard') }}" class="layout-menu-toggle menu-link text-large ms-auto">
       <i class="bx bx-chevron-left bx-sm align-middle"></i>
     </a>
   </div>
@@ -202,7 +202,7 @@
       </li>
 
 
-      <li class="menu-item {{ Request::is('supper_admin/chats/chargeur') ? 'active' : '' }}">
+      <li class="menu-item {{ Request::is('supper_admin/chats/chargeur') ? 'active' : '' }} {{ Request::is('supper_admin/chats/detail_chat') ? 'active open' : '' }}">
         <a href="{{ route('chats.chargeur') }}" class="menu-link">
           <i class='menu-icon tf-icons bx bx-chat'></i>
           <div class="text-truncate" data-i18n="Chats">Chats</div>

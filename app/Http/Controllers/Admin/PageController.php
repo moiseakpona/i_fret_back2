@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Fret;
 use App\Models\Demande;
@@ -156,6 +157,45 @@ class PageController extends Controller
     }
 
 
+    public function supprimer_chargeur($id)
+    {
+        // Trouver l'utilisateur à supprimer
+        $utilisateur = User::find($id);
+
+        // Supprimer l'utilisateur de la base de données
+        $utilisateur->delete();
+
+        // Retourner une réponse de succès
+        return redirect()->route('utilisateurs.chargeur')->with('message', 'Utilisateur supprimé avec succès.');
+    }
+
+
+    public function supprimer_chauffeur($id)
+    {
+        // Trouver l'utilisateur à supprimer
+        $utilisateur = User::find($id);
+
+        // Supprimer l'utilisateur de la base de données
+        $utilisateur->delete();
+
+        // Retourner une réponse de succès
+        return redirect()->route('utilisateurs.chauffeur')->with('message', 'Utilisateur supprimé avec succès.');
+    }
+
+
+    public function supprimer_transporteur($id)
+    {
+        // Trouver l'utilisateur à supprimer
+        $utilisateur = User::find($id);
+
+        // Supprimer l'utilisateur de la base de données
+        $utilisateur->delete();
+
+        // Retourner une réponse de succès
+        return redirect()->route('utilisateurs.transporteur')->with('message', 'Utilisateur supprimé avec succès.');
+    }
+
+
 
     public function rejete()
     {
@@ -167,23 +207,199 @@ class PageController extends Controller
     }
 
 
+    public function detail_rejete(Request $request, $id)
+    {
+        // Récupérer le véhicule avec l'id spécifié
+        $vehicule = Vehicule::where('id', $id)->first();
+
+        // Récupérer le numéro de telephone du véhicule 
+        $numero = $vehicule->numero_tel;
+
+        // Recherche le transporteur correspondant au numero de telelphone recuperé
+        $transporteur = User::where('numero_tel', $numero)->first();
+        
+        // Retourner la vue des camions Rejetés
+        return view('supper_admin.camions.detail_rejete', ['vehicule' => $vehicule, 'transporteur' => $transporteur]);
+    }
+
+
     public function valide()
     {
+        // Récupérer la liste des véhicules dont le statut est "validé"
+        $valide = Vehicule::where('statut', 'Validé')->get();
+
         // Retourner la vue des camions Validés
-        return view('supper_admin.camions.valide');
+        return view('supper_admin.camions.valide', ['valide' => $valide]);
     }
+
+    public function detail_valide(Request $request, $id)
+    {
+        // Récupérer le véhicule avec l'id spécifié
+        $vehicule = Vehicule::where('id', $id)->first();
+
+        // Récupérer le numéro de telephone du véhicule 
+        $numero = $vehicule->numero_tel;
+
+        // Recherche le transporteur correspondant au numero de telelphone recuperé
+        $transporteur = User::where('numero_tel', $numero)->first();
+        
+        // Retourner la vue des camions Rejetés
+        return view('supper_admin.camions.detail_valide', ['vehicule' => $vehicule, 'transporteur' => $transporteur]);
+    }
+
 
     public function en_attent()
     {
+        // Récupérer la liste des véhicules dont le statut est "en_attent"
+        $en_attent = Vehicule::where('statut', 'En attent')->get();
+
         // Retourner la vue des camions En attents
-        return view('supper_admin.camions.en_attent');
+        return view('supper_admin.camions.en_attent', ['en_attent' => $en_attent]);
     }
+
+
+    public function detail_en_attent(Request $request, $id)
+    {
+        // Récupérer le véhicule avec l'id spécifié
+        $vehicule = Vehicule::where('id', $id)->first();
+
+        // Récupérer le numéro de telephone du véhicule 
+        $numero = $vehicule->numero_tel;
+
+        // Recherche le transporteur correspondant au numero de telelphone recuperé
+        $transporteur = User::where('numero_tel', $numero)->first();
+        
+        // Retourner la vue des camions Rejetés
+        return view('supper_admin.camions.detail_en_attent', ['vehicule' => $vehicule, 'transporteur' => $transporteur]);
+    }
+
+
+    public function forme_valide_vehicule(Request $request, $id)
+    {
+        // Trouver le véhicule à mettre à jour
+        $vehicule = Vehicule::findOrFail($id);
+
+        // Mettre à jour les tables visite_exp; assurance_exp et le statut
+        $vehicule->visite_exp = $request->input('visite_exp');
+        $vehicule->assurance_exp = $request->input('assurance_exp');
+        $vehicule->statut = 'Validé';
+
+        // Sauvegarder les modifications dans la base de données
+        $vehicule->save();
+
+        // Retourner une réponse de succès
+        return redirect()->route('camions.en_attent')->with('message', 'Véhicule validé avec succès.');
+    }
+
+
+    public function forme_rejete_vehicule(Request $request, $id)
+    {
+        // Trouver le véhicule à mettre à jour
+        $vehicule = Vehicule::findOrFail($id);
+
+        // Mettre à jour les tables commentaire du vehicule
+        $matricule_commentaire = $request->input('matricule_commentaire');
+        $photo_camion_commentaire = $request->input('photo_camion_commentaire');
+        $carte_grise_commentaire = $request->input('carte_grise_commentaire');
+        $assurance_commentaire = $request->input('assurance_commentaire');
+        $visite_technique_commentaire = $request->input('visite_technique_commentaire');
+        $vehicule->statut = 'Rejeté';
+
+        // Vérifier si les champs ne sont pas nul avant de les mettre à jour
+        if ($matricule_commentaire) {
+            $vehicule->matricule_commentaire = $matricule_commentaire;
+        }
+        if ($photo_camion_commentaire) {
+            $vehicule->photo_camion_commentaire = $photo_camion_commentaire;
+        }
+        if ($carte_grise_commentaire) {
+            $vehicule->carte_grise_commentaire = $carte_grise_commentaire;
+        }
+        if ($assurance_commentaire) {
+            $vehicule->assurance_commentaire = $assurance_commentaire;
+        }
+        if ($visite_technique_commentaire) {
+            $vehicule->visite_technique_commentaire = $visite_technique_commentaire;
+        }
+
+        // Sauvegarder les modifications dans la base de données
+        $vehicule->save();
+
+        // Retourner une réponse de succès
+        return redirect()->route('camions.en_attent')->with('error', 'Véhicule rejeté avec succès.');
+    }
+
+
+    public function supprimer_vehicule_rejete($id)
+    {
+        // Trouver le vehicule à supprimer
+        $vehicule = Vehicule::find($id);
+
+        // Supprimer le véhicule de la base de données
+        $vehicule->delete();
+
+        // Retourner une réponse de succès
+        return redirect()->route('camions.rejete')->with('message', 'Véhicule supprimé avec succès.');
+    }
+
+
+    public function supprimer_vehicule_valide($id)
+    {
+        // Trouver le vehicule à supprimer
+        $vehicule = Vehicule::find($id);
+
+        // Supprimer le véhicule de la base de données
+        $vehicule->delete();
+
+        // Retourner une réponse de succès
+        return redirect()->route('camions.valide')->with('message', 'Véhicule supprimé avec succès.');
+    }
+
+
+    public function supprimer_vehicule_en_attent($id)
+    {
+        // Trouver le vehicule à supprimer
+        $vehicule = Vehicule::find($id);
+
+        // Supprimer le véhicule de la base de données
+        $vehicule->delete();
+
+        // Retourner une réponse de succès
+        return redirect()->route('camions.en_attent')->with('message', 'Véhicule supprimé avec succès.');
+    }
+
+
 
     public function chat_chargeur()
     {
+        // Récupérer l'utilisateur connecté
+        $admin = auth()->user();
+
+        // Récupérer la liste des utilisateurs dont le type de compte est "chargeur"
+        $chargeurs = User::where('type_compte', 'chargeur')->get();
+
         // Retourner la vue du chat Chargeur
-        return view('supper_admin.chats.chargeur');
+        return view('supper_admin.chats.chargeur', ['admin' => $admin, 'chargeurs' => $chargeurs]);
     }
+
+
+
+    public function detail_chat(Request $request, $numero)
+    {
+        // Récupérer l'utilisateur avec le numéro de téléphone spécifié
+        $chargeur_online = User::where('numero_tel', $numero)->first();
+
+        // Récupérer l'utilisateur connecté
+        $admin = auth()->user();
+
+        // Récupérer la liste des utilisateurs dont le type de compte est "chargeur"
+        $chargeurs = User::where('type_compte', 'chargeur')->get();
+
+        // Retourner la vue du chat Chargeur
+        return view('supper_admin.chats.detail_chat', ['admin' => $admin, 'chargeurs' => $chargeurs, 'chargeur_online' => $chargeur_online]);
+    }
+
+
     
     public function gestion_demande()
     {
