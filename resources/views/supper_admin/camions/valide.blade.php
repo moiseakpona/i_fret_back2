@@ -15,6 +15,24 @@
                         <span class="text-muted fw-light">Camions /</span> Validés
                      </h4>
 
+                     @if (session()->has('message'))
+                        <div class="alert alert-success">
+                            <button type="button" class="close" data-dismiss="alert">
+                            ×
+                            </button>
+                            {{session()->get('message')}}
+                        </div> 
+                    @endif
+
+                    @if (session()->has('error'))
+                        <div class="alert alert-danger">
+                            <button type="button" class="close" data-dismiss="alert">
+                            ×
+                            </button>
+                            {{session()->get('error')}}
+                        </div> 
+                    @endif
+
                       <!-- Fixed Header -->
                     <div class="content mt-3">
                      <div class="animated fadeIn">
@@ -29,39 +47,29 @@
                                          <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
                                              <thead>
                                                  <tr>
-                                                     <th>#</th>
                                                      <th>Matricule</th>
                                                      <th>Visite Technique</th>
                                                      <th>Assurance</th>
+                                                     <th>Statut</th>
                                                      <th>Action</th>
                                                  </tr>
                                              </thead>
                                              <tbody>
+                                              @foreach ($valide as $valides)
                                                  <tr>
-                                                   <td>001</td>
-                                                   <td>DC 3467</td>
+                                                   <td>{{ $valides->matricule }}</td>
                                                    <td>
                                                      <span class="badge bg-label-success me-1">A jour</span>
                                                    </td>
                                                    <td>
                                                      <span class="badge bg-label-danger me-1">Expiré(e)</span>
                                                    </td>
-                                                   <td><a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#plusModal">Voir <span class="tf-icon bx bx-plus bx-xs me-1"></span></a></button>
+                                                   <td>
+                                                    <span class="badge bg-label-success me-1">{{ $valides->statut }}</span>
                                                    </td>
+                                                   <td><a href="{{ route('detail_valide', ['id' => $valides->id]) }}" class="btn btn-primary">Voir <span class="tf-icon bx bx-plus bx-xs me-1"></span></a></button></td>
                                                  </tr>
-
-                                                 <tr>
-                                                     <td>OO2</td>
-                                                     <td>AC 3467</td>
-                                                     <td>
-                                                       <span class="badge bg-label-success me-1">A jour</span>
-                                                     </td>
-                                                     <td>
-                                                       <span class="badge bg-label-success me-1">A jour</span>
-                                                     </td>
-                                                     </td>
-                                                   <td><a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#plusModal">Voir <span class="tf-icon bx bx-plus bx-xs me-1"></span></a></td>
-                                                 </tr>
+                                              @endforeach
                                              </tbody>
                                          </table>
                                      </div>
@@ -152,7 +160,7 @@
                               <tr>
                                 <div class="mb-3">
                                   <td><label for="truckBrand" style="font-weight: 600; ">Profil :</label></td> 
-                                  <td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2"><img src="../../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle"></div></div><div class="d-flex flex-column"><a href="{{ route('utilisateurs.details_transporteur') }}" spellcheck="false"><span class="fw-medium">Yank Luddy</span></a><small class="text-muted">Transporteur</small></div></div></td> 
+                                  <td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2"><img src="../../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle"></div></div><div class="d-flex flex-column"><a href="#" spellcheck="false"><span class="fw-medium">Yank Luddy</span></a><small class="text-muted">Transporteur</small></div></div></td> 
                                 </div>
                               </tr>
                               <tr>

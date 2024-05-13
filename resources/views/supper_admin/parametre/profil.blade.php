@@ -59,6 +59,8 @@
 
                                 @if (Auth::check() && Auth::user()->photo)
                                   <img src="{{ asset('images/' . Auth::user()->photo) }}" alt="Photo de profil" class="d-block rounded" height="100" width="100" id="image">
+                                @else
+                                  <img src="{{ asset('images/default_profile_photo.png') }}" alt="Photo de profil" class="d-block rounded" height="100" width="100" id="image">
                                 @endif
                     
                                 <div >

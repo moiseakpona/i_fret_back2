@@ -15,6 +15,24 @@
                         <span class="text-muted fw-light">Utilisateurs /</span> Chargeur
                     </h4>
 
+                    @if (session()->has('message'))
+                        <div class="alert alert-success">
+                            <button type="button" class="close" data-dismiss="alert">
+                              ×
+                            </button>
+                            {{session()->get('message')}}
+                        </div> 
+                      @endif
+
+                      @if (session()->has('error'))
+                        <div class="alert alert-danger">
+                            <button type="button" class="close" data-dismiss="alert">
+                              ×
+                            </button>
+                            {{session()->get('error')}}
+                        </div> 
+                      @endif
+
                     <!-- Fixed Header -->
                     <div class="content mt-3">
                       <div class="animated fadeIn">

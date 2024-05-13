@@ -12,8 +12,28 @@
                   <div class="container-xxl flex-grow-1 container-p-y">
                     
                      <h4 class="py-3 mb-4">
-                        <span class="text-muted fw-light">Camions /</span> En attent
+                        <span class="text-muted fw-light">Véhicule /</span> En attent
                      </h4>
+
+
+                     @if (session()->has('message'))
+                        <div class="alert alert-success">
+                            <button type="button" class="close" data-dismiss="alert">
+                              ×
+                            </button>
+                            {{session()->get('message')}}
+                        </div> 
+                      @endif
+
+                      @if (session()->has('error'))
+                        <div class="alert alert-danger">
+                            <button type="button" class="close" data-dismiss="alert">
+                              ×
+                            </button>
+                            {{session()->get('error')}}
+                        </div> 
+                      @endif
+
 
                      <!-- Fixed Header -->
                     <div class="content mt-3">
@@ -29,34 +49,25 @@
                                             <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
-                                                        <th>#</th>
                                                         <th>Numéro matricule</th>
+                                                        <th>Date d'ajout</th>
                                                         <th>Statut</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                  @foreach ($en_attent as $en_attents)
                                                     <tr>
-                                                      <td>1</td>
-                                                      <td>GT 4619</td>
+                                                      <td>{{ $en_attents->matricule }}</td>
+                                                      <td>{{ $en_attents->created_at }}</td>
                                                       <td>
                                                         <span class="badge bg-label-warning me-1">En attent</span>
                                                       </td>
                                                       <td>
-                                                         <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#plusModal">Voir <span class="tf-icon bx bx-plus bx-xs me-1"></span></a>
-                                                       </td>
-                                                    </tr>
-  
-                                                    <tr>
-                                                      <td>2</td>
-                                                      <td>AB 3703</td>
-                                                      <td>
-                                                        <span class="badge bg-label-warning me-1">En attent</span>
-                                                      </td>
-                                                      <td>
-                                                        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#plusModal">Voir <span class="tf-icon bx bx-plus bx-xs me-1"></span></a>
+                                                        <a href="{{ route('detail_en_attent', ['id' => $en_attents->id]) }}" class="btn btn-primary">Voir <span class="tf-icon bx bx-plus bx-xs me-1"></span></a>
                                                       </td>
                                                     </tr>
+                                                  @endforeach
                                                 </tbody>
                                             </table>
                                         </div>

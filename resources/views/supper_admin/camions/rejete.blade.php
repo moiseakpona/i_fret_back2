@@ -15,6 +15,24 @@
                         <span class="text-muted fw-light">Camions /</span> Rejetés
                      </h4>
 
+                     @if (session()->has('message'))
+                        <div class="alert alert-success">
+                            <button type="button" class="close" data-dismiss="alert">
+                            ×
+                            </button>
+                            {{session()->get('message')}}
+                        </div> 
+                    @endif
+
+                    @if (session()->has('error'))
+                        <div class="alert alert-danger">
+                            <button type="button" class="close" data-dismiss="alert">
+                            ×
+                            </button>
+                            {{session()->get('error')}}
+                        </div> 
+                    @endif
+
                      <!-- Fixed Header -->
                     <div class="content mt-3">
                      <div class="animated fadeIn">
@@ -44,8 +62,8 @@
                                                     <span class="badge bg-label-danger me-1">{{ $rejetes->statut}}</span>
                                                   </td>
                                                   <td>
-                                                      <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#plusModal" data-matricule="{{ $rejetes->matricule }}" data-photo="{{ $rejetes->photo }}" data-carte_grise="{{ $rejetes->carte_grise }}" data-visite_technique="{{ $rejetes->visite_technique }}" data-assurance="{{ $rejetes->assurance }}" data-id="{{ $rejetes->id }}">Voir <span class="tf-icon bx bx-plus bx-xs me-1"></span></a>
-                                                    </td>
+                                                    <a href="{{ route('detail_rejete', ['id' => $rejetes->id]) }}" class="btn btn-primary">Voir <span class="tf-icon bx bx-plus bx-xs me-1"></span></a>
+                                                  </td>
                                                 </tr>
                                                 @endforeach
                                              </tbody>
@@ -58,6 +76,7 @@
                      </div><!-- .animated -->
                  </div><!-- .content -->
                  <!--/ Fixed Header -->
+                 {{-- data-bs-toggle="modal" data-bs-target="#plusModal" data-matricule="{{ $rejetes->matricule }}" data-photo="{{ $rejetes->photo }}" data-carte_grise="{{ $rejetes->carte_grise }}" data-visite_technique="{{ $rejetes->visite_technique }}" data-assurance="{{ $rejetes->assurance }}" data-id="{{ $rejetes->id }}" --}}
 
 
                  <!-- Le modal Voir Plus -->

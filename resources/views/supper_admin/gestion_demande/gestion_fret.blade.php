@@ -153,25 +153,25 @@
                                       const numeroTel = document.createElement('tr');
                                       numeroTel.innerHTML = `
                                           <td><label style="font-weight: 600">Contact</label></td>
-                                          <td><span style="font-weight: 600; color:green;">${utilisateur.numero_tel}</span></td>`;
+                                          <td><span style="font-weight: 600;">${utilisateur.numero_tel}</span></td>`;
                                       modalBody.appendChild(numeroTel);
 
                                       const description = document.createElement('tr');
                                       description.innerHTML = `
                                           <td><label style="font-weight: 600;">Description du fret :</label></td>
-                                          <td><span style="font-weight: 600; color:green;">${fret.description}</span></td>`;
+                                          <td><span style="font-weight: 600;">${fret.description}</span></td>`;
                                       modalBody.appendChild(description);
                       
                                       const lieuDepart = document.createElement('tr');
                                       lieuDepart.innerHTML = `
                                           <td><label style="font-weight: 600;">Lieu de départ :</label></td>
-                                          <td><span style="font-weight: 600; color:green;">${fret.lieu_depart}</span></td>`;
+                                          <td><span style="font-weight: 600;">${fret.lieu_depart}</span></td>`;
                                       modalBody.appendChild(lieuDepart);
                       
                                       const lieuArrivee = document.createElement('tr');
                                       lieuArrivee.innerHTML = `
                                           <td><label style="font-weight: 600;">Lieu d'arrivée :</label></td>
-                                          <td><span style="font-weight: 600; color:green;">${fret.lieu_arrive}</span></td>`;
+                                          <td><span style="font-weight: 600;">${fret.lieu_arrive}</span></td>`;
                                       modalBody.appendChild(lieuArrivee);
                       
                                       // Ajoute un séparateur entre chaque fret et utilisateur

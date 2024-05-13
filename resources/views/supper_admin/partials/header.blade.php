@@ -184,7 +184,7 @@
                   <div class="d-flex">
                     <div class="flex-shrink-0 me-3">
                       <div class="avatar">
-                        <img src="../../assets/img/avatars/6.png" alt class="w-px-40 h-auto rounded-circle">
+                        <img src="{{ url('assets/img/avatars/6.png') }}" alt class="w-px-40 h-auto rounded-circle">
                       </div>
                     </div>
                     <div class="flex-grow-1">
@@ -229,7 +229,9 @@
           <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
             <div class="avatar avatar-online">
               @if (Auth::check() && Auth::user()->photo)
-               <img src="{{ asset('images/' . Auth::user()->photo) }}" alt class="w-px-40 h-auto rounded-circle">
+               <img src="{{ asset('images/' . Auth::user()->photo) }}" alt="Photo de profil" class="w-px-40 h-auto rounded-circle">
+              @else
+                <img src="{{ asset('images/default_profile_photo.png') }}" alt="Photo de profil" class="w-px-40 h-auto rounded-circle">
               @endif
             </div>
           </a>
@@ -240,7 +242,9 @@
                   <div class="flex-shrink-0 me-3">
                     <div class="avatar avatar-online">
                       @if (Auth::check() && Auth::user()->photo)
-                      <img src="{{ asset('images/' . Auth::user()->photo) }}" alt class="w-px-40 h-auto rounded-circle">
+                        <img src="{{ asset('images/' . Auth::user()->photo) }}" alt="Photo de profil" class="w-px-40 h-auto rounded-circle">
+                      @else
+                        <img src="{{ asset('images/default_profile_photo.png') }}" alt="Photo de profil" class="w-px-40 h-auto rounded-circle">
                       @endif
                     </div>
                   </div>
