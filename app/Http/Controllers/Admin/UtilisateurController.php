@@ -35,7 +35,7 @@ class UtilisateurController extends Controller
              $fret->lieu_arrive = $request->lieu_arrive;
              $fret->montant = $request->montant;
              $fret->description = $request->description;
-             $fret->statut = 'En attente';
+             $fret->statut = 'En attent';
              //$fret->numero_tel = $request->numero_tel;
              $fret->numero_tel = $numero;
  

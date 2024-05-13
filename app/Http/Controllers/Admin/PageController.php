@@ -411,7 +411,7 @@ class PageController extends Controller
     public function gestion_fret()
     {
         // Récupérer la liste des frets de statut "en attente"
-        $fretsEnAttente = Fret::where('statut', 'En attente')->get();
+        $fretsEnAttente = Fret::where('statut', 'En attent')->get();
 
         // Récupérer la liste des demandes
         $demandes = Demande::all();
