@@ -115,11 +115,12 @@ class AuthController extends Controller
             $enregistrement->matricule = $validatedData['matricule'];
 
             // Save the uploaded files with unique names
-            $photoPath = $request->file('photo_camion')->store('camion_images');
-            $carteGrisePath = $request->file('carte_grise')->store('camion_images');
-            $visiteTechniquePath = $request->file('visite_technique')->store('camion_images');
-            $assurancePath = $request->file('assurance')->store('camion_images');
+            $photoPath = $request->file('photo_camion')->store('images');
+            $carteGrisePath = $request->file('carte_grise')->store('images');
+            $visiteTechniquePath = $request->file('visite_technique')->store('images');
+            $assurancePath = $request->file('assurance')->store('images');
             $enregistrement->numero_tel = $numeroTel;
+            $enregistrement->statut = 'En attent';
 
             $enregistrement->photo_camion = $photoPath;
             $enregistrement->carte_grise = $carteGrisePath;
