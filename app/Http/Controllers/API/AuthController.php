@@ -120,10 +120,12 @@ class AuthController extends Controller
         $enregistrement->statut = 'En attent';
 
 
+
         // Stocker les fichiers téléchargés localement
         $photoPath = $request->file('photo_camion')->store('public/images');
         $carteGrisePath = $request->file('carte_grise')->store('public/images');
         $visiteTechniquePath = $request->file('visite_technique')->store('public/images');
+
 
             // Save the uploaded files with unique names
             $photoPath = $request->file('photo_camion')->store('images');
@@ -132,6 +134,9 @@ class AuthController extends Controller
             $assurancePath = $request->file('assurance')->store('images');
             $enregistrement->numero_tel = $numeroTel;
             $enregistrement->statut = 'En attent';
+
+        $assurancePath = $request->file('assurance')->store('public/images');
+
 
         // Mettre à jour les chemins complets dans l'objet Enregistrement
         $enregistrement->photo_camion = Storage::url($photoPath);
@@ -157,7 +162,6 @@ class AuthController extends Controller
             $enregistrement->visite_technique = $visiteTechniquePath;
             $enregistrement->assurance = $assurancePath;
 
-            
 
         $enregistrement->save();
 
