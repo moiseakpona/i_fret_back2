@@ -118,21 +118,11 @@ class AuthController extends Controller
         $enregistrement->numero_tel = $numeroTel;
         $enregistrement->statut = 'En attent';
 
-<<<<<<< HEAD
         // Stocker les fichiers téléchargés localement
         $photoPath = $request->file('photo_camion')->store('public/images');
         $carteGrisePath = $request->file('carte_grise')->store('public/images');
         $visiteTechniquePath = $request->file('visite_technique')->store('public/images');
         $assurancePath = $request->file('assurance')->store('public/images');
-=======
-            // Save the uploaded files with unique names
-            $photoPath = $request->file('photo_camion')->store('images');
-            $carteGrisePath = $request->file('carte_grise')->store('images');
-            $visiteTechniquePath = $request->file('visite_technique')->store('images');
-            $assurancePath = $request->file('assurance')->store('images');
-            $enregistrement->numero_tel = $numeroTel;
-            $enregistrement->statut = 'En attent';
->>>>>>> 44504204a220321e7d479585ac0f5f71b5955511
 
         // Mettre à jour les chemins complets dans l'objet Enregistrement
         $enregistrement->photo_camion = Storage::url($photoPath);
