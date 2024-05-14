@@ -82,18 +82,24 @@
                                     <li class="chat-contact-list-item chat-list-item-0 d-none">
                                        <h6 class="text-muted mb-0">No Chats Found</h6>
                                     </li>
-                                    <li class="chat-contact-list-item">
-                                       <a href="#" class="d-flex align-items-center">
-                                          <div class="flex-shrink-0 avatar avatar-offline">
-                                             <img src="{{ asset('assets/img/avatars/2.png')}}" alt="Avatar" class="rounded-circle">
-                                          </div>
-                                          <div class="chat-contact-info flex-grow-1 ms-3">
-                                             <h6 class="chat-contact-name text-truncate m-0">Felecia Rower</h6>
-                                             <p class="chat-contact-status text-truncate mb-0 text-muted">I will purchase it for sure. 👍</p>
-                                          </div>
-                                          <small class="text-muted mb-auto">30 Minutes</small>
-                                       </a>
-                                    </li>
+                                    @foreach($usersEtEndMessage as $userEtEndMessage)
+                                       <li class="chat-contact-list-item">
+                                          <a href="{{ route('detail_chat', ['numero_tel' => $userEtEndMessage['utilisateur']->numero_tel]) }}" class="d-flex align-items-center">
+                                             <div class="flex-shrink-0 avatar avatar-offline">
+                                                @if ($userEtEndMessage['utilisateur']->photo)
+                                                   <img src="{{ $userEtEndMessage['utilisateur']->photo }}" alt="Photo de profil" class="rounded-circle">
+                                                @else
+                                                   <img src="{{ asset('images/default_profile_photo.png') }}" alt="Avatar" class="rounded-circle">
+                                                @endif
+                                             </div>
+                                             <div class="chat-contact-info flex-grow-1 ms-3">
+                                                <h6 class="chat-contact-name text-truncate m-0">{{ $userEtEndMessage['utilisateur']->nom }} {{ $userEtEndMessage['utilisateur']->prenom }}</h6>
+                                                <p class="chat-contact-status text-truncate mb-0 text-muted">{{ $userEtEndMessage['dernierMessage']->message }}</p>
+                                             </div>
+                                             <small class="text-muted mb-auto">{{ $userEtEndMessage['dernierMessage']->created_at }}</small>
+                                          </a>
+                                       </li>
+                                    @endforeach
                                  </ul>
 
                                  <!-- Contacts -->

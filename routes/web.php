@@ -97,6 +97,8 @@ Route::get('/supper_admin/chats/chargeur', [PageController::class, 'chat_chargeu
 Route::get('/supper_admin/chats/detail_chat/{numero_tel}', [PageController::class, 'detail_chat'])->name('detail_chat');
 // Route pour enregistrer de nouvel fret
 Route::post('/supper_admin/chats/chargeur/enregistrer/{numero_tel}', [UtilisateurController::class, 'fret_enregister'])->name('fret.enregister');
+// Route pour enregistrer de message dans le chat
+Route::post('/supper_admin/chats/chargeur/enregistrer/message/{numero_tel}', [UtilisateurController::class, 'message'])->name('message');
 
 
 // Route de la page Gestion des demandes

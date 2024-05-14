@@ -82,18 +82,24 @@
                                     <li class="chat-contact-list-item chat-list-item-0 d-none">
                                         <h6 class="text-muted mb-0">No Chats Found</h6>
                                      </li>
-                                    <li class="chat-contact-list-item active">
-                                       <a href="#" class="d-flex align-items-center">
-                                          <div class="flex-shrink-0 avatar avatar-offline">
-                                             <img src="{{ asset('assets/img/avatars/2.png')}}" alt="Avatar" class="rounded-circle">
-                                          </div>
-                                          <div class="chat-contact-info flex-grow-1 ms-3">
-                                             <h6 class="chat-contact-name text-truncate m-0">Felecia Rower</h6>
-                                             <p class="chat-contact-status text-truncate mb-0 text-muted">I will purchase it for sure. 👍</p>
-                                          </div>
-                                          <small class="text-muted mb-auto">30 Minutes</small>
-                                       </a>
-                                    </li>
+                                     @foreach($usersEtEndMessage as $userEtEndMessage)
+                                       <li class="chat-contact-list-item">
+                                          <a href="{{ route('detail_chat', ['numero_tel' => $userEtEndMessage['utilisateur']->numero_tel]) }}" class="d-flex align-items-center">
+                                             <div class="flex-shrink-0 avatar avatar-offline">
+                                                @if ($userEtEndMessage['utilisateur']->photo)
+                                                   <img src="{{ $userEtEndMessage['utilisateur']->photo }}" alt="Photo de profil" class="rounded-circle">
+                                                @else
+                                                   <img src="{{ asset('images/default_profile_photo.png') }}" alt="Avatar" class="rounded-circle">
+                                                @endif
+                                             </div>
+                                             <div class="chat-contact-info flex-grow-1 ms-3">
+                                                <h6 class="chat-contact-name text-truncate m-0">{{ $userEtEndMessage['utilisateur']->nom }} {{ $userEtEndMessage['utilisateur']->prenom }}</h6>
+                                                <p class="chat-contact-status text-truncate mb-0 text-muted">{{ $userEtEndMessage['dernierMessage']->message }}</p>
+                                             </div>
+                                             <small class="text-muted mb-auto">{{ $userEtEndMessage['dernierMessage']->created_at }}</small>
+                                          </a>
+                                       </li>
+                                    @endforeach
                                  </ul>
 
                                  <!-- Contacts -->
@@ -172,27 +178,31 @@
                                                 @endif
                                               </div>
                                            </div>
+                                           @foreach ($chargeur_envoyer as $envoyer)
                                            <div class="chat-message-wrapper flex-grow-1">
                                               <div class="chat-message-text">
-                                                 <p class="mb-0">Hey John, Could you please help me to find it out? 🤔</p>
+                                                 <p class="mb-0">{{ $envoyer->message }}</p>
                                               </div>
                                               <div class="text-muted mt-1">
-                                                 <small>10:02 AM</small>
+                                                 <small>{{ $envoyer->created_at }}</small>
                                               </div>
                                            </div>
+                                           @endforeach
                                         </div>
                                      </li>
                                      <li class="chat-message chat-message-right">
                                         <div class="d-flex overflow-hidden">
+                                          @foreach ($chargeur_recu as $recu)
                                           <div class="chat-message-wrapper flex-grow-1">
                                             <div class="chat-message-text">
-                                              <p class="mb-0">Sneat has all the components you'll ever need in a app.</p>
+                                              <p class="mb-0">{{ $recu->message }}</p>
                                             </div>
                                             <div class="text-end text-muted mt-1">
                                               <i class='bx bx-check-double text-success'></i>
-                                              <small>10:03 AM</small>
+                                              <small>{{ $recu->created_at }}</small>
                                             </div>
                                           </div>
+                                          @endforeach
                                           <div class="user-avatar flex-shrink-0 ms-3">
                                             <div class="avatar avatar-sm">
                                                 @if (Auth::check() && Auth::user()->photo)
@@ -209,10 +219,11 @@
                                <!-- Chat message form -->
                                
                                <div class="chat-history-footer">
-                                  <form class="form-send-message d-flex justify-content-between align-items-center ">
-                                     <input class="form-control message-input border-0 me-3 shadow-none" placeholder="Message...">
+                                  <form method="POST" action="{{ route('message', ['numero_tel' => $chargeur_online->numero_tel ]) }}" class="d-flex justify-content-between align-items-center ">
+                                    @csrf
+                                     <input name="message" class="form-control message-input border-0 me-3 shadow-none" placeholder="Message...">
                                      <div class="message-actions d-flex align-items-center">
-                                        <button type="submit" class="btn btn-primary d-flex send-msg-btn">
+                                        <button type="submit" name="submit" class="btn btn-primary d-flex send-msg-btn">
                                         <i class="bx bx-paper-plane me-md-1 me-0"></i>
                                         <span class="align-middle d-md-inline-block d-none">Envoyer</span>
                                         </button>

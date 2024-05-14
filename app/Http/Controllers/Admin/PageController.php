@@ -10,6 +10,8 @@ use App\Models\Fret;
 use App\Models\Demande;
 use App\Models\Vehicule;
 use App\Models\DetailChauffeur;
+use App\Models\Envoyer;
+use App\Models\Recevoir;
 
 class PageController extends Controller
 {
@@ -378,14 +380,42 @@ class PageController extends Controller
         // Récupérer la liste des utilisateurs dont le type de compte est "chargeur"
         $chargeurs = User::where('type_compte', 'chargeur')->get();
 
+        // Récupérer les numéros de téléphone distincts des utilisateurs ayant des envois non lus
+        $numeros_tel = Envoyer::where('statut', 'Non lu')->distinct()->pluck('numero_tel');
+
+        // Récupérer les utilisateurs correspondant aux numéros de téléphone trouvés
+        $utilisateurs = User::whereIn('numero_tel', $numeros_tel)->get();
+
+        // Tableau pour stocker les utilisateurs avec leurs derniers messages
+        $usersEtEndMessage = [];
+
+        // Parcourir chaque utilisateur pour récupérer son dernier message envoyé
+        foreach ($utilisateurs as $utilisateur) {
+            $dernierMessage = Envoyer::where('numero_tel', $utilisateur->numero_tel)
+                ->orderByDesc('created_at')
+                ->first();
+
+            // Assigner le dernier message à l'utilisateur
+            $usersEtEndMessage[] = [
+                'utilisateur' => $utilisateur,
+                'dernierMessage' => $dernierMessage,
+            ];
+        }
+
         // Retourner la vue du chat Chargeur
-        return view('supper_admin.chats.chargeur', ['admin' => $admin, 'chargeurs' => $chargeurs]);
+        return view('supper_admin.chats.chargeur', ['admin' => $admin, 'chargeurs' => $chargeurs, 'usersEtEndMessage' => $usersEtEndMessage ]);
     }
 
 
 
     public function detail_chat(Request $request, $numero)
     {
+        // Récupère les messavage envoyer par ce utilisateur
+        $chargeur_envoyer = Envoyer::where('numero_tel', $numero)->get();
+
+        // Récupère les messavage Reçu par ce utilisateur
+        $chargeur_recu = Recevoir::where('numero_tel', $numero)->get();
+
         // Récupérer l'utilisateur avec le numéro de téléphone spécifié
         $chargeur_online = User::where('numero_tel', $numero)->first();
 
@@ -395,8 +425,30 @@ class PageController extends Controller
         // Récupérer la liste des utilisateurs dont le type de compte est "chargeur"
         $chargeurs = User::where('type_compte', 'chargeur')->get();
 
+         // Récupérer les numéros de téléphone distincts des utilisateurs ayant des envois non lus
+         $numeros_tel = Envoyer::where('statut', 'Non lu')->distinct()->pluck('numero_tel');
+
+         // Récupérer les utilisateurs correspondant aux numéros de téléphone trouvés
+         $utilisateurs = User::whereIn('numero_tel', $numeros_tel)->get();
+ 
+         // Tableau pour stocker les utilisateurs avec leurs derniers messages
+         $usersEtEndMessage = [];
+ 
+         // Parcourir chaque utilisateur pour récupérer son dernier message envoyé
+         foreach ($utilisateurs as $utilisateur) {
+             $dernierMessage = Envoyer::where('numero_tel', $utilisateur->numero_tel)
+                 ->orderByDesc('created_at')
+                 ->first();
+ 
+             // Assigner le dernier message à l'utilisateur
+             $usersEtEndMessage[] = [
+                 'utilisateur' => $utilisateur,
+                 'dernierMessage' => $dernierMessage,
+             ];
+         }
+
         // Retourner la vue du chat Chargeur
-        return view('supper_admin.chats.detail_chat', ['admin' => $admin, 'chargeurs' => $chargeurs, 'chargeur_online' => $chargeur_online]);
+        return view('supper_admin.chats.detail_chat', ['admin' => $admin, 'chargeurs' => $chargeurs, 'chargeur_online' => $chargeur_online, 'usersEtEndMessage' => $usersEtEndMessage, 'chargeur_envoyer' => $chargeur_envoyer, 'chargeur_recu' => $chargeur_recu]);
     }
 
 

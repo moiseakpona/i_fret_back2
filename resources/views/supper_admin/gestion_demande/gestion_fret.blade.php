@@ -248,21 +248,23 @@
                                     <div class="col">
                                       <label for="lieu_depart" class="form-label"> Lieu de depart </label>
                                       <select class="form-select" id="lieu_depart" name="lieu_depart">
-                                        <option selected disabled>Cotonou</option>
+                                        <option selected disabled>Selectionner =la ville de depart</option>
                                         <option value="Cotonou">Cotonou</option>
+                                        <option value="Abomey-Calavi">Abomey-Calavi</option>
                                         <option value="Porto-Novo">Porto-Novo</option>
                                         <option value="Parakou">Parakou</option>
-                                        <option value="Abomey-Calavi">Abomey-Calavi</option>
+                                        <option value="Djougou">Djougou</option>
                                       </select>
                                     </div>
                                     <div class="col">
                                       <label for="lieu_arrive" class="form-label">Lieu d'arrivée</label>
                                       <select class="form-select" id="lieu_arrive" name="lieu_arrive">
-                                        <option selected disabled>Parakou</option>
+                                        <option selected disabled>Selectionner =la ville d'arriver</option>
                                         <option value="Cotonou">Cotonou</option>
+                                        <option value="Abomey-Calavi">Abomey-Calavi</option>
                                         <option value="Porto-Novo">Porto-Novo</option>
                                         <option value="Parakou">Parakou</option>
-                                        <option value="Abomey-Calavi">Abomey-Calavi</option>
+                                        <option value="Djougou">Djougou</option>
                                       </select>
                                     </div>
                                   </div>

@@ -9,6 +9,8 @@ use Auth;
 use DB;
 use App\Models\Fret;
 use App\Models\Demande;
+use App\Models\Envoyer;
+use App\Models\Recevoir;
 
 class UtilisateurController extends Controller
 {
@@ -91,6 +93,22 @@ class UtilisateurController extends Controller
     
         // Redirige avec un message de succès
         return redirect()->back()->with('message', 'Les informations ont été enregistrées avec succès.');
+    }
+
+
+    public function message(Request $request, $numero)
+    {
+        // Créer une instance du message
+        $message = new Recevoir();
+        $message->message = $request->input('message');
+        $message->numero_tel = $numero;
+        $message->statut = 'Non lu';
+
+        // Enregistrer le message dans la base de données
+        $message->save();
+
+        // Retourner une réponse de succès
+        return back()->with('success', 'Message envoyé avec succès.');
     }
     
 
