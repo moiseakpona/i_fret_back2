@@ -16,7 +16,7 @@ return new class extends Migration
             $table->text('message');
             $table->string('statut')->nullable();
             $table->string('numero_tel');
-            $table->foreign('numero_tel')->references('numero_tel')->on('users');
+            $table->foreign('numero_tel')->references('numero_tel')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

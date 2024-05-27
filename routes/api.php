@@ -24,10 +24,20 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('/who',[AuthController::class,'who']);
+    Route::get('/camions',[AuthController::class,'getUserCamions']);
+    Route::get('/camions/{matricule}', [AuthController::class, 'getCamionDetails']);
+    Route::put('/updateCamion/{matricule}',  [AuthController::class, 'mettreAJourCamion']);
     Route::put('/edit-profil',  [AuthController::class, 'edit']);
     Route::put('/photoImport',  [AuthController::class, 'store']);
     Route::get('/getUser',  [AuthController::class, 'getUserDetails']);
     Route::post('/enregistrementCamion', [AuthController::class,'enregistrerCamion']);
+  
+    Route::post('/send', [AuthController::class, 'send']);
+    Route::get('/receive', [AuthController::class, 'receiveMe']);
+  
+   
+   
+
    
 });
 
