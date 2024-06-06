@@ -110,7 +110,8 @@ class UtilisateurController extends Controller
         // Retourner une réponse de succès
         return back()->with('success', 'Message envoyé avec succès.');
     }
-    
+
+
 
     
 }

@@ -81,11 +81,19 @@
                                     </li>
                                     <li class="chat-contact-list-item chat-list-item-0 d-none">
                                         <h6 class="text-muted mb-0">No Chats Found</h6>
-                                     </li>
-                                     @foreach($usersEtEndMessage as $userEtEndMessage)
-                                       <li class="chat-contact-list-item">
+                                    </li>
+                                    @foreach($usersEtEndMessage as $userEtEndMessage)
+                                       @if ( $userEtEndMessage['utilisateur']->numero_tel == $chargeur_online->numero_tel )
+                                          <li class="chat-contact-list-item active">
+                                       @else
+                                          <li class="chat-contact-list-item">
+                                       @endif
                                           <a href="{{ route('detail_chat', ['numero_tel' => $userEtEndMessage['utilisateur']->numero_tel]) }}" class="d-flex align-items-center">
-                                             <div class="flex-shrink-0 avatar avatar-offline">
+                                             @if ( $userEtEndMessage['dernierMessage']->statut)
+                                                <div class="flex-shrink-0 avatar">
+                                             @else
+                                                <div class="flex-shrink-0 avatar avatar-online">
+                                             @endif
                                                 @if ($userEtEndMessage['utilisateur']->photo)
                                                    <img src="{{ $userEtEndMessage['utilisateur']->photo }}" alt="Photo de profil" class="rounded-circle">
                                                 @else
@@ -100,18 +108,22 @@
                                           </a>
                                        </li>
                                     @endforeach
-                                 </ul>
-
-                                 <!-- Contacts -->
-                                 <ul class="list-unstyled chat-contact-list mb-0" id="contact-list">
-                                    <li class="chat-contact-list-item chat-contact-list-item-title">
-                                       <h5 class="text-primary mb-0">Utilisateurs</h5>
-                                    </li>
-                                    <li class="chat-contact-list-item contact-list-item-0 d-none">
-                                        <h6 class="text-muted mb-0">No Contacts Found</h6>
-                                     </li>
-                                    @foreach ($chargeurs as $chargeur)
-                                       <li class="chat-contact-list-item">
+                                    </ul>
+   
+                                    <!-- Contacts -->
+                                    <ul class="list-unstyled chat-contact-list mb-0" id="contact-list">
+                                       <li class="chat-contact-list-item chat-contact-list-item-title">
+                                          <h5 class="text-primary mb-0">Utilisateurs</h5>
+                                       </li>
+                                       <li class="chat-contact-list-item contact-list-item-0 d-none">
+                                          <h6 class="text-muted mb-0">No Contacts Found</h6>
+                                       </li>
+                                       @foreach ($chargeurs as $chargeur)
+                                          @if ( $chargeur->numero_tel == $chargeur_online->numero_tel )
+                                             <li class="chat-contact-list-item active">
+                                          @else
+                                             <li class="chat-contact-list-item">
+                                          @endif
                                           <a href="{{ route('detail_chat', ['numero_tel' => $chargeur->numero_tel]) }}" class="d-flex align-items-center">
                                              <div class="flex-shrink-0 avatar">
                                                 @if ($chargeur->photo)
@@ -167,7 +179,8 @@
 
                                <div class="chat-history-body">
                                   <ul class="list-unstyled chat-history mb-0">
-                                     <li class="chat-message">
+                                    @foreach ($envois as $envoi)
+                                     <li class="chat-message envoye">
                                         <div class="d-flex overflow-hidden">
                                            <div class="user-avatar flex-shrink-0 me-3">
                                               <div class="avatar avatar-sm">
@@ -178,31 +191,30 @@
                                                 @endif
                                               </div>
                                            </div>
-                                           @foreach ($chargeur_envoyer as $envoyer)
-                                           <div class="chat-message-wrapper flex-grow-1">
-                                              <div class="chat-message-text">
-                                                 <p class="mb-0">{{ $envoyer->message }}</p>
+                                           <div id="envois" class="chat-message-wrapper flex-grow-1">
+                                              <div class="chat-message-text message envoye">
+                                                 <p class="mb-0">{{ $envoi->message }}</p>
                                               </div>
                                               <div class="text-muted mt-1">
-                                                 <small>{{ $envoyer->created_at }}</small>
+                                                 <small>{{ $envoi->created_at }}</small>
                                               </div>
                                            </div>
-                                           @endforeach
                                         </div>
                                      </li>
-                                     <li class="chat-message chat-message-right">
+                                     @endforeach
+
+                                     @foreach ($receptions as $reception)
+                                     <li class="chat-message chat-message-right recu">
                                         <div class="d-flex overflow-hidden">
-                                          @foreach ($chargeur_recu as $recu)
-                                          <div class="chat-message-wrapper flex-grow-1">
-                                            <div class="chat-message-text">
-                                              <p class="mb-0">{{ $recu->message }}</p>
+                                          <div id="receptions" class="chat-message-wrapper flex-grow-1">
+                                            <div class="chat-message-text message recu">
+                                              <p class="mb-0">{{ $reception->message }}</p>
                                             </div>
                                             <div class="text-end text-muted mt-1">
                                               <i class='bx bx-check-double text-success'></i>
-                                              <small>{{ $recu->created_at }}</small>
+                                              <small>{{ $reception->created_at }}</small>
                                             </div>
                                           </div>
-                                          @endforeach
                                           <div class="user-avatar flex-shrink-0 ms-3">
                                             <div class="avatar avatar-sm">
                                                 @if (Auth::check() && Auth::user()->photo)
@@ -214,6 +226,7 @@
                                           </div>
                                         </div>
                                       </li>
+                                      @endforeach
                                   </ul>
                                </div>
                                <!-- Chat message form -->
@@ -266,12 +279,51 @@
                          </div>
                          <!-- /Sidebar Right -->
 
-
                            <div class="app-overlay"></div>
                         </div>
                      </div>
                   </div>
 
+
+
+                  <script>
+
+                     window.onload = function() {
+                        var env = document.querySelectorAll('.chat-message.envoye');
+                        var rec = document.querySelectorAll('.chat-message.recu');
+                        var container = document.querySelector('.chat-history-body ul');
+
+                        var messages = [];
+
+                        // Ajouter tous les messages envoyés dans un tableau
+                        env.forEach(function(message) {
+                           messages.push({
+                                 element: message,
+                                 timestamp: new Date(message.querySelector('.text-muted small').innerText)
+                           });
+                        });
+
+                        // Ajouter tous les messages reçus dans un tableau
+                        rec.forEach(function(message) {
+                           messages.push({
+                                 element: message,
+                                 timestamp: new Date(message.querySelector('.text-muted small').innerText)
+                           });
+                        });
+
+                        // Trier les messages par date d'envoi
+                        messages.sort(function(a, b) {
+                           return a.timestamp - b.timestamp;
+                        });
+
+                        // Réinsérer les messages triés dans le conteneur
+                        messages.forEach(function(message) {
+                           container.appendChild(message.element);
+                        });
+                     };
+
+                  </script>
+                  
 
 
                   <!-- Modal -->

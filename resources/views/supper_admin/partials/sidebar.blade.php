@@ -199,14 +199,19 @@
             </a>
           </li>
         </ul>
-      </li>
+      </li> 
 
+
+      @php
+        $pageController = new App\Http\Controllers\Admin\PageController();
+        $nombreDeMessagesNonLus = $pageController->compte_chat_non_lu();
+      @endphp
 
       <li class="menu-item {{ Request::is('supper_admin/chats/chargeur') ? 'active' : '' }} {{ Request::is('supper_admin/chats/detail_chat') ? 'active open' : '' }}">
         <a href="{{ route('chats.chargeur') }}" class="menu-link">
           <i class='menu-icon tf-icons bx bx-chat'></i>
           <div class="text-truncate" data-i18n="Chats">Chats</div>
-          <span class="badge badge-center rounded-pill bg-success ms-auto">8</span>
+          <span class="badge badge-center rounded-pill bg-success ms-auto">{{ $nombreDeMessagesNonLus }}</span>
         </a>
         <ul class="menu-sub">
         </ul>

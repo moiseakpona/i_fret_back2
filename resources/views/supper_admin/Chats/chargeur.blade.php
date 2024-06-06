@@ -85,7 +85,11 @@
                                     @foreach($usersEtEndMessage as $userEtEndMessage)
                                        <li class="chat-contact-list-item">
                                           <a href="{{ route('detail_chat', ['numero_tel' => $userEtEndMessage['utilisateur']->numero_tel]) }}" class="d-flex align-items-center">
-                                             <div class="flex-shrink-0 avatar avatar-offline">
+                                             @if ( $userEtEndMessage['dernierMessage']->statut)
+                                                <div class="flex-shrink-0 avatar">
+                                             @else
+                                                <div class="flex-shrink-0 avatar avatar-online">
+                                             @endif
                                                 @if ($userEtEndMessage['utilisateur']->photo)
                                                    <img src="{{ $userEtEndMessage['utilisateur']->photo }}" alt="Photo de profil" class="rounded-circle">
                                                 @else

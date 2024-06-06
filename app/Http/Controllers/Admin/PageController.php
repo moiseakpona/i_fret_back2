@@ -377,11 +377,24 @@ class PageController extends Controller
         // Récupérer l'utilisateur connecté
         $admin = auth()->user();
 
-        // Récupérer la liste des utilisateurs dont le type de compte est "chargeur"
-        $chargeurs = User::where('type_compte', 'chargeur')->get();
+       
+        // <-- message non lu -->
+        // Récupérer les numéros de téléphone distincts de la table Envoyer
+        $numeros_telephone = Envoyer::distinct()->pluck('numero_tel')->toArray();
 
-        // Récupérer les numéros de téléphone distincts des utilisateurs ayant des envois non lus
-        $numeros_tel = Envoyer::where('statut', 'Non lu')->distinct()->pluck('numero_tel');
+        // Supprimer les doublons des numéros de téléphone
+        $numeros_tel = array_unique($numeros_telephone);
+         
+        // <-- Autre fonction en interne -->
+         // Récupérer les numéros de téléphone distincts des utilisateurs
+         $numeros_telephone = User::where('type_compte', 'Chargeur')->distinct()->pluck('numero_tel')->toArray();
+
+         // Filtrer les numéros de téléphone pour exclure ceux ayant des envois non lus
+         $numeros_tel_lu = array_diff($numeros_telephone, $numeros_tel);
+ 
+         // Récupérer les utilisateurs correspondant aux numéros de téléphone trouvés
+         $chargeurs = User::whereIn('numero_tel', $numeros_tel_lu)->get();
+        // < !-- Autre fonction en interne -->
 
         // Récupérer les utilisateurs correspondant aux numéros de téléphone trouvés
         $utilisateurs = User::whereIn('numero_tel', $numeros_tel)->get();
@@ -401,9 +414,11 @@ class PageController extends Controller
                 'dernierMessage' => $dernierMessage,
             ];
         }
+        // < !-- message non lu -->
+
 
         // Retourner la vue du chat Chargeur
-        return view('supper_admin.chats.chargeur', ['admin' => $admin, 'chargeurs' => $chargeurs, 'usersEtEndMessage' => $usersEtEndMessage ]);
+        return view('supper_admin.chats.chargeur', ['admin' => $admin, 'usersEtEndMessage' => $usersEtEndMessage, 'chargeurs' => $chargeurs ]);
     }
 
 
@@ -411,10 +426,20 @@ class PageController extends Controller
     public function detail_chat(Request $request, $numero)
     {
         // Récupère les messavage envoyer par ce utilisateur
-        $chargeur_envoyer = Envoyer::where('numero_tel', $numero)->get();
+        $envois = Envoyer::where('numero_tel', $numero)
+                            ->orderBy('created_at')
+                            ->get();
+
+        // Parcourir chaque message et mettre à jour le statut
+        foreach ($envois as $envoi) {
+            $envoi->statut = 'Lu';
+            $envoi->save();
+        }
 
         // Récupère les messavage Reçu par ce utilisateur
-        $chargeur_recu = Recevoir::where('numero_tel', $numero)->get();
+        $receptions = Recevoir::where('numero_tel', $numero)
+                            ->orderBy('created_at')
+                            ->get();
 
         // Récupérer l'utilisateur avec le numéro de téléphone spécifié
         $chargeur_online = User::where('numero_tel', $numero)->first();
@@ -425,31 +450,73 @@ class PageController extends Controller
         // Récupérer la liste des utilisateurs dont le type de compte est "chargeur"
         $chargeurs = User::where('type_compte', 'chargeur')->get();
 
-         // Récupérer les numéros de téléphone distincts des utilisateurs ayant des envois non lus
-         $numeros_tel = Envoyer::where('statut', 'Non lu')->distinct()->pluck('numero_tel');
+       // Récupérer les numéros de téléphone distincts des utilisateurs ayant des envois lus
+       $numeros_telephone = User::where('type_compte', 'Chargeur')->distinct()->pluck('numero_tel')->toArray();
 
+       // Récupérer les numéros de téléphone distincts des utilisateurs ayant des envois non lus
+       $numeros_tel_non_lus = Envoyer::where('statut', 'Non lu')->distinct()->pluck('numero_tel')->toArray();
+
+       // Filtrer les numéros de téléphone pour exclure ceux ayant des envois non lus
+       $numeros_tel_lu = array_diff($numeros_telephone, $numeros_tel_non_lus);
+
+       // Récupérer les utilisateurs correspondant aux numéros de téléphone trouvés
+       $chargeurs = User::whereIn('numero_tel', $numeros_tel_lu)->get();
+
+        // <-- message non lu -->
+        // Récupérer les numéros de téléphone distincts de la table Envoyer
+        $numeros_telephone = Envoyer::distinct()->pluck('numero_tel')->toArray();
+
+        // Supprimer les doublons des numéros de téléphone
+        $numeros_tel = array_unique($numeros_telephone);
+
+         
+        // <-- Autre fonction en interne -->
+         // Récupérer les numéros de téléphone distincts des utilisateurs
+         $numeros_telephone = User::where('type_compte', 'Chargeur')->distinct()->pluck('numero_tel')->toArray();
+
+         // Filtrer les numéros de téléphone pour exclure ceux ayant des envois non lus
+         $numeros_tel_lu = array_diff($numeros_telephone, $numeros_tel);
+ 
          // Récupérer les utilisateurs correspondant aux numéros de téléphone trouvés
-         $utilisateurs = User::whereIn('numero_tel', $numeros_tel)->get();
- 
-         // Tableau pour stocker les utilisateurs avec leurs derniers messages
-         $usersEtEndMessage = [];
- 
-         // Parcourir chaque utilisateur pour récupérer son dernier message envoyé
-         foreach ($utilisateurs as $utilisateur) {
-             $dernierMessage = Envoyer::where('numero_tel', $utilisateur->numero_tel)
-                 ->orderByDesc('created_at')
-                 ->first();
- 
-             // Assigner le dernier message à l'utilisateur
-             $usersEtEndMessage[] = [
-                 'utilisateur' => $utilisateur,
-                 'dernierMessage' => $dernierMessage,
-             ];
-         }
+         $chargeurs = User::whereIn('numero_tel', $numeros_tel_lu)->get();
+        // < !-- Autre fonction en interne -->
+
+        // Récupérer les utilisateurs correspondant aux numéros de téléphone trouvés
+        $utilisateurs = User::whereIn('numero_tel', $numeros_tel)->get();
+
+        // Tableau pour stocker les utilisateurs avec leurs derniers messages
+        $usersEtEndMessage = [];
+
+        // Parcourir chaque utilisateur pour récupérer son dernier message envoyé
+        foreach ($utilisateurs as $utilisateur) {
+            $dernierMessage = Envoyer::where('numero_tel', $utilisateur->numero_tel)
+                ->orderByDesc('created_at')
+                ->first();
+
+            // Assigner le dernier message à l'utilisateur
+            $usersEtEndMessage[] = [
+                'utilisateur' => $utilisateur,
+                'dernierMessage' => $dernierMessage,
+            ];
+        }
+        // < !-- message non lu -->
+
 
         // Retourner la vue du chat Chargeur
-        return view('supper_admin.chats.detail_chat', ['admin' => $admin, 'chargeurs' => $chargeurs, 'chargeur_online' => $chargeur_online, 'usersEtEndMessage' => $usersEtEndMessage, 'chargeur_envoyer' => $chargeur_envoyer, 'chargeur_recu' => $chargeur_recu]);
+        return view('supper_admin.chats.detail_chat', ['admin' => $admin, 'chargeurs' => $chargeurs, 'chargeur_online' => $chargeur_online, 'usersEtEndMessage' => $usersEtEndMessage, 'chargeurs' => $chargeurs,  'envois' => $envois, 'receptions' => $receptions]);
     }
+
+
+
+    public function compte_chat_non_lu()
+    {
+        // Compte le nombre de message non lu dans le chat
+        $chat_non_lu = Envoyer::where('statut', '')->count();
+
+        // Retourner  la vue correspondante
+        return $chat_non_lu;
+    }
+
 
 
     
@@ -511,7 +578,7 @@ class PageController extends Controller
     public function fret_diponible()
     {
         // Récupérer la liste des frets de statut "en attente"
-        $fretsEnAttente = Fret::where('statut', 'En attente')->get();
+        $fretsEnAttente = Fret::where('statut', 'En attent')->get();
 
         // Tableau pour stocker les résultats
         $resultats = [];
@@ -535,6 +602,8 @@ class PageController extends Controller
         return view('supper_admin.gestion_demande.fret_diponible', ['resultats' => $resultats]);
     }
 
+    
+
     public function traking()
     {
         // Retourner la vue Traking
@@ -551,10 +620,17 @@ class PageController extends Controller
     //==========================================================
 
 
-    public function details()
+    public function soumissionnaire()
     {
         // Retourner la vue connexion
-        return view('supper_admin.gestion_demande.details');
+        return view('supper_admin.gestion_demande.soumissionnaire');
+    }
+
+
+    public function detail_demande()
+    {
+        // Retourner la vue connexion
+        return view('supper_admin.gestion_demande.detail_demande');
     }
 
 

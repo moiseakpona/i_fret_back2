@@ -89,8 +89,7 @@
                                                   <div class="dropdown">
                                                       <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                                                       <div class="dropdown-menu">
-                                                          <a class="dropdown-item" href="{{ route('details')}}"><i class="bx bx-food-menu me-1"></i> Détail</a>
-                                                          <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-1"></i> Modifier</a>
+                                                          <a class="dropdown-item" href="{{ route('soumissionnaire')}}"><i class="bx bxs-truck me-1"></i> Soumissionnaires</a>
                                                           <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Supprimé</a>
                                                       </div>
                                                   </div>
@@ -146,32 +145,32 @@
                       
                                       const nom = document.createElement('tr');
                                       nom.innerHTML = `
-                                          <td><label style="font-weight: 600; ">Profil :</label></td> 
+                                          <td><label>Profil :</label></td> 
                                           <td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2">${chargeurPhoto ? `<img src="${chargeurPhoto}" alt="Photo de profil" class="rounded-circle">` : `<img src="{{ asset('images/default_profile_photo.png') }}" alt="Photo de profil par défaut" class="rounded-circle">`}</div></div><div class="d-flex flex-column"><a href="#" spellcheck="false"><span class="fw-medium">${utilisateur.nom} ${utilisateur.prenom}</span></a><small class="text-muted">${utilisateur.type_compte}</small></div></div></td> `;
                                       modalBody.appendChild(nom);
                       
                                       const numeroTel = document.createElement('tr');
                                       numeroTel.innerHTML = `
                                           <td><label style="font-weight: 600">Contact</label></td>
-                                          <td><span style="font-weight: 600;">${utilisateur.numero_tel}</span></td>`;
+                                          <td><span>${utilisateur.numero_tel}</span></td>`;
                                       modalBody.appendChild(numeroTel);
 
                                       const description = document.createElement('tr');
                                       description.innerHTML = `
-                                          <td><label style="font-weight: 600;">Description du fret :</label></td>
-                                          <td><span style="font-weight: 600;">${fret.description}</span></td>`;
+                                          <td><label>Description du fret :</label></td>
+                                          <td><span>${fret.description}</span></td>`;
                                       modalBody.appendChild(description);
                       
                                       const lieuDepart = document.createElement('tr');
                                       lieuDepart.innerHTML = `
-                                          <td><label style="font-weight: 600;">Lieu de départ :</label></td>
-                                          <td><span style="font-weight: 600;">${fret.lieu_depart}</span></td>`;
+                                          <td><label>Lieu de départ :</label></td>
+                                          <td><span>${fret.lieu_depart}</span></td>`;
                                       modalBody.appendChild(lieuDepart);
                       
                                       const lieuArrivee = document.createElement('tr');
                                       lieuArrivee.innerHTML = `
-                                          <td><label style="font-weight: 600;">Lieu d'arrivée :</label></td>
-                                          <td><span style="font-weight: 600;">${fret.lieu_arrive}</span></td>`;
+                                          <td><label>Lieu d'arrivée :</label></td>
+                                          <td><span>${fret.lieu_arrive}</span></td>`;
                                       modalBody.appendChild(lieuArrivee);
                       
                                       // Ajoute un séparateur entre chaque fret et utilisateur
@@ -248,7 +247,7 @@
                                     <div class="col">
                                       <label for="lieu_depart" class="form-label"> Lieu de depart </label>
                                       <select class="form-select" id="lieu_depart" name="lieu_depart">
-                                        <option selected disabled>Selectionner =la ville de depart</option>
+                                        <option selected disabled>Ville de depart</option>
                                         <option value="Cotonou">Cotonou</option>
                                         <option value="Abomey-Calavi">Abomey-Calavi</option>
                                         <option value="Porto-Novo">Porto-Novo</option>
@@ -259,7 +258,7 @@
                                     <div class="col">
                                       <label for="lieu_arrive" class="form-label">Lieu d'arrivée</label>
                                       <select class="form-select" id="lieu_arrive" name="lieu_arrive">
-                                        <option selected disabled>Selectionner =la ville d'arriver</option>
+                                        <option selected disabled>Ville d'arriver</option>
                                         <option value="Cotonou">Cotonou</option>
                                         <option value="Abomey-Calavi">Abomey-Calavi</option>
                                         <option value="Porto-Novo">Porto-Novo</option>
