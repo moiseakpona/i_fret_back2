@@ -130,11 +130,13 @@ Route::post('/supper_admin/parametre/profil/update/{id}', [ProfilController::cla
 
 
 // Route pour afficher la page soumissionnaire de la gestion des frets  
-Route::get('/supper_admin/gestion_demande/soumissionnaire', [PageController::class, 'soumissionnaire'])->name('soumissionnaire');
+Route::get('/supper_admin/gestion_demande/soumissionnaire/{id}', [PageController::class, 'soumissionnaire'])->name('soumissionnaire');
 // Route pour afficher la page du detail des soumissions de la gestion des frets / soumissionnaires  
-Route::get('/supper_admin/gestion_demande/detail_demande', [PageController::class, 'detail_demande'])->name('detail_demande');
+Route::get('/supper_admin/gestion_demande/detail_demande/{id}', [PageController::class, 'detail_demande'])->name('detail_demande');
 // Route pour afficher la page details des contenus pour valider  les camions
 Route::get('/supper_admin/camions/details_val_camion', [PageController::class, 'details_val_camion'])->name('details_val_camion');
+// Route pour valider un vehicule  
+Route::get('/supper_admin/gestion_demande/soumissionnaire/valider/{id}', [PageController::class, 'valider'])->name('valider');
 
 
 

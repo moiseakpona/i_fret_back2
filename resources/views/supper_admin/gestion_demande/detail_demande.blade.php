@@ -53,54 +53,76 @@
                                                             <td><h1></h1></td>
                                                             <td><h1></h1></td>
                                                         </tr>
-                                                        <tr>
-                                                            <td><h4>Véhicule :</h4></td>
-                                                            <td></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <div class="mb-3">
-                                                                <td><label">Numéro Matricule</label></td> 
-                                                                <td><a href="#">DC 3467</a></td>
-                                                            </div>
-                                                        </tr>
-                                                        <tr>
-                                                            <div class="mb-3">
-                                                                <td><label">Modèle</label></td> 
-                                                                <td><span>Fourgonnette 0 - 10 Tonnes</span></td>
-                                                            </div>
-                                                        </tr>
-                                                        <tr>
-                                                            <div class="mb-3">
-                                                                <td><label">Montant</label></td> 
-                                                                <td><span>1.000.000F CFA</span></td>
-                                                            </div>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><h1></h1></td>
-                                                            <td><h1></h1></td>
-                                                        </tr>
+                                                        @foreach ($resultatSoumi as $resultatSoumis)
+                                                            @php
+                                                                $soumissionnaire = $resultatSoumis['soumissionnaire'];
+                                                                $transportUser = $resultatSoumis['transportUser'];
+                                                                $chauffeurUser = $resultatSoumis['chauffeurUser'];
+                                                                $vehicule = $resultatSoumis['vehicule'];
+                                                                $demande = $resultatSoumis['demande'];
+                                                            @endphp
+                                                            <tr>
+                                                                <td><h4>Véhicule :</h4></td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <div class="mb-3">
+                                                                    <td><label">Numéro Matricule</label></td> 
+                                                                    <td><a href="#">{{ $vehicule->matricule }}</a></td>
+                                                                </div>
+                                                            </tr>
+                                                            <tr>
+                                                                <div class="mb-3">
+                                                                    <td><label">Modèle</label></td> 
+                                                                    <td><span>{{ $demande->type_vehicule }}</span></td>
+                                                                </div>
+                                                            </tr>
+                                                            <tr>
+                                                                <div class="mb-3">
+                                                                    <td><label">Montant</label></td> 
+                                                                    <td><span>{{ $demande->montant }}</span></td>
+                                                                </div>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><h1></h1></td>
+                                                                <td><h1></h1></td>
+                                                            </tr>
 
-                                                        <!-- Section propriétaire -->
-                                                        <tr>
-                                                            <td><h4>Propriétaire :</h4></td>
-                                                            <td></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <div class="mb-3">
-                                                                <td>Profil :</td> 
-                                                                <td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2"><img src="../../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle"></div></div><div class="d-flex flex-column"><a href="#" spellcheck="false"><span class="fw-medium">Yank Luddy</span></a><small class="text-muted">Transporteur</small></div></div></td> 
-                                                            </div>
-                                                        </tr>
-                                                        <tr>
-                                                            <div class="mb-3">
-                                                                <td>Contact</td>
-                                                                <td>+229 90345878</td>
-                                                            </div>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><h1></h1></td>
-                                                            <td><h1></h1></td>
-                                                        </tr>
+                                                            <!-- Section transporteur -->
+                                                            <tr>
+                                                                <td><h4>Transporteur :</h4></td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <div class="mb-3">
+                                                                    <td>Profil :</td> 
+                                                                    <td class="sorting_1">
+                                                                        <div class="d-flex justify-content-start align-items-center customer-name">
+                                                                            <div class="avatar-wrapper">
+                                                                                <div class="avatar me-2">
+                                                                                    @if ($transportUser->photo)
+                                                                                        <img src="{{ $transportUser->photo }}" alt="Photo de profil" class="rounded-circle">
+                                                                                    @else
+                                                                                        <img src="{{ asset('images/default_profile_photo.png') }}" alt="Photo de profil" class="rounded-circle">
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="d-flex flex-column"><a href="{{ route('utilisateurs.details_transporteur', ['numero_tel' => $transportUser->numero_tel]) }}" spellcheck="false"><span class="fw-medium">{{ $transportUser->nom }} {{ $transportUser->prenom }}</span></a><small class="text-muted">{{ $transportUser->type_compte }}</small></div>
+                                                                        </div>
+                                                                    </td> 
+                                                                </div>
+                                                            </tr>
+                                                            <tr>
+                                                                <div class="mb-3">
+                                                                    <td>Contact</td>
+                                                                    <td>{{ $transportUser->numero_tel }}</td>
+                                                                </div>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><h1></h1></td>
+                                                                <td><h1></h1></td>
+                                                            </tr>
+                                                        @endforeach
 
                                                         <!-- Section Chauffeur -->
                                                         <tr>
@@ -109,11 +131,24 @@
                                                         </tr>
                                                         <tr>
                                                             <td>Profil :</td> 
-                                                            <td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2"><img src="../../assets/img/avatars/17.png" alt="Avatar" class="rounded-circle"></div></div><div class="d-flex flex-column"><a href="#" spellcheck="false"><span class="fw-medium">Yank Luddy</span></a><small class="text-muted">Chauffeur</small></div></div></td> 
+                                                            <td class="sorting_1">
+                                                                <div class="d-flex justify-content-start align-items-center customer-name">
+                                                                    <div class="avatar-wrapper">
+                                                                        <div class="avatar me-2">
+                                                                            @if ($chauffeurUser->photo)
+                                                                                <img src="{{ $chauffeurUser->photo }}" alt="Photo de profil" class="rounded-circle">
+                                                                            @else
+                                                                                <img src="{{ asset('images/default_profile_photo.png') }}" alt="Photo de profil" class="rounded-circle">
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="d-flex flex-column"><a href="{{ route('utilisateurs.details_chauffeur', ['numero_tel' => $chauffeurUser->numero_tel]) }}" spellcheck="false"><span class="fw-medium">{{ $chauffeurUser->nom }} {{ $chauffeurUser->prenom }}</span></a><small class="text-muted">{{ $chauffeurUser->type_compte }}</small></div>
+                                                                </div>
+                                                            </td> 
                                                         </tr>
                                                         <tr>
                                                             <td>Contact</td>
-                                                            <td>+229 90345878</td>
+                                                            <td>{{ $chauffeurUser->numero_tel }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td><h1></h1></td>
@@ -125,36 +160,56 @@
                                                             <td><h4>Chargeur(s) :</h4></td>
                                                             <td></td>
                                                         </tr>
-                                                        <tr>
-                                                            <td>Profil :</td> 
-                                                            <td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2"><img src="../../assets/img/avatars/17.png" alt="Avatar" class="rounded-circle"></div></div><div class="d-flex flex-column"><a href="#" spellcheck="false"><span class="fw-medium">Yank Luddy</span></a><small class="text-muted">Chauffeur</small></div></div></td> 
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Contact</td>
-                                                            <td>+229 90345878</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <div class="mb-3">
-                                                              <td>Description Fret</td>
-                                                              <td>1O Tonnes de maïs</td>
-                                                            </div>
-                                                          </tr>
-                                                          <tr>
-                                                            <div class="mb-3">
-                                                              <td>Lieu de depart</td>
-                                                              <td>Cotonou</td>
-                                                            </div>
-                                                          </tr>
-                                                          <tr>
-                                                            <div class="mb-3">
-                                                              <td>Lieu d'arrivée</td>
-                                                              <td>Djougou</td>
-                                                            </div>
-                                                          </tr>
-                                                        <tr>
-                                                            <td><h1></h1></td>
-                                                            <td><h1></h1></td>
-                                                        </tr>
+                                                        @foreach ($resultatFret as $resultatFrets)
+                                                        @php
+                                                            $fret = $resultatFrets['fret'];
+                                                            $chargeur = $resultatFrets['chargeur'];
+                                                        @endphp
+                                                            <tr>
+                                                                <td>Profil :</td> 
+                                                                <td class="sorting_1">
+                                                                    <div class="d-flex justify-content-start align-items-center customer-name">
+                                                                        <div class="avatar-wrapper">
+                                                                            <div class="avatar me-2">
+                                                                                @if ($chargeur->photo)
+                                                                                    <img src="{{ $chargeur->photo }}" alt="Photo de profil" class="rounded-circle">
+                                                                                @else
+                                                                                    <img src="{{ asset('images/default_profile_photo.png') }}" alt="Photo de profil" class="rounded-circle">
+                                                                                @endif
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="d-flex flex-column"><a href="{{ route('utilisateurs.details_chargeur', ['numero_tel' => $chargeur->numero_tel]) }}" spellcheck="false"><span class="fw-medium">{{ $chargeur->nom }} {{ $chargeur->prenom }}</span></a><small class="text-muted">{{ $chargeur->type_compte }}</small></div>
+                                                                    </div>
+                                                                </td> 
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Contact</td>
+                                                                <td>{{ $chargeur->numero_tel }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <div class="mb-3">
+                                                                <td>Description Fret</td>
+                                                                <td>{{ $fret->description }}</td>
+                                                                </div>
+                                                            </tr>
+                                                            <tr>
+                                                                <div class="mb-3">
+                                                                <td>Lieu de depart</td>
+                                                                <td>{{ $fret->lieu_depart }}</td>
+                                                                </div>
+                                                            </tr>
+                                                            <tr>
+                                                                <div class="mb-3">
+                                                                <td>Lieu d'arrivée</td>
+                                                                <td>{{ $fret->lieu_arrive }}</td>
+                                                                </div>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><h1></h1></td>
+                                                                <td><h1></h1></td>
+                                                            </tr>
+                                                        @endforeach    
+
 
                                                         <!-- Section Statut -->
                                                         <tr>

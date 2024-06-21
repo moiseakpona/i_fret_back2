@@ -12,6 +12,7 @@ use App\Models\Vehicule;
 use App\Models\DetailChauffeur;
 use App\Models\Envoyer;
 use App\Models\Recevoir;
+use App\Models\Soumissionnaire;
 
 class PageController extends Controller
 {
@@ -522,9 +523,13 @@ class PageController extends Controller
     
     public function gestion_demande()
     {
+        // Récupérer la liste des demandes
+        $demandes = Demande::all();
+
         // Retourner la vue Gestion demande
-        return view('supper_admin.gestion_demande.gestion_demande');
+        return view('supper_admin.gestion_demande.gestion_demande', ['demandes' => $demandes]);
     }
+
 
 
     public function gestion_fret()
@@ -620,18 +625,93 @@ class PageController extends Controller
     //==========================================================
 
 
-    public function soumissionnaire()
+    public function soumissionnaire(Request $request, $id)
     {
-        // Retourner la vue connexion
-        return view('supper_admin.gestion_demande.soumissionnaire');
+        // Récupérer les soumissionnairesrespondant à id spécifié
+        $soumissionnaires = Soumissionnaire::where('demande_id', $id)->get();
+
+        // Tableau pour stocker les résultats
+        $resultats = [];
+
+        // Pour chaque soumissionnaire
+        foreach ($soumissionnaires as $soumissionnaire) {
+            // Récupérer les informations liées
+            $transportUser = User::where('numero_tel', $soumissionnaire->numero_tel_transport)->first();
+            $chauffeurUser = User::where('numero_tel', $soumissionnaire->numero_tel_chauffeur)->first();
+            $vehicule = Vehicule::find($soumissionnaire->vehicule_id);
+
+            // Ajouter les informations aux résultats
+            $resultats[] = [
+                'soumissionnaire' => $soumissionnaire,
+                'transportUser' => $transportUser,
+                'chauffeurUser' => $chauffeurUser,
+                'vehicule' => $vehicule
+            ];
+        }
+        
+        // Retourner une vue avec les soumissionnaires et les informations liées
+        return view('supper_admin.gestion_demande.soumissionnaire', ['resultats' => $resultats]);
     }
 
 
-    public function detail_demande()
+
+    public function detail_demande(Request $request, $id)
     {
+        // Récupérer la demande correspondant à l'ID spécifié
+        $demande = Demande::find($id);
+
+
+        // Récupérer les soumissionnaires dont demande_id est égal à l'ID récupéré et statut_soumission est égal à "Retenue"
+        $soumissionnaires = Soumissionnaire::where('demande_id', $id)
+                                            ->where('statut_soumission', 'Retenue')
+                                            ->get();
+
+        // Tableau pour stocker les résultats
+        $resultatSoumi = [];
+
+        // Pour chaque soumissionnaire
+        foreach ($soumissionnaires as $soumissionnaire) {
+            // Récupérer les informations liées
+            $transportUser = User::where('numero_tel', $soumissionnaire->numero_tel_transport)->first();
+            $chauffeurUser = User::where('numero_tel', $soumissionnaire->numero_tel_chauffeur)->first();
+            $vehicule = Vehicule::find($soumissionnaire->vehicule_id);
+
+            // Ajouter les informations aux résultats
+            $resultatSoumi[] = [
+                'soumissionnaire' => $soumissionnaire,
+                'transportUser' => $transportUser,
+                'chauffeurUser' => $chauffeurUser,
+                'vehicule' => $vehicule,
+                'demande' => $demande
+            ];
+        } //fin
+
+
+        // Récupérer la liste de tous les frets dont id_demande est égal à l'ID récupéré
+        $frets = Fret::where('id_demande', $id)->get();
+
+        // Tableau pour stocker les résultats
+        $resultatFret = [];
+
+        // Pour chaque fret en attente
+        foreach ($frets as $fret) {
+            // Récupérer le numéro de téléphone du camp
+            $numeroTel = $fret->numero_tel;
+
+            // Vérifier l'utilisateur correspondant à ce numéro de téléphone
+            $chargeur = User::where('numero_tel', $numeroTel)->first();
+
+            // Ajouter le fret et l'utilisateur correspondant aux résultats
+            $resultatFret[] = [
+                'fret' => $fret,
+                'chargeur' => $chargeur
+            ];
+        } //fin
+
         // Retourner la vue connexion
-        return view('supper_admin.gestion_demande.detail_demande');
+        return view('supper_admin.gestion_demande.detail_demande', ['resultatSoumi' => $resultatSoumi, 'resultatFret' => $resultatFret ]);
     }
+
 
 
     public function details_val_camion()
@@ -642,7 +722,30 @@ class PageController extends Controller
 
 
 
+    public function valider($id)
+    {
+        // Chercher le soumissionnaire par ID
+        $soumissionnaire = Soumissionnaire::find($id);
 
+        if ($soumissionnaire) {
+            // Récupérer l'ID de la demande
+            $demande_id = $soumissionnaire->demande_id;
+
+            // Mettre à jour le champ statut_demande et statut_soumission du soumissionnaire actuel
+            $soumissionnaire->statut_demande = 'En cours';
+            $soumissionnaire->statut_soumission = 'Retenue';
+            $soumissionnaire->save();
+
+            // Mettre à jour le statut_soumission de tous les autres soumissionnaires ayant le même demande_id
+            Soumissionnaire::where('demande_id', $demande_id)
+                ->where('id', '!=', $id)
+                ->update(['statut_soumission' => 'Rejeté']);
+
+            return redirect()->back()->with('message', 'Le statut de la demande a été mis à jour avec succès.');
+        } else {
+            return redirect()->back()->with('error', 'Soumissionnaire non trouvé.');
+        }
+    }
 
 
 

@@ -53,19 +53,19 @@
                                                     $chargeur = $resultat['chargeur'];
                                                 @endphp
                                                 <tr>
-                                                <td>
-                                                    <button type="button" class="btn btn-xs btn-primary plus-btn" data-bs-toggle="modal" data-bs-target="#plusModal" data-nom="{{ $chargeur->nom }}" data-prenom="{{ $chargeur->prenom }}" data-type_compte="{{ $chargeur->type_compte }}" data-numero_tel="{{ $chargeur->numero_tel }}" data-date_naissance="{{ $chargeur->date_naissance }}" data-ville="{{ $chargeur->ville }}" data-photo="{{ $chargeur->photo }}" >
-                                                    <span class="tf-icon bx bx-plus bx-xs me-1"></span>
-                                                    </button>
-                                                </td>
-                                                <td>{{ $fret->id }}. {{ $fret->description }}</td>
-                                                <td>{{ $fret->montant }} F CFA</td>
-                                                <td>{{ $fret->lieu_depart }}</td>
-                                                <td>{{ $fret->lieu_arrive }}</td>
-                                                <td>{{ $fret->created_at }}</td>
-                                                <td>
-                                                    <span class="badge bg-label-warning me-1">{{ $fret->statut }}</span>
-                                                </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-xs btn-primary plus-btn" data-bs-toggle="modal" data-bs-target="#plusModal" data-nom="{{ $chargeur->nom }}" data-prenom="{{ $chargeur->prenom }}" data-type_compte="{{ $chargeur->type_compte }}" data-numero_tel="{{ $chargeur->numero_tel }}" data-date_naissance="{{ $chargeur->date_naissance }}" data-ville="{{ $chargeur->ville }}" data-photo="{{ $chargeur->photo }}" >
+                                                        <span class="tf-icon bx bx-plus bx-xs me-1"></span>
+                                                        </button>
+                                                    </td>
+                                                    <td>{{ $fret->id }}. {{ $fret->description }}</td>
+                                                    <td>{{ $fret->montant }} F CFA</td>
+                                                    <td>{{ $fret->lieu_depart }}</td>
+                                                    <td>{{ $fret->lieu_arrive }}</td>
+                                                    <td>{{ $fret->created_at }}</td>
+                                                    <td>
+                                                        <span class="badge bg-label-warning me-1">{{ $fret->statut }}</span>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                             </tbody>

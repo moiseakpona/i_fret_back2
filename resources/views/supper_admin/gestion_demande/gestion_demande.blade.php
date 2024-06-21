@@ -37,20 +37,21 @@
                                               <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
                                                   <thead>
                                                       <tr>
-                                                          <th>Numéro Matricule</th>
-                                                          <th>Montant</th>
+                                                          <th>Date</th>
                                                           <th>Lieu de depart</th>
                                                           <th>Lieu d'arrivée</th>
+                                                          <th>Montant</th>
                                                           <th>Statut</th>
                                                           <th>Action</th>
                                                       </tr>
                                                   </thead>
                                                   <tbody>
-                                                      <tr>
-                                                          <td>AC 1934</td>
-                                                          <td>500000F CFA</td>
-                                                          <td>Djougou</td>
-                                                          <td>Cotonou</td>
+                                                    @foreach ($demandes as $demande)
+                                                        <tr>
+                                                          <td>{{ $demande->created_at }}</td>
+                                                          <td>{{ $demande->lieu_depart }}</td>
+                                                          <td>{{ $demande->lieu_arrive }}</td>
+                                                          <td>{{ $demande->montant }}</td>
                                                           <td>
                                                             <span class="badge bg-label-warning me-1">En cours</span>
                                                           </td>
@@ -58,12 +59,13 @@
                                                             <div class="dropdown">
                                                               <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                                                               <div class="dropdown-menu">
-                                                                  <a class="dropdown-item" href="{{ route('detail_demande')}}"><i class="bx bx-food-menu me-1"></i> Détail</a>
-                                                                  <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Supprimé</a>
+                                                                  <a class="dropdown-item" href="{{ route('detail_demande' , ['id' => $demande->id])}}"><i class="bx bx-food-menu me-1"></i> Détail</a>
+                                                                  <a class="dropdown-item" href="#"><i class="bx bx-trash me-1"></i> Supprimé</a>
                                                               </div>
                                                           </div>
                                                           </td>
-                                                      </tr>
+                                                        </tr>
+                                                    @endforeach
                                                   </tbody>
                                               </table>
                                           </div>
