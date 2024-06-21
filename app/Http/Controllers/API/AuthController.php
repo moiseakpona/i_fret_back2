@@ -14,11 +14,20 @@ use App\Models\Enregistrement; // Assurez-vous d'importer la classe Enregistreme
 use App\Models\Message;
 use App\Models\Envoyer;
 use App\Models\Recevoir;
+use App\Models\Fret; // Assurez-vous d'importer la classe Fret
+use App\Models\Soumissionnaire;
 
 
 use Illuminate\Support\Facades\Log; // Importez la classe Log
 
 class AuthController extends Controller
+ /**
+     * Récupère les détails d'un fret spécifique.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+
 {
     public function register(Request $request)
         {
@@ -89,6 +98,161 @@ class AuthController extends Controller
                 'token' => $token,
             ], 201);
         }
+
+         // Méthode pour récupérer tous les chauffeurs
+        public function getChauffeurs()
+        {
+            // Récupérer tous les utilisateurs ayant type_compte = 'chauffeur'
+            $chauffeurs = User::where('type_compte', 'chauffeur')->get();
+
+            // Retourner la liste des chauffeurs
+            return response()->json([
+                'chauffeurs' => $chauffeurs,
+            ], 201);
+        }
+
+        public function soumission(Request $request)
+        {
+            // Validation des données
+            $validator = Validator::make($request->all(), [
+                'localisation' => 'required|string|max:255',
+                'numero_tel_transport' => 'required|string|max:20|exists:users,numero_tel',
+                'vehicule_id' => 'required|exists:vehicules,id',
+                'numero_tel_chauffeur' => 'required|string|max:20|exists:users,numero_tel',
+                'demande_id' => 'required|exists:demandes,id',
+                'statut_soumission' => 'nullable|string',
+                'statut_demande' => 'nullable|string',
+            ]);
+    
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 400);
+            }
+    
+            try {
+                // Création du soumissionnaire
+                $soumissionnaire = Soumissionnaire::create($request->all());
+        
+            // Retourner une réponse JSON avec les détails du soumissionnaire créé
+            return response()->json(['soumissionnaire' => $soumissionnaire], 201);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Erreur lors de la soumission. Veuillez réessayer plus tard.'], 500);
+        }
+        }
+
+         // Fonction pour récupérer tous les détails des soumissionnaires
+    public function getVoyages(Request $request)
+    {
+        try {
+            // Récupérer tous les soumissionnaires avec les relations associées
+            $soumissionnaires = Soumissionnaire::with(['vehicule', 'chauffeur', 'demande'])->get();
+
+            // Transformer les données pour inclure toutes les informations disponibles
+            $voyages = $soumissionnaires->map(function ($soumissionnaire) {
+                return [
+                    'id' => $soumissionnaire->id,
+                    'localisation' => $soumissionnaire->localisation,
+                    'numero_tel_transport' => $soumissionnaire->numero_tel_transport,
+                    'vehicule_id' => $soumissionnaire->vehicule_id,
+                    'vehicule_matricule' => $soumissionnaire->vehicule->matricule ?? 'N/A',
+                    'numero_tel_chauffeur' => $soumissionnaire->numero_tel_chauffeur,
+                    'chauffeur_nom' => $soumissionnaire->chauffeur->name ?? 'N/A',
+                    'chauffeur_prenom' => $soumissionnaire->chauffeur->prenom ?? 'N/A',
+                    'demande_id' => $soumissionnaire->demande_id,
+                    'demande_details' => $soumissionnaire->demande ? $soumissionnaire->demande->toArray() : [],
+                    'statut_soumission' => $soumissionnaire->statut_soumission,
+                    'statut_demande' => $soumissionnaire->statut_demande,
+                    'date_creation' => $soumissionnaire->created_at->format('Y-m-d H:i:s'),
+                    // Ajoutez d'autres informations si nécessaire
+                ];
+            });
+
+            return response()->json($voyages, 200);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Erreur lors de la récupération des voyages.'], 500);
+        }
+    }
+// Dans AuthController.php// Dans AuthController.php// Fonction pour récupérer les détails d'un voyage par demandeId
+public function getVoyageDetails($demandeId)
+{
+    try {
+        // Rechercher le soumissionnaire par demandeId
+        $soumissionnaire = Soumissionnaire::with(['vehicule', 'chauffeur', 'demande'])
+            ->where('demande_id', $demandeId)
+            ->firstOrFail();
+
+        // Transformer les données pour inclure toutes les informations nécessaires
+        $voyageDetails = [
+            'id' => $soumissionnaire->id,
+            'localisation' => $soumissionnaire->localisation,
+            'numero_tel_transport' => $soumissionnaire->numero_tel_transport,
+            'vehicule_id' => $soumissionnaire->vehicule_id,
+            'vehicule_matricule' => $soumissionnaire->vehicule->matricule ?? 'N/A',
+            'numero_tel_chauffeur' => $soumissionnaire->numero_tel_chauffeur,
+            'chauffeur_nom' => $soumissionnaire->chauffeur->name ?? 'N/A',
+            'chauffeur_prenom' => $soumissionnaire->chauffeur->prenom ?? 'N/A',
+            'demande_id' => $soumissionnaire->demande_id,
+            'demande_details' => $soumissionnaire->demande ? $soumissionnaire->demande->toArray() : [],
+            'statut_soumission' => $soumissionnaire->statut_soumission,
+            'statut_demande' => $soumissionnaire->statut_demande,
+            'date_creation' => $soumissionnaire->created_at->format('Y-m-d H:i:s'),
+            // Ajoutez d'autres informations si nécessaire
+        ];
+
+        return response()->json($voyageDetails, 200);
+    } catch (Exception $e) {
+        return response()->json(['error' => 'Erreur lors de la récupération des détails du voyage.'], 500);
+    }
+}
+
+public function getFretDetails($fretId)
+{
+    try {
+        // Trouver le fret par son ID avec les relations associées
+        $fret = Fret::where('id', $fretId)
+            ->with(['demande', 'user']) // Inclure les relations nécessaires
+            ->firstOrFail();
+
+        // Assurez-vous que la table users a une colonne `type_compte` pour vérifier le type de compte
+        $chauffeur = User::where('numero_tel', $fret->numero_tel) // Assumant que numero_tel fait référence au chauffeur
+                          ->where('type_compte', 'chauffeur') // Filtrer par type de compte
+                          ->first();
+
+        // Transformer les données pour inclure toutes les informations nécessaires
+        $fretDetails = [
+            'id' => $fret->id,
+            'lieu_depart' => $fret->lieu_depart,
+            'lieu_arrive' => $fret->lieu_arrive,
+            'montant' => $fret->montant,
+            'description' => $fret->description,
+            'numero_tel' => $fret->numero_tel,
+            'id_demande' => $fret->id_demande,
+            'statut' => $fret->statut,
+            'created_at' => $fret->created_at->format('Y-m-d H:i:s'),
+            'updated_at' => $fret->updated_at->format('Y-m-d H:i:s'),
+            // Ajouter les détails du chauffeur
+            'chauffeur' => [
+                'nom' => $chauffeur ? $chauffeur->nom : 'N/A',
+                'prenom' => $chauffeur ? $chauffeur->prenom : 'N/A',
+                'numero_tel' => $chauffeur ? $chauffeur->numero_tel : 'N/A',
+            ],
+            // Ajoutez d'autres informations si nécessaire
+        ];
+
+        return response()->json($fretDetails, 200);
+    } catch (\Exception $e) {
+        // En cas d'erreur, enregistrer les détails de l'erreur
+        \Log::error('Error fetching fret details', [
+            'fret_id' => $fretId,
+            'error' => $e->getMessage()
+        ]);
+        
+        return response()->json(['error' => 'Erreur lors de la récupération des détails du fret.'], 500);
+    }
+}
+
+
+
+    
 
     public function enregistrerCamion(Request $request)
         {
@@ -219,7 +383,7 @@ public function mettreAJourCamion(Request $request, $matricule)
 
         $enregistrement->save();
 
-        return response()->json(['message' => 'Camion mis à jour avec succès', 'data' => $enregistrement], 200);
+        return response()->json(['message' => 'Camion mis à jour avec succès', 'data' => $enregistrement], 201);
     } catch (\Exception $e) {
         Log::error('Erreur lors de la mise à jour du camion: ' . $e->getMessage());
         return response()->json(['message' => 'Erreur lors de la mise à jour du camion'], 500);
@@ -294,43 +458,47 @@ public function getCamionDetails(Request $request, $matricule)
     }
     
     public function edit(Request $request) {
-       try {
-        //code...
-       $input = $request->all();
-       $validator = Validator::make($input, [
-        'nom' => 'string',
-        'prenom' => 'string',
-        'ville' => 'string',
-        'date_naissance' => 'string',
-        'numero_tel' => 'string',
-        'type_compte' => 'string', 
-        'photo' => 'nullable|string',
-       ], 201);
-       if ($validator->fails()) {
-        # code...
-        return response()->json([
-            "status"=>false,
-            "message"=>"Erreur de Validation",
-            "errors"=> $validator->errors(),  
-        ], 422);
-
-       }
-       $request->user()->update($input);
-       return response()->json([
-        "status"=>true,
-        "message"=>"Utilisateur Modifier avec succès.",
-        "errors"=> $request->user(),  
-       ]);
-       } catch (\Throwable $th) {
-        //throw $th;
-        return response()->json([
-            "status"=>false,
-            "message"=>$th->getMessage(),
-      
-        ], 500,);
-       }
+        try {
+            // Récupérer toutes les données envoyées dans la requête
+            $input = $request->all();
+    
+            // Définir les règles de validation pour les champs attendus
+            $validator = Validator::make($input, [
+                'nom' => 'string',
+                'prenom' => 'string',
+                'ville' => 'string',
+                'date_naissance' => 'string', 
+                'numero_tel' => 'string',
+                'type_compte' => 'string',
+                'photo' => 'nullable|string',
+            ]);
+    
+            // Vérifier si la validation échoue
+            if ($validator->fails()) {
+                return response()->json([
+                    "status" => false,
+                    "message" => "Erreur de Validation",
+                    "errors" => $validator->errors(),
+                ], 422);
+            }
+    
+            // Mettre à jour les informations de l'utilisateur authentifié
+            $request->user()->update($input);
+    
+            return response()->json([
+                "status" => true,
+                "message" => "Utilisateur modifié avec succès.",
+                "data" => $request->user(),
+            ]);
+        } catch (\Throwable $th) {
+            // Capturer les exceptions et retourner une réponse JSON appropriée
+            return response()->json([
+                "status" => false,
+                "message" => $th->getMessage(),
+            ], 500);
+        }
     }
-
+    
     public function store(Request $request)
     {
         $request->validate([
@@ -448,7 +616,59 @@ public function getCamionDetails(Request $request, $matricule)
         }
     }
     
+   
+    public function notif(Request $request)
+    {
+        // Vérifier si l'utilisateur est authentifié
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401); // 401 = Non autorisé
+        }
+
+        // Récupérer tous les frets disponibles
+        $frets = Fret::all();
+
+        // Retourner les frets en réponse JSON
+        return response()->json([
+            'message' => 'Frets récupérés avec succès',
+            'data' => $frets
+        ], 201); // 201 = OK
+    }
+
+    public function descripNotif($id)
+    {
+        // Vérifier si l'utilisateur est authentifié
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401); // 401 = Non autorisé
+        }
     
+        try {
+            // Récupérer le fret correspondant à l'ID avec les informations de la demande
+            $fret = Fret::with('demande')->findOrFail($id);
+    
+            // Retourner les détails du fret en réponse JSON avec le type de véhicule
+            return response()->json([
+                'message' => 'Détails du fret récupérés avec succès',
+                'data' => [
+                    'id' => $fret->id,
+                    'lieu_depart' => $fret->lieu_depart,
+                    'lieu_arrive' => $fret->lieu_arrive,
+                    'montant' => $fret->montant,
+                    'description' => $fret->description,
+                    'numero_tel' => $fret->numero_tel,
+                    'statut' => $fret->statut,
+                    'type_vehicule' => $fret->demande ? $fret->demande->type_vehicule : null,
+                    'created_at' => $fret->created_at,
+                    'updated_at' => $fret->updated_at,
+                ]
+            ], 201); // 201 = OK
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Fret non trouvé'], 404);
+        }
+    }
+    
+
 
   /*   public function receiveAdmin(Request $request)
     {

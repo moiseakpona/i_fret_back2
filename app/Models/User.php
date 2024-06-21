@@ -30,6 +30,12 @@ class User extends Authenticatable
         'password',
     ];
 
+      // Relation avec les demandes
+      public function demandes()
+      {
+          return $this->hasMany(Demande::class, 'chauffeur_id');
+      }
+
     /**
      * The attributes that should be hidden for serialization.
      *
