@@ -155,7 +155,7 @@ class AuthController extends Controller
                     'vehicule_id' => $soumissionnaire->vehicule_id,
                     'vehicule_matricule' => $soumissionnaire->vehicule->matricule ?? 'N/A',
                     'numero_tel_chauffeur' => $soumissionnaire->numero_tel_chauffeur,
-                    'chauffeur_nom' => $soumissionnaire->chauffeur->name ?? 'N/A',
+                    'chauffeur_nom' => $soumissionnaire->chauffeur->nom ?? 'N/A',
                     'chauffeur_prenom' => $soumissionnaire->chauffeur->prenom ?? 'N/A',
                     'demande_id' => $soumissionnaire->demande_id,
                     'demande_details' => $soumissionnaire->demande ? $soumissionnaire->demande->toArray() : [],
@@ -180,6 +180,10 @@ public function getVoyageDetails($demandeId)
             ->where('demande_id', $demandeId)
             ->firstOrFail();
 
+             // Récupérer la description du fret lié à la demande
+        $fret = Fret::where('id_demande', $demandeId)->first();
+
+
         // Transformer les données pour inclure toutes les informations nécessaires
         $voyageDetails = [
             'id' => $soumissionnaire->id,
@@ -188,13 +192,15 @@ public function getVoyageDetails($demandeId)
             'vehicule_id' => $soumissionnaire->vehicule_id,
             'vehicule_matricule' => $soumissionnaire->vehicule->matricule ?? 'N/A',
             'numero_tel_chauffeur' => $soumissionnaire->numero_tel_chauffeur,
-            'chauffeur_nom' => $soumissionnaire->chauffeur->name ?? 'N/A',
+            'chauffeur_nom' => $soumissionnaire->chauffeur->nom ?? 'N/A',
             'chauffeur_prenom' => $soumissionnaire->chauffeur->prenom ?? 'N/A',
             'demande_id' => $soumissionnaire->demande_id,
             'demande_details' => $soumissionnaire->demande ? $soumissionnaire->demande->toArray() : [],
             'statut_soumission' => $soumissionnaire->statut_soumission,
             'statut_demande' => $soumissionnaire->statut_demande,
             'date_creation' => $soumissionnaire->created_at->format('Y-m-d H:i:s'),
+            'description_fret' => $fret ? $fret->description : 'N/A', // Ajoutez la description du fret
+
             // Ajoutez d'autres informations si nécessaire
         ];
 
