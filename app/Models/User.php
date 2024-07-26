@@ -36,6 +36,11 @@ class User extends Authenticatable
           return $this->hasMany(Demande::class, 'chauffeur_id');
       }
 
+      public function transactions()
+      {
+          return $this->hasMany(Transaction::class);
+      }
+
     /**
      * The attributes that should be hidden for serialization.
      *

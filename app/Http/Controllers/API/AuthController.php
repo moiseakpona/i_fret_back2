@@ -16,6 +16,8 @@ use App\Models\Envoyer;
 use App\Models\Recevoir;
 use App\Models\Fret; // Assurez-vous d'importer la classe Fret
 use App\Models\Soumissionnaire;
+use App\Models\Transaction;
+
 
 
 use Illuminate\Support\Facades\Log; // Importez la classe Log
@@ -110,6 +112,45 @@ class AuthController extends Controller
                 'chauffeurs' => $chauffeurs,
             ], 201);
         }
+
+        public function storeTransaction(Request $request)
+    {
+        $validatedData = $request->validate([
+            'fretId' => 'required|exists:frets,id',
+            'transactionId' => 'required|string',
+            'montant_paye' => 'required|integer',
+        ]);
+
+        try {
+            // Création de la transaction
+            $transaction = new Transaction();
+            $transaction->fret_id = $validatedData['fretId'];
+            $transaction->kkiapay_transaction_id = $validatedData['transactionId'];
+            $transaction->montant_paye = $validatedData['montant_paye'];
+            $transaction->save();
+
+            return response()->json(['message' => 'Transaction enregistrée avec succès.'], 201);
+        } catch (\Exception $e) {
+            // Gestion des erreurs
+            \Log::error('Erreur lors de l\'enregistrement de la transaction: '.$e->getMessage());
+
+            return response()->json(['message' => 'Erreur lors de l\'enregistrement de la transaction.', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Retrieve transactions by fretId.
+     */
+    public function getTransactionsForFret($fretId)
+    {
+        try {
+            $transactions = Transaction::where('fret_id', $fretId)->get();
+            return response()->json($transactions, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur lors de la récupération des transactions.', 'error' => $e->getMessage()], 500);
+        }
+    }
+
 
         public function soumission(Request $request)
         {

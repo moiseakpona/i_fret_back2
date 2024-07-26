@@ -17,6 +17,7 @@ class Fret extends Model
         'numero_tel',
         'id_demande',
         'statut',
+      
     ];
 
     // Relations éventuelles avec d'autres tables
@@ -28,5 +29,10 @@ class Fret extends Model
     public function demande()
     {
         return $this->belongsTo(Demande::class, 'id_demande', 'id');
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'fret_id');
     }
 }

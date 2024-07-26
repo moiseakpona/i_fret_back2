@@ -25,6 +25,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('/who',[AuthController::class,'who']);
+    Route::post('/payment/init', [AuthController::class, 'processPayment']);
+    Route::post('/payment/notification', [AuthController::class, 'paymentNotification']);
     Route::get('/camions',[AuthController::class,'getUserCamions']);
     Route::get('/camions/{matricule}', [AuthController::class, 'getCamionDetails']);
     Route::put('/updateCamion/{matricule}',  [AuthController::class, 'mettreAJourCamion']);
@@ -41,6 +43,8 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/soumissionnaires', [AuthController::class, 'soumission']);
     Route::get('/chauffeurs', [AuthController::class, 'getChauffeurs']);
     Route::get('/receive', [AuthController::class, 'receiveMe']);
+    Route::post('/store-transaction', [AuthController::class, 'storeTransaction']);
+    Route::get('/frets/{fretId}/transactions', [AuthController::class, 'getTransactionsForFret']);
   
    
    
