@@ -5,6 +5,7 @@ use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,6 +25,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('/who',[AuthController::class,'who']);
+    Route::post('/payment/init', [AuthController::class, 'processPayment']);
+    Route::post('/payment/notification', [AuthController::class, 'paymentNotification']);
     Route::get('/camions',[AuthController::class,'getUserCamions']);
     Route::get('/camions/{matricule}', [AuthController::class, 'getCamionDetails']);
     Route::put('/updateCamion/{matricule}',  [AuthController::class, 'mettreAJourCamion']);
@@ -31,9 +34,17 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::put('/photoImport',  [AuthController::class, 'store']);
     Route::get('/getUser',  [AuthController::class, 'getUserDetails']);
     Route::post('/enregistrementCamion', [AuthController::class,'enregistrerCamion']);
-  
+    Route::get('/frets', [AuthController::class, 'notif']);
+    Route::get('/frets/{id}', [AuthController::class, 'descripNotif']);
+    Route::get('/fretsA/{fretId}', [AuthController::class, 'getFretDetails']);
+    Route::get('/voyages', [AuthController::class, 'getVoyages']);
+    Route::get('/voyages/{demandeId}', [AuthController::class, 'getVoyageDetails']);
     Route::post('/send', [AuthController::class, 'send']);
+    Route::post('/soumissionnaires', [AuthController::class, 'soumission']);
+    Route::get('/chauffeurs', [AuthController::class, 'getChauffeurs']);
     Route::get('/receive', [AuthController::class, 'receiveMe']);
+    Route::post('/store-transaction', [AuthController::class, 'storeTransaction']);
+    Route::get('/frets/{fretId}/transactions', [AuthController::class, 'getTransactionsForFret']);
   
    
    
