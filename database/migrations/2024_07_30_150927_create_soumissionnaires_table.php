@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('soumissionnaires', function (Blueprint $table) {
             $table->id();
             $table->string('localisation');
+            $table->string('montant');
             $table->string('numero_tel_transport')->nullable();
             $table->foreign('numero_tel_transport')->references('numero_tel')->on('users');
             $table->unsignedBigInteger('vehicule_id')->nullable();

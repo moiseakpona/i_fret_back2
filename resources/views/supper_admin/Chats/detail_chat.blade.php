@@ -373,14 +373,14 @@
                                      </div>
                                    </div>
  
-                                   <div class="row mb-3">
+                                   {{-- <div class="row mb-3">
                                      <div class="col">
                                        <label for="montant" class="form-label">Montant (F CFA)</label>
                                        <input type="number" class="form-control" id="montant" name="montant" placeholder="1 000 000">
                                      </div>
                                      <div class="col">
                                      </div>
-                                   </div>  
+                                   </div>   --}}
  
                                  </div>
                                </div>

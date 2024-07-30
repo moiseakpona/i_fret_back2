@@ -21,7 +21,6 @@ class UtilisateurController extends Controller
         $request->validate([
             'lieu_depart' => 'required|string',
             'lieu_arrive' => 'required|string',
-            'montant' => 'required|string',
             'description' => 'required|string',
         ]);
 
@@ -35,8 +34,8 @@ class UtilisateurController extends Controller
              $fret = new Fret();
              $fret->lieu_depart = $request->lieu_depart;
              $fret->lieu_arrive = $request->lieu_arrive;
-             $fret->montant = $request->montant;
              $fret->description = $request->description;
+             $fret->montant = '';
              $fret->statut = 'En attent';
              //$fret->numero_tel = $request->numero_tel;
              $fret->numero_tel = $numero;
