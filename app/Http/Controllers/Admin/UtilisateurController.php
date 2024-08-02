@@ -15,45 +15,45 @@ use App\Models\Recevoir;
 class UtilisateurController extends Controller
 {
 
-    public function fret_enregister(Request $request, $numero)
-    {
-       // Valide les données envoyées par le formulaire
-        $request->validate([
-            'lieu_depart' => 'required|string',
-            'lieu_arrive' => 'required|string',
-            'description' => 'required|string',
-        ]);
+    // public function fret_enregister(Request $request, $numero)
+    // {
+    //    // Valide les données envoyées par le formulaire
+    //     $request->validate([
+    //         'lieu_depart' => 'required|string',
+    //         'lieu_arrive' => 'required|string',
+    //         'description' => 'required|string',
+    //     ]);
 
-         // Vérifie si le numéro de téléphone existe dans la table "users"
-         $user = User::where('numero_tel', $request->numero_tel)->first();
-         //$user = User::where('numero_tel', $chargeur)->first();
+    //      // Vérifie si le numéro de téléphone existe dans la table "users"
+    //      $user = User::where('numero_tel', $request->numero_tel)->first();
+    //      //$user = User::where('numero_tel', $chargeur)->first();
 
-         // Si l'utilisateur correspondant au numéro de téléphone est trouvé
-         if ($user) {
-             // Crée un nouvel enregistrement dans la table "frets"
-             $fret = new Fret();
-             $fret->lieu_depart = $request->lieu_depart;
-             $fret->lieu_arrive = $request->lieu_arrive;
-             $fret->description = $request->description;
-             $fret->montant = '';
-             $fret->statut = 'En attent';
-             //$fret->numero_tel = $request->numero_tel;
-             $fret->numero_tel = $numero;
+    //      // Si l'utilisateur correspondant au numéro de téléphone est trouvé
+    //      if ($user) {
+    //          // Crée un nouvel enregistrement dans la table "frets"
+    //          $fret = new Fret();
+    //          $fret->lieu_depart = $request->lieu_depart;
+    //          $fret->lieu_arrive = $request->lieu_arrive;
+    //          $fret->description = $request->description;
+    //          $fret->montant = '';
+    //          $fret->statut = 'En attent';
+    //          //$fret->numero_tel = $request->numero_tel;
+    //          $fret->numero_tel = $numero;
  
-             // Sauvegarde l'enregistrement dans la base de données
-             if ($fret->save()) {
-                 // Message de succès si l'enregistrement est réussi
-                 return redirect()->back()->with('message', 'Les informations ont été enregistrées avec succès.');
-             } else {
-                 // Message d'erreur si l'enregistrement a échoué
-                 return redirect()->back()->with('error', 'Une erreur s\'est produite lors de l\'enregistrement des informations.');
-             }
-         } else {
-             // Si le numéro de téléphone n'est pas trouvé dans la table "users"
-             return redirect()->back()->with('error', 'Le numéro de téléphone spécifié n\'existe pas.');
-         }
+    //          // Sauvegarde l'enregistrement dans la base de données
+    //          if ($fret->save()) {
+    //              // Message de succès si l'enregistrement est réussi
+    //              return redirect()->back()->with('message', 'Les informations ont été enregistrées avec succès.');
+    //          } else {
+    //              // Message d'erreur si l'enregistrement a échoué
+    //              return redirect()->back()->with('error', 'Une erreur s\'est produite lors de l\'enregistrement des informations.');
+    //          }
+    //      } else {
+    //          // Si le numéro de téléphone n'est pas trouvé dans la table "users"
+    //          return redirect()->back()->with('error', 'Le numéro de téléphone spécifié n\'existe pas.');
+    //      }
 
-    }
+    // }
 
 
     public function demande(Request $request)
@@ -95,20 +95,20 @@ class UtilisateurController extends Controller
     }
 
 
-    public function message(Request $request, $numero)
-    {
-        // Créer une instance du message
-        $message = new Recevoir();
-        $message->message = $request->input('message');
-        $message->numero_tel = $numero;
-        $message->statut = 'Non lu';
+    // public function message(Request $request, $numero)
+    // {
+    //     // Créer une instance du message
+    //     $message = new Recevoir();
+    //     $message->message = $request->input('message');
+    //     $message->numero_tel = $numero;
+    //     $message->statut = 'Non lu';
 
-        // Enregistrer le message dans la base de données
-        $message->save();
+    //     // Enregistrer le message dans la base de données
+    //     $message->save();
 
-        // Retourner une réponse de succès
-        return back()->with('success', 'Message envoyé avec succès.');
-    }
+    //     // Retourner une réponse de succès
+    //     return back()->with('success', 'Message envoyé avec succès.');
+    // }
 
 
 

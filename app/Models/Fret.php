@@ -4,19 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-class Fret extends Model
 
+class Fret extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'description',
         'lieu_depart',
         'lieu_arrive',
+        'info_comp',
         'montant',
-        'description',
         'numero_tel',
-        'id_demande',
         'statut',
+        'kkiapay_transaction_id',
+        'statut_paiement',
       
     ];
 

@@ -20,7 +20,7 @@
                 <ul class="nav nav-pills flex-column flex-md-row mb-3">
                     <li class="nav-item"><a class="nav-link" href="{{ route('gestion_demande') }}"><i class="bx bx-food-menu me-1"></i> Gestion demandes </a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('gestion_fret') }}"><i class="bx bxs-truck me-1"></i> Gestion frets</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{{ route('fret_diponible') }}"><i class="bx bxs-truck me-1"></i> frets diponibles</a></li>
+                    {{-- <li class="nav-item"><a class="nav-link active" href="{{ route('fret_diponible') }}"><i class="bx bxs-truck me-1"></i> frets diponibles</a></li> --}}
                 </ul>
             
                 <!-- Fixed Header -->
@@ -92,7 +92,7 @@
                 </div>
                 <div class="modal-body">
 
-                <!-- Section Chauffeur -->
+                <!-- Section chargeur -->
                 <div class="table-responsive">
                     <table class="table ">
                     <thead>

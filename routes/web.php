@@ -90,15 +90,16 @@ Route::delete('/supper_admin/camions/details_vehicule_en_attent/supprimer_vehicu
 // Route pour supprimer un véhicule dans detail en attent
 Route::delete('/supper_admin/camions/details_vehicule_en_attent/supprimer_vehicule_en_attent/{id}', [PageController::class, 'supprimer_vehicule_en_attent'])->name('supprimer_vehicule_en_attent');
 
-// Affichage des pages Chats
-// Route pour afficher la page chat Chargeur 
-Route::get('/supper_admin/chats/chargeur', [PageController::class, 'chat_chargeur'])->name('chats.chargeur');
-// Route pour afficher la page detail chat
-Route::get('/supper_admin/chats/detail_chat/{numero_tel}', [PageController::class, 'detail_chat'])->name('detail_chat');
-// Route pour enregistrer de nouvel fret
-Route::post('/supper_admin/chats/chargeur/enregistrer/{numero_tel}', [UtilisateurController::class, 'fret_enregister'])->name('fret.enregister');
-// Route pour enregistrer de message dans le chat
-Route::post('/supper_admin/chats/chargeur/enregistrer/message/{numero_tel}', [UtilisateurController::class, 'message'])->name('message');
+
+// // Affichage des pages Chats
+// // Route pour afficher la page chat Chargeur 
+// Route::get('/supper_admin/chats/chargeur', [PageController::class, 'chat_chargeur'])->name('chats.chargeur');
+// // Route pour afficher la page detail chat
+// Route::get('/supper_admin/chats/detail_chat/{numero_tel}', [PageController::class, 'detail_chat'])->name('detail_chat');
+// // Route pour enregistrer de nouvel fret
+// Route::post('/supper_admin/chats/chargeur/enregistrer/{numero_tel}', [UtilisateurController::class, 'fret_enregister'])->name('fret.enregister');
+// // Route pour enregistrer de message dans le chat
+// Route::post('/supper_admin/chats/chargeur/enregistrer/message/{numero_tel}', [UtilisateurController::class, 'message'])->name('message');
 
 
 // Route de la page Gestion des demandes

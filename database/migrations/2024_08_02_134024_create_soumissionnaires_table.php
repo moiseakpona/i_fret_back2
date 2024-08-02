@@ -21,10 +21,9 @@ return new class extends Migration
             $table->foreign('vehicule_id')->references('id')->on('vehicules');
             $table->string('numero_tel_chauffeur')->nullable();
             $table->foreign('numero_tel_chauffeur')->references('numero_tel')->on('users');
-            $table->unsignedBigInteger('demande_id')->nullable();
-            $table->foreign('demande_id')->references('id')->on('demandes');
-            $table->string('statut_soumission')->nullable();
-            $table->string('statut_demande')->nullable();
+            $table->unsignedBigInteger('fret_id')->nullable();
+            $table->foreign('fret_id')->references('id')->on('frets');
+            $table->string('statut')->nullable();
             $table->timestamps();
         });
     }

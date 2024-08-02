@@ -5,19 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
 class Soumissionnaire extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'localisation',
+        'montant',
         'numero_tel_transport',
         'vehicule_id',
         'numero_tel_chauffeur',
-        'demande_id',
-        'statut_soumission',
-        'statut_demande',
+        'fret_id',
+        'statut',
     ];
 
      // Relation avec le modèle Vehicule
@@ -33,8 +31,8 @@ class Soumissionnaire extends Model
      }
  
      // Relation avec le modèle Demande
-     public function demande()
+     public function fret()
      {
-         return $this->belongsTo(Demande::class);
+         return $this->belongsTo(Fret::class);
      }
 }

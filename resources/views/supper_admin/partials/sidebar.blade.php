@@ -202,7 +202,7 @@
       </li> 
 
 
-      @php
+      {{-- @php
         $pageController = new App\Http\Controllers\Admin\PageController();
         $nombreDeMessagesNonLus = $pageController->compte_chat_non_lu();
       @endphp
@@ -215,7 +215,7 @@
         </a>
         <ul class="menu-sub">
         </ul>
-      </li>
+      </li> --}}
 
       <li class="menu-item {{ Request::is('supper_admin/gestion_demande') ? 'active' : '' }} {{ Request::is('supper_admin/gestion_demande/details') ? 'active open' : '' }} {{ Request::is('supper_admin/gestion_fret') ? 'active open' : '' }} {{ Request::is('supper_admin/fret_diponible') ? 'active open' : '' }}">
         <a href="{{ route('gestion_demande') }}" class="menu-link">

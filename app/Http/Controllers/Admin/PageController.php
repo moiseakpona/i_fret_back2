@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Fret;
-use App\Models\Demande;
 use App\Models\Vehicule;
 use App\Models\DetailChauffeur;
 use App\Models\Envoyer;
@@ -373,139 +372,140 @@ class PageController extends Controller
 
 
 
-    public function chat_chargeur()
-    {
-        // Récupérer l'utilisateur connecté
-        $admin = auth()->user();
+    // public function chat_chargeur()
+    // {
+    //     // Récupérer l'utilisateur connecté
+    //     $admin = auth()->user();
 
        
-        // <-- message non lu -->
-        // Récupérer les numéros de téléphone distincts de la table Envoyer
-        $numeros_telephone = Envoyer::distinct()->pluck('numero_tel')->toArray();
+    //     // <-- message non lu -->
+    //     // Récupérer les numéros de téléphone distincts de la table Envoyer
+    //     $numeros_telephone = Envoyer::distinct()->pluck('numero_tel')->toArray();
 
-        // Supprimer les doublons des numéros de téléphone
-        $numeros_tel = array_unique($numeros_telephone);
+    //     // Supprimer les doublons des numéros de téléphone
+    //     $numeros_tel = array_unique($numeros_telephone);
          
-        // <-- Autre fonction en interne -->
-         // Récupérer les numéros de téléphone distincts des utilisateurs
-         $numeros_telephone = User::where('type_compte', 'Chargeur')->distinct()->pluck('numero_tel')->toArray();
+    //     // <-- Autre fonction en interne -->
+    //      // Récupérer les numéros de téléphone distincts des utilisateurs
+    //      $numeros_telephone = User::where('type_compte', 'Chargeur')->distinct()->pluck('numero_tel')->toArray();
 
-         // Filtrer les numéros de téléphone pour exclure ceux ayant des envois non lus
-         $numeros_tel_lu = array_diff($numeros_telephone, $numeros_tel);
+    //      // Filtrer les numéros de téléphone pour exclure ceux ayant des envois non lus
+    //      $numeros_tel_lu = array_diff($numeros_telephone, $numeros_tel);
  
-         // Récupérer les utilisateurs correspondant aux numéros de téléphone trouvés
-         $chargeurs = User::whereIn('numero_tel', $numeros_tel_lu)->get();
-        // < !-- Autre fonction en interne -->
+    //      // Récupérer les utilisateurs correspondant aux numéros de téléphone trouvés
+    //      $chargeurs = User::whereIn('numero_tel', $numeros_tel_lu)->get();
+    //     // < !-- Autre fonction en interne -->
 
-        // Récupérer les utilisateurs correspondant aux numéros de téléphone trouvés
-        $utilisateurs = User::whereIn('numero_tel', $numeros_tel)->get();
+    //     // Récupérer les utilisateurs correspondant aux numéros de téléphone trouvés
+    //     $utilisateurs = User::whereIn('numero_tel', $numeros_tel)->get();
 
-        // Tableau pour stocker les utilisateurs avec leurs derniers messages
-        $usersEtEndMessage = [];
+    //     // Tableau pour stocker les utilisateurs avec leurs derniers messages
+    //     $usersEtEndMessage = [];
 
-        // Parcourir chaque utilisateur pour récupérer son dernier message envoyé
-        foreach ($utilisateurs as $utilisateur) {
-            $dernierMessage = Envoyer::where('numero_tel', $utilisateur->numero_tel)
-                ->orderByDesc('created_at')
-                ->first();
+    //     // Parcourir chaque utilisateur pour récupérer son dernier message envoyé
+    //     foreach ($utilisateurs as $utilisateur) {
+    //         $dernierMessage = Envoyer::where('numero_tel', $utilisateur->numero_tel)
+    //             ->orderByDesc('created_at')
+    //             ->first();
 
-            // Assigner le dernier message à l'utilisateur
-            $usersEtEndMessage[] = [
-                'utilisateur' => $utilisateur,
-                'dernierMessage' => $dernierMessage,
-            ];
-        }
-        // < !-- message non lu -->
-
-
-        // Retourner la vue du chat Chargeur
-        return view('supper_admin.chats.chargeur', ['admin' => $admin, 'usersEtEndMessage' => $usersEtEndMessage, 'chargeurs' => $chargeurs ]);
-    }
+    //         // Assigner le dernier message à l'utilisateur
+    //         $usersEtEndMessage[] = [
+    //             'utilisateur' => $utilisateur,
+    //             'dernierMessage' => $dernierMessage,
+    //         ];
+    //     }
+    //     // < !-- message non lu -->
 
 
+    //     // Retourner la vue du chat Chargeur
+    //     return view('supper_admin.chats.chargeur', ['admin' => $admin, 'usersEtEndMessage' => $usersEtEndMessage, 'chargeurs' => $chargeurs ]);
+    // }
 
-    public function detail_chat(Request $request, $numero)
-    {
-        // Récupère les messavage envoyer par ce utilisateur
-        $envois = Envoyer::where('numero_tel', $numero)
-                            ->orderBy('created_at')
-                            ->get();
 
-        // Parcourir chaque message et mettre à jour le statut
-        foreach ($envois as $envoi) {
-            $envoi->statut = 'Lu';
-            $envoi->save();
-        }
 
-        // Récupère les messavage Reçu par ce utilisateur
-        $receptions = Recevoir::where('numero_tel', $numero)
-                            ->orderBy('created_at')
-                            ->get();
 
-        // Récupérer l'utilisateur avec le numéro de téléphone spécifié
-        $chargeur_online = User::where('numero_tel', $numero)->first();
+    // public function detail_chat(Request $request, $numero)
+    // {
+    //     // Récupère les messavage envoyer par ce utilisateur
+    //     $envois = Envoyer::where('numero_tel', $numero)
+    //                         ->orderBy('created_at')
+    //                         ->get();
 
-        // Récupérer l'utilisateur connecté
-        $admin = auth()->user();
+    //     // Parcourir chaque message et mettre à jour le statut
+    //     foreach ($envois as $envoi) {
+    //         $envoi->statut = 'Lu';
+    //         $envoi->save();
+    //     }
 
-        // Récupérer la liste des utilisateurs dont le type de compte est "chargeur"
-        $chargeurs = User::where('type_compte', 'chargeur')->get();
+    //     // Récupère les messavage Reçu par ce utilisateur
+    //     $receptions = Recevoir::where('numero_tel', $numero)
+    //                         ->orderBy('created_at')
+    //                         ->get();
 
-       // Récupérer les numéros de téléphone distincts des utilisateurs ayant des envois lus
-       $numeros_telephone = User::where('type_compte', 'Chargeur')->distinct()->pluck('numero_tel')->toArray();
+    //     // Récupérer l'utilisateur avec le numéro de téléphone spécifié
+    //     $chargeur_online = User::where('numero_tel', $numero)->first();
 
-       // Récupérer les numéros de téléphone distincts des utilisateurs ayant des envois non lus
-       $numeros_tel_non_lus = Envoyer::where('statut', 'Non lu')->distinct()->pluck('numero_tel')->toArray();
+    //     // Récupérer l'utilisateur connecté
+    //     $admin = auth()->user();
 
-       // Filtrer les numéros de téléphone pour exclure ceux ayant des envois non lus
-       $numeros_tel_lu = array_diff($numeros_telephone, $numeros_tel_non_lus);
+    //     // Récupérer la liste des utilisateurs dont le type de compte est "chargeur"
+    //     $chargeurs = User::where('type_compte', 'chargeur')->get();
 
-       // Récupérer les utilisateurs correspondant aux numéros de téléphone trouvés
-       $chargeurs = User::whereIn('numero_tel', $numeros_tel_lu)->get();
+    //    // Récupérer les numéros de téléphone distincts des utilisateurs ayant des envois lus
+    //    $numeros_telephone = User::where('type_compte', 'Chargeur')->distinct()->pluck('numero_tel')->toArray();
 
-        // <-- message non lu -->
-        // Récupérer les numéros de téléphone distincts de la table Envoyer
-        $numeros_telephone = Envoyer::distinct()->pluck('numero_tel')->toArray();
+    //    // Récupérer les numéros de téléphone distincts des utilisateurs ayant des envois non lus
+    //    $numeros_tel_non_lus = Envoyer::where('statut', 'Non lu')->distinct()->pluck('numero_tel')->toArray();
 
-        // Supprimer les doublons des numéros de téléphone
-        $numeros_tel = array_unique($numeros_telephone);
+    //    // Filtrer les numéros de téléphone pour exclure ceux ayant des envois non lus
+    //    $numeros_tel_lu = array_diff($numeros_telephone, $numeros_tel_non_lus);
+
+    //    // Récupérer les utilisateurs correspondant aux numéros de téléphone trouvés
+    //    $chargeurs = User::whereIn('numero_tel', $numeros_tel_lu)->get();
+
+    //     // <-- message non lu -->
+    //     // Récupérer les numéros de téléphone distincts de la table Envoyer
+    //     $numeros_telephone = Envoyer::distinct()->pluck('numero_tel')->toArray();
+
+    //     // Supprimer les doublons des numéros de téléphone
+    //     $numeros_tel = array_unique($numeros_telephone);
 
          
-        // <-- Autre fonction en interne -->
-         // Récupérer les numéros de téléphone distincts des utilisateurs
-         $numeros_telephone = User::where('type_compte', 'Chargeur')->distinct()->pluck('numero_tel')->toArray();
+    //     // <-- Autre fonction en interne -->
+    //      // Récupérer les numéros de téléphone distincts des utilisateurs
+    //      $numeros_telephone = User::where('type_compte', 'Chargeur')->distinct()->pluck('numero_tel')->toArray();
 
-         // Filtrer les numéros de téléphone pour exclure ceux ayant des envois non lus
-         $numeros_tel_lu = array_diff($numeros_telephone, $numeros_tel);
+    //      // Filtrer les numéros de téléphone pour exclure ceux ayant des envois non lus
+    //      $numeros_tel_lu = array_diff($numeros_telephone, $numeros_tel);
  
-         // Récupérer les utilisateurs correspondant aux numéros de téléphone trouvés
-         $chargeurs = User::whereIn('numero_tel', $numeros_tel_lu)->get();
-        // < !-- Autre fonction en interne -->
+    //      // Récupérer les utilisateurs correspondant aux numéros de téléphone trouvés
+    //      $chargeurs = User::whereIn('numero_tel', $numeros_tel_lu)->get();
+    //     // < !-- Autre fonction en interne -->
 
-        // Récupérer les utilisateurs correspondant aux numéros de téléphone trouvés
-        $utilisateurs = User::whereIn('numero_tel', $numeros_tel)->get();
+    //     // Récupérer les utilisateurs correspondant aux numéros de téléphone trouvés
+    //     $utilisateurs = User::whereIn('numero_tel', $numeros_tel)->get();
 
-        // Tableau pour stocker les utilisateurs avec leurs derniers messages
-        $usersEtEndMessage = [];
+    //     // Tableau pour stocker les utilisateurs avec leurs derniers messages
+    //     $usersEtEndMessage = [];
 
-        // Parcourir chaque utilisateur pour récupérer son dernier message envoyé
-        foreach ($utilisateurs as $utilisateur) {
-            $dernierMessage = Envoyer::where('numero_tel', $utilisateur->numero_tel)
-                ->orderByDesc('created_at')
-                ->first();
+    //     // Parcourir chaque utilisateur pour récupérer son dernier message envoyé
+    //     foreach ($utilisateurs as $utilisateur) {
+    //         $dernierMessage = Envoyer::where('numero_tel', $utilisateur->numero_tel)
+    //             ->orderByDesc('created_at')
+    //             ->first();
 
-            // Assigner le dernier message à l'utilisateur
-            $usersEtEndMessage[] = [
-                'utilisateur' => $utilisateur,
-                'dernierMessage' => $dernierMessage,
-            ];
-        }
-        // < !-- message non lu -->
+    //         // Assigner le dernier message à l'utilisateur
+    //         $usersEtEndMessage[] = [
+    //             'utilisateur' => $utilisateur,
+    //             'dernierMessage' => $dernierMessage,
+    //         ];
+    //     }
+    //     // < !-- message non lu -->
 
 
-        // Retourner la vue du chat Chargeur
-        return view('supper_admin.chats.detail_chat', ['admin' => $admin, 'chargeurs' => $chargeurs, 'chargeur_online' => $chargeur_online, 'usersEtEndMessage' => $usersEtEndMessage, 'chargeurs' => $chargeurs,  'envois' => $envois, 'receptions' => $receptions]);
-    }
+    //     // Retourner la vue du chat Chargeur
+    //     return view('supper_admin.chats.detail_chat', ['admin' => $admin, 'chargeurs' => $chargeurs, 'chargeur_online' => $chargeur_online, 'usersEtEndMessage' => $usersEtEndMessage, 'chargeurs' => $chargeurs,  'envois' => $envois, 'receptions' => $receptions]);
+    // }
 
 
 
@@ -524,7 +524,7 @@ class PageController extends Controller
     public function gestion_demande()
     {
         // Récupérer la liste des demandes
-        $demandes = Demande::all();
+        $demandes = Fret::all();
 
         // Retourner la vue Gestion demande
         return view('supper_admin.gestion_demande.gestion_demande', ['demandes' => $demandes]);
@@ -535,47 +535,29 @@ class PageController extends Controller
     public function gestion_fret()
     {
         // Récupérer la liste des frets de statut "en attente"
-        $fretsEnAttente = Fret::where('statut', 'En attent')->get();
+        $frets = Fret::where('statut', 'En attent')->get();
 
-        // Récupérer la liste des demandes
-        $demandes = Demande::all();
+        // Tableau pour stocker les informations sur les utilisateurs correspondant à chaque fret
+        $utilisateursFrets = [];
 
-        // Tableau pour stocker les informations sur les demandes avec les frets et les utilisateurs correspondants
-        $demandeFretsUser = [];
-
-        // Parcourir chaque demande
-        foreach ($demandes as $demande) {
-            // Récupérer l'ID de la demande
-            $demandeId = $demande->id;
-
-            // Récupérer la liste des frets associés à cette demande
-            $frets = Fret::where('id_demande', $demandeId)->get();
-
-            // Tableau pour stocker les informations sur les utilisateurs correspondant à chaque fret
-            $utilisateursFrets = [];
-
-            // Pour chaque fret, récupérer les informations sur l'utilisateur correspondant
-            foreach ($frets as $fret) {
-                // Récupérer le numéro de téléphone associé à ce fret
-                $numeroTelephone = $fret->numero_tel;
-                
-                // Récupérer l'utilisateur correspondant au numéro de téléphone
-                $user = User::where('numero_tel', $numeroTelephone)->first();
-
-                // Stocker les informations sur l'utilisateur correspondant à ce fret
-                $utilisateursFrets[] = $user;
-            }
+        // Pour chaque fret, récupérer les informations sur l'utilisateur correspondant
+        foreach ($frets as $fret) {
+            // Récupérer le numéro de téléphone du camp
+            $numeroTel = $fret->numero_tel;
+            
+            // Récupérer l'utilisateur correspondant au numéro de téléphone
+            $chargeur = User::where('numero_tel', $numeroTel)->first();
 
             // Stocker les informations sur la demande, les frets et les utilisateurs correspondants
-            $demandeFretsUser[] = [
-                'demande' => $demande,
-                'frets' => $frets,
-                'utilisateurs' => $utilisateursFrets,
+            $utilisateursFrets[] = [
+                'fret' => $fret,
+                'chargeur' => $chargeur,
             ];
+
         }
 
         // Retourner la vue Gestion demande
-        return view('supper_admin.gestion_demande.gestion_fret', ['fretsEnAttente' => $fretsEnAttente, 'demandeFretsUser' => $demandeFretsUser]);
+        return view('supper_admin.gestion_demande.gestion_fret', ['utilisateursFrets' => $utilisateursFrets]);
     }
 
 

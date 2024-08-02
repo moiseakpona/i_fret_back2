@@ -13,15 +13,17 @@ return new class extends Migration
     {
         Schema::create('frets', function (Blueprint $table) {
             $table->id();
+            $table->string('description');
             $table->string('lieu_depart');
             $table->string('lieu_arrive');
-            $table->string('montant');
-            $table->string('description');
+            $table->string('info_comp');
+            $table->string('montant')->nullable();
+            $table->foreign('montant')->references('montant')->on('soumissionnaires');
             $table->string('numero_tel');
             $table->foreign('numero_tel')->references('numero_tel')->on('users');
-            $table->unsignedBigInteger('id_demande')->nullable();
-            $table->foreign('id_demande')->references('id')->on('demandes')->onDelete('cascade');
             $table->string('statut')->nullable();
+            $table->string('kkiapay_transaction_id')->nullable();
+            $table->string('statut_paiement')->nullable();
             $table->timestamps();
         });
     }
