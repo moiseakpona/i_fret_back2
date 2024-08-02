@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string('lieu_depart');
             $table->string('lieu_arrive');
             $table->string('info_comp');
-            $table->string('montant')->nullable();
-            $table->foreign('montant')->references('montant')->on('soumissionnaires');
             $table->string('numero_tel');
             $table->foreign('numero_tel')->references('numero_tel')->on('users');
             $table->string('statut')->nullable();

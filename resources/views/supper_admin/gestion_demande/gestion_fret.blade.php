@@ -141,15 +141,31 @@
                                     </div>
                                     </tr>
                                     <tr>
-                                    <div class="mb-3">
-                                        <td style="font-weight: 600; "> Data de naissance :</td>
-                                        <td id="date_naissance"></td>
-                                    </div>
+                                      <div class="mb-3">
+                                          <td style="font-weight: 600; "> Description</td>
+                                          <td id="description"></td>
+                                      </div>
+                                    </tr>
+                                    <tr>
+                                      <div class="mb-3">
+                                          <td style="font-weight: 600; "> Information Complémentaire</td>
+                                          <td id="info_comp"></td>
+                                      </div>
+                                    </tr><tr>
+                                      <div class="mb-3">
+                                          <td style="font-weight: 600; "> Lieu de départ</td>
+                                          <td id="lieu_depart"></td>
+                                      </div>
+                                    </tr><tr>
+                                      <div class="mb-3">
+                                          <td style="font-weight: 600; "> Lieu d'arrivé</td>
+                                          <td id="lieu_arrive"></td>
+                                      </div>
                                     </tr>
                                     <tr>
                                     <div class="mb-3">
-                                        <td style="font-weight: 600; "> Ville :</td>
-                                        <td id="ville"></td>
+                                        <td style="font-weight: 600; "> Date de création :</td>
+                                        <td id="created_at"></td>
                                     </div>
                                     </tr>
                                 </tbody>
@@ -169,7 +185,7 @@
                               const prenom = btn.getAttribute('data-prenom');
                               const type_compte = btn.getAttribute('data-type_compte');
                               const numero_tel = btn.getAttribute('data-numero_tel');
-                              const date_naissance = btn.getAttribute('data-date_naissance');
+                              const description = btn.getAttribute('data-description');
                               const ville = btn.getAttribute('data-ville');
                               const photo = btn.getAttribute('data-photo');
                               
