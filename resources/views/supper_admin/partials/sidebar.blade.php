@@ -176,7 +176,10 @@
         </ul>
       </li>
 
-          <!-- Academy menu end -->
+
+      @if(auth()->user()->type_compte != 'comptable')
+
+      <!-- Academy menu end -->
     <li class="menu-item {{ Request::is('supper_admin/camions/en_attent') ? 'active open' : '' }} {{ Request::is('supper_admin/camions/valide') ? 'active open' : '' }} {{ Request::is('supper_admin/camions/rejete') ? 'active open' : '' }}">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
           <i class='menu-icon tf-icons bx bxs-truck'></i>
@@ -234,6 +237,18 @@
         <ul class="menu-sub">
         </ul>
       </li>
+
+      @endif
+
+      <li class="menu-item {{ Request::is('supper_admin/paiement') ? 'active' : '' }}">
+        <a href="{{ route('paiement') }}" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-dollar"></i>
+          <div class="text-truncate" data-i18n="Paiement">Paiement</div>
+        </a>
+        <ul class="menu-sub">
+        </ul>
+      </li>
+
   </ul>
   
   

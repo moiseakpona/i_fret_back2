@@ -117,6 +117,10 @@ Route::post('/supper_admin/gestion_fret/demande', [UtilisateurController::class,
 Route::get('/supper_admin/traking', [PageController::class, 'traking'])->name('traking');
 
 
+// Route pour afficher la page du Paiement 
+Route::get('/supper_admin/paiement', [PageController::class, 'paiement'])->name('paiement');
+
+
 // Affiche des pages paramètre de l'admin 
 // Route pour afficher la page du prfil de d'admin 
 Route::get('/supper_admin/parametre/profil', [ProfilController::class, 'profil'])->name('profil');

@@ -41,9 +41,11 @@
                           <p class="mb-0">
                             {{ $chargeur->created_at }}
                           </p>
-                        </div>
-                          <button type="button" class="btn btn-label-danger delete-customer" data-bs-toggle="modal" data-bs-target="#confirmationModal">Supprimer le compte</button>
-                        </div>
+                        @if(auth()->user()->type_compte != 'comptable')
+                          </div>
+                            <button type="button" class="btn btn-label-danger delete-customer" data-bs-toggle="modal" data-bs-target="#confirmationModal">Supprimer le compte</button>
+                          </div>
+                        @endif
 
                       <!-- Modal confirmation de Suppression de compte-->
                       <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
@@ -114,10 +116,11 @@
                                   </table>
                                 </div>
 
-                                <div class="d-flex justify-content-center mt-3">
-                                  <a href="javascript:;" class="btn btn-primary me-3" data-bs-target="#editUser" data-bs-toggle="modal">Modifier Profil</a>
-                      
-                                </div>
+                                @if(auth()->user()->type_compte != 'comptable')
+                                  <div class="d-flex justify-content-center mt-3">
+                                    <a href="javascript:;" class="btn btn-primary me-3" data-bs-target="#editUser" data-bs-toggle="modal">Modifier Profil</a>
+                                  </div>
+                                @endif
                               </div>
                             </div>
                           </div>
@@ -184,67 +187,38 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <strong class="card-title">Liste des fret ajoutés</strong>
-                                            <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                <span class="tf-icon bx bx-plus bx-xs me-1">
-                                                Ajouter une demande 
-                                              </button>
                                         </div>
                                         <div class="card-body table-responsive mb-3">
                                             <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
-                                                        <th>#</th>
                                                         <th>Fret</th>
                                                         <th>Lieu de depart</th>
                                                         <th>Lieu d'arriver</th>
-                                                        <th>Prix</th>
-                                                        <th>Date Emission</th>
-                                                        <th>Date Finalisation</th>
+                                                        <th>Montant</th>
+                                                        <th>Transporteur</th>
                                                         <th>Statut</th>
-                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td>#001</td>
                                                         <td>15 sacs de maïs	</td>
-                                                        <td>Cotonou</td>
-                                                        <th>Parakou</th>
+                                                        <td>Cotonou <br> 2024-05-13 13:59:53</td>
+                                                        <td>Parakou <br> 2024-05-13 13:59:53</td>
                                                         <td>100 000F CFA</td>
-                                                        <td>03/03/2024</td>
                                                         <td></td>
                                                         <td>
                                                             <span class="badge bg-label-warning me-1">En cours</span>
                                                         </td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
-                                                                <div class="dropdown-menu">
-                                                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-2"></i> Edit</a>
-                                                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-2"></i> Delete</a>
-                                                                </div>
-                                                            </div>
-                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>#001</td>
                                                         <td>200 sacs de charbon</td>
-                                                        <td>Cotonou</td>
-                                                        <th>Djougou</th>
+                                                        <td>Cotonou <br> 2024-05-13 13:59:53</td>
+                                                        <th>Djougou <br> 2024-05-13 13:59:53 </th>
                                                         <td>1 000 000F CFA</td>
-                                                        <td>03/02/2024</td>
-                                                        <td>10/02/2024</td>
+                                                        <td></td>
                                                         <td>
                                                             <span class="badge bg-label-success me-1">Finalisé</span>
-                                                        </td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
-                                                                <div class="dropdown-menu">
-                                                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-2"></i> Edit</a>
-                                                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-2"></i> Delete</a>
-                                                                </div>
-                                                            </div>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -257,61 +231,6 @@
                     <!--/ Fixed Header -->
 
                     <hr class="my-5">
-                    
-                    <!-- Fixed Header -->
-                    <div class="content mt-3">
-                        <div class="animated fadeIn">
-                            <div class="row">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <strong class="card-title">Liste des tansactions</strong>
-                                        </div>
-                                        <div class="card-body table-responsive mb-3">
-                                            <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>Id de transaction</th>
-                                                        <th>Moyen de paiement</th>
-                                                        <th>Nom & Prénom</th>
-                                                        <th>Montant</th>
-                                                        <th>Date</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>#001</td>
-                                                        <td>258904758598</td>
-                                                        <td>
-                                                            <span class="accordion-button-image">
-                                                                <img src="../../assets/img/icons/payments/visa-light.png" class="img-fluid w-px-50 h-px-30" alt="visa-card" />
-                                                            </span>
-                                                        </td>
-                                                        <th>Yank Luddy</th>
-                                                        <td>500 000F CFA</td>
-                                                        <td>03/03/2024</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>#002</td>
-                                                        <td>2004348588</td>
-                                                        <td>
-                                                            <span class="accordion-button-image">
-                                                                <img src="../../assets/img/icons/payments/master-light.png" class="img-fluid w-px-50 h-px-30" alt="master-card"/>
-                                                              </span>
-                                                        </td>
-                                                        <th>Djonou NOUAGOVI</th>
-                                                        <td>1 000 000F CFA</td>
-                                                        <td>03/02/2024</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                            </div>
-                        </div><!-- .animated -->
-                    </div><!-- .content -->
-                    <!--/ Fixed Header -->
-
                       
                       <!-- Modal -->
                       <!-- Edit User Modal -->
@@ -375,73 +294,8 @@
                       </div>
                       <!--/ Edit User Modal -->
                       
-                      <!-- Modal  Ajouter demande de fret-->
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Formulaire d'ajout de fret</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form class="form-repeater">
-                                    <div data-repeater-list="group-a">
-                                    <div data-repeater-item>
-
-                                        <div class="row mb-3">
-                                        <div class="col">
-                                            <label for="inputCity1" class="form-label"> Lieu de depart </label>
-                                            <select class="form-select" id="inputCity1">
-                                            <option selected disabled>Select City</option>
-                                            <option value="Cotonou">Cotonou</option>
-                                            <option value="Porto-Novo">Porto-Novo</option>
-                                            <option value="Parakou">Parakou</option>
-                                            <option value="Abomey-Calavi">Abomey-Calavi</option>
-                                            </select>
-                                        </div>
-                                        <div class="col">
-                                            <label for="inputCity2" class="form-label">Lieu d'arrivée</label>
-                                            <select class="form-select" id="inputCity2">
-                                            <option selected disabled>Select City</option>
-                                            <option value="Cotonou">Cotonou</option>
-                                            <option value="Porto-Novo">Porto-Novo</option>
-                                            <option value="Parakou">Parakou</option>
-                                            <option value="Abomey-Calavi">Abomey-Calavi</option>
-                                            </select>
-                                        </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                        <div class="col">
-                                            <label for="inputPrice" class="form-label">Price</label>
-                                            <input type="number" class="form-control" id="inputPrice" placeholder="0.00">
-                                        </div>
-                                        <div class="col">
-                                            <label for="inputDate" class="form-label">Date</label>
-                                            <input type="date" class="form-control" id="inputDate">
-                                        </div>
-                                        </div>  
-
-                                        <div class="row mb-3 mt-3">
-                                            <div class="col">
-                                            <label for="inputDescription" class="form-label">Fret</label>
-                                            <textarea class="form-control" id="inputDescription" rows="3"></textarea>
-                                            </div>
-                                        </div>  
-
-                                    </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                                <button type="button" class="btn btn-primary">Enregistrer</button>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                        <!--/ Modal Ajouter demande de fret -->
- 
+               
+                  </div>
                   </div>
                   <!-- / Content -->
                   <!-- Footer -->

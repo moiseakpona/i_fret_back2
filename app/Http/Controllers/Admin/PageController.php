@@ -40,6 +40,7 @@ class PageController extends Controller
         return view('supper_admin.dashboard', compact('statistics'));
     }
 
+
     public function chargeur()
     {
           // Récupérer la liste des utilisateurs dont le type de compte est "chargeur"
@@ -524,7 +525,7 @@ class PageController extends Controller
     public function gestion_demande()
     {
         // Récupérer la liste des demandes
-        $demandes = Fret::all();
+        $demandes = Fret::where('statut', 'Retenue')->get();
 
         // Retourner la vue Gestion demande
         return view('supper_admin.gestion_demande.gestion_demande', ['demandes' => $demandes]);
@@ -597,6 +598,13 @@ class PageController extends Controller
         return view('supper_admin.traking');
     }
 
+
+    public function paiement()
+    {
+        // Retourner la vue Traking
+        return view('supper_admin.paiement');
+    }
+
     public function password()
     {
         // Retourner la vue mot de passe oublié
@@ -610,7 +618,7 @@ class PageController extends Controller
     public function soumissionnaire(Request $request, $id)
     {
         // Récupérer les soumissionnairesrespondant à id spécifié
-        $soumissionnaires = Soumissionnaire::where('demande_id', $id)->get();
+        $soumissionnaires = Soumissionnaire::where('fret_id', $id)->get();
 
         // Tableau pour stocker les résultats
         $resultats = [];
@@ -638,61 +646,51 @@ class PageController extends Controller
 
 
     public function detail_demande(Request $request, $id)
-    {
-        // Récupérer la demande correspondant à l'ID spécifié
-        $demande = Demande::find($id);
+{
+    // Récupérer le fret correspondant à l'ID spécifié
+    $fret = Fret::find($id);
 
-
-        // Récupérer les soumissionnaires dont demande_id est égal à l'ID récupéré et statut_soumission est égal à "Retenue"
-        $soumissionnaires = Soumissionnaire::where('demande_id', $id)
-                                            ->where('statut_soumission', 'Retenue')
-                                            ->get();
-
-        // Tableau pour stocker les résultats
-        $resultatSoumi = [];
-
-        // Pour chaque soumissionnaire
-        foreach ($soumissionnaires as $soumissionnaire) {
-            // Récupérer les informations liées
-            $transportUser = User::where('numero_tel', $soumissionnaire->numero_tel_transport)->first();
-            $chauffeurUser = User::where('numero_tel', $soumissionnaire->numero_tel_chauffeur)->first();
-            $vehicule = Vehicule::find($soumissionnaire->vehicule_id);
-
-            // Ajouter les informations aux résultats
-            $resultatSoumi[] = [
-                'soumissionnaire' => $soumissionnaire,
-                'transportUser' => $transportUser,
-                'chauffeurUser' => $chauffeurUser,
-                'vehicule' => $vehicule,
-                'demande' => $demande
-            ];
-        } //fin
-
-
-        // Récupérer la liste de tous les frets dont id_demande est égal à l'ID récupéré
-        $frets = Fret::where('id_demande', $id)->get();
-
-        // Tableau pour stocker les résultats
-        $resultatFret = [];
-
-        // Pour chaque fret en attente
-        foreach ($frets as $fret) {
-            // Récupérer le numéro de téléphone du camp
-            $numeroTel = $fret->numero_tel;
-
-            // Vérifier l'utilisateur correspondant à ce numéro de téléphone
-            $chargeur = User::where('numero_tel', $numeroTel)->first();
-
-            // Ajouter le fret et l'utilisateur correspondant aux résultats
-            $resultatFret[] = [
-                'fret' => $fret,
-                'chargeur' => $chargeur
-            ];
-        } //fin
-
-        // Retourner la vue connexion
-        return view('supper_admin.gestion_demande.detail_demande', ['resultatSoumi' => $resultatSoumi, 'resultatFret' => $resultatFret ]);
+    // Vérifier si le fret existe
+    if (!$fret) {
+        return redirect()->back()->with('error', 'Fret non trouvé.');
     }
+
+    // Récupérer les soumissionnaires dont fret_id est égal à l'ID récupéré et statut_soumission est égal à "Retenue"
+    $soumissionnaires = Soumissionnaire::where('fret_id', $id)
+                                        ->where('statut', 'Retenue')
+                                        ->get();
+
+    // Tableau pour stocker les résultats
+    $resultatSoumi = [];
+
+    // Pour chaque soumissionnaire
+    foreach ($soumissionnaires as $soumissionnaire) {
+        // Récupérer les informations liées
+        $transportUser = User::where('numero_tel', $soumissionnaire->numero_tel_transport)->first();
+        $chauffeurUser = User::where('numero_tel', $soumissionnaire->numero_tel_chauffeur)->first();
+        $vehicule = Vehicule::find($soumissionnaire->vehicule_id);
+
+        // Ajouter les informations aux résultats
+        $resultatSoumi[] = [
+            'soumissionnaire' => $soumissionnaire,
+            'transportUser' => $transportUser,
+            'chauffeurUser' => $chauffeurUser,
+            'vehicule' => $vehicule,
+        ];
+    }
+
+    // Récupérer l'utilisateur correspondant au fret
+    $chargeur = User::where('numero_tel', $fret->numero_tel)->first();
+
+    // Retourner la vue avec les données nécessaires
+    return view('supper_admin.gestion_demande.detail_demande', [
+        'fret' => $fret,
+        'chargeur' => $chargeur,
+        'resultatSoumi' => $resultatSoumi
+    ]);
+}
+
+    
 
 
 

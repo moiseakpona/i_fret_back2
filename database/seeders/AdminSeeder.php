@@ -34,7 +34,7 @@ class AdminSeeder extends Seeder
                 'numero_tel' => '+22995270470', // Numéro de téléphone unique
                 'email' => 'e.dovoedo@group-ilt.com',
                 'password' => Hash::make('@Admin_ILT_2024'),
-                'type_compte' => 'Comptable',
+                'type_compte' => 'comptable',
             ]
         ]);
 

@@ -26,13 +26,9 @@ class AuthAdminController extends Controller
             // Authentification réussie, vérifiez le type de compte
             $user = Auth::user();
     
-            if ($user->type_compte === 'comptable') {
-                // Rediriger les comptables vers le tableau de bord des comptables
-                return redirect('/comptable/dashboard');
-            } else {
-                // Rediriger les autres utilisateurs vers le tableau de bord de l'administration
-                return redirect('/supper_admin/dashboard');
-            }
+            // Rediriger les autres utilisateurs vers le tableau de bord de l'administration
+            return redirect('/supper_admin/dashboard');
+            
         } else {
             // Authentification échouée, rediriger vers le formulaire de connexion avec un message d'erreur
             return redirect()->back()->withInput()->withErrors(['email' => 'Email ou mot de passe incorrect.']);

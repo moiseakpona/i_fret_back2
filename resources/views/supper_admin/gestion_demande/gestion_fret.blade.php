@@ -69,7 +69,7 @@
                                           @endphp
                                           <tr>
                                             <td>
-                                              <button type="button" class="btn btn-xs btn-primary plus-btn" data-bs-toggle="modal" data-bs-target="#plusModal" data-nom="{{ $chargeur->nom }}" data-prenom="{{ $chargeur->prenom }}" data-type_compte="{{ $chargeur->type_compte }}" data-numero_tel="{{ $chargeur->numero_tel }}" data-description="{{ $chargeur->description }}" data-info_comp="{{ $fret->info_comp }}" data-lieu_depart="{{ $fret->lieu_depart }}" data-lieu_arrive="{{ $fret->lieu_arrive }}" data-created_at="{{ $fret->created_at }}" data-photo="{{ $chargeur->photo }}" data-photo="{{ $chargeur->photo }}" >
+                                              <button type="button" class="btn btn-xs btn-primary plus-btn" data-bs-toggle="modal" data-bs-target="#plusModal" data-nom="{{ $chargeur->nom }}" data-prenom="{{ $chargeur->prenom }}" data-type_compte="{{ $chargeur->type_compte }}" data-numero_tel="{{ $chargeur->numero_tel }}" data-description="{{ $fret->description }}" data-info_comp="{{ $fret->info_comp }}" data-lieu_depart="{{ $fret->lieu_depart }}" data-lieu_arrive="{{ $fret->lieu_arrive }}" data-created_at="{{ $fret->created_at }}" data-photo="{{ $chargeur->photo }}" data-photo="{{ $chargeur->photo }}" >
                                                 <span class="tf-icon bx bx-plus bx-xs me-1"></span>
                                               </button>
                                             </td>
@@ -186,7 +186,10 @@
                               const type_compte = btn.getAttribute('data-type_compte');
                               const numero_tel = btn.getAttribute('data-numero_tel');
                               const description = btn.getAttribute('data-description');
-                              const ville = btn.getAttribute('data-ville');
+                              const info_comp = btn.getAttribute('data-info_comp');
+                              const lieu_depart = btn.getAttribute('data-lieu_depart');
+                              const lieu_arrive = btn.getAttribute('data-lieu_arrive');
+                              const created_at = btn.getAttribute('data-created_at');
                               const photo = btn.getAttribute('data-photo');
                               
           
@@ -194,8 +197,11 @@
                               document.getElementById('prenom').innerText = prenom;
                               document.getElementById('type_compte').innerText = type_compte;
                               document.getElementById('numero_tel').innerText = numero_tel;
-                              document.getElementById('date_naissance').innerText = date_naissance;
-                              document.getElementById('ville').innerText = ville;
+                              document.getElementById('description').innerText = description;
+                              document.getElementById('info_comp').innerText = info_comp;
+                              document.getElementById('lieu_depart').innerText = lieu_depart;
+                              document.getElementById('lieu_arrive').innerText = lieu_arrive;
+                              document.getElementById('created_at').innerText = created_at;
                               document.getElementById('photo').innerText = photo;
                               document.getElementById('plusModal').style.display = 'block';
                           });

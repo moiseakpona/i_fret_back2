@@ -235,139 +235,59 @@
                         <!--/ Customer Content -->
                       </div>
 
-                    <!-- Fixed Header -->
+                      <!-- Fixed Header -->
                     <div class="content mt-3">
-                        <div class="animated fadeIn">
-                            <div class="row">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <strong class="card-title">Liste des fret ajoutés</strong>
-                                            <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addNewCCModal">
-                                                Ajouter une demande 
-                                              </button>
-                                        </div>
-                                        <div class="card-body table-responsive mb-3">
-                                            <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>Fret</th>
-                                                        <th>Lieu de depart</th>
-                                                        <th>Lieu d'arriver</th>
-                                                        <th>Prix</th>
-                                                        <th>Date Emission</th>
-                                                        <th>Date Finalisation</th>
-                                                        <th>Statut</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>#001</td>
-                                                        <td>15 sacs de maïs	</td>
-                                                        <td>Cotonou</td>
-                                                        <th>Parakou</th>
-                                                        <td>100 000F CFA</td>
-                                                        <td>03/03/2024</td>
-                                                        <td></td>
-                                                        <td>
-                                                            <span class="badge bg-label-warning me-1">En cours</span>
-                                                        </td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
-                                                                <div class="dropdown-menu">
-                                                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-2"></i> Edit</a>
-                                                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-2"></i> Delete</a>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>#001</td>
-                                                        <td>200 sacs de charbon</td>
-                                                        <td>Cotonou</td>
-                                                        <th>Djougou</th>
-                                                        <td>1 000 000F CFA</td>
-                                                        <td>03/02/2024</td>
-                                                        <td>10/02/2024</td>
-                                                        <td>
-                                                            <span class="badge bg-label-success me-1">Finalisé</span>
-                                                        </td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
-                                                                <div class="dropdown-menu">
-                                                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-2"></i> Edit</a>
-                                                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-2"></i> Delete</a>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                            </div>
-                        </div><!-- .animated -->
-                    </div><!-- .content -->
-                    <!--/ Fixed Header -->
+                      <div class="animated fadeIn">
+                          <div class="row">
+                                  <div class="card">
+                                      <div class="card-header">
+                                          <strong class="card-title">Liste des fret ajoutés</strong>
+                                      </div>
+                                      <div class="card-body table-responsive mb-3">
+                                          <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
+                                              <thead>
+                                                  <tr>
+                                                      <th>Chargeur</th>
+                                                      <th>Fret</th>
+                                                      <th>Lieu de depart</th>
+                                                      <th>Lieu d'arriver</th>
+                                                      <th>Montant</th>
+                                                      <th>Statut</th>
+                                                  </tr>
+                                              </thead>
+                                              <tbody>
+                                                  <tr>
+                                                      <td></td>
+                                                      <td>15 sacs de maïs	</td>
+                                                      <td>Cotonou <br> 2024-05-13 13:59:53</td>
+                                                      <td>Parakou <br> 2024-05-13 13:59:53</td>
+                                                      <td>100 000F CFA</td>
+                                                      <td>
+                                                          <span class="badge bg-label-warning me-1">En cours</span>
+                                                      </td>
+                                                  </tr>
+                                                  <tr>
+                                                      <td></td>
+                                                      <td>200 sacs de charbon</td>
+                                                      <td>Cotonou <br> 2024-05-13 13:59:53</td>
+                                                      <th>Djougou <br> 2024-05-13 13:59:53 </th>
+                                                      <td>1 000 000F CFA</td>
+                                                      <td>
+                                                          <span class="badge bg-label-success me-1">Finalisé</span>
+                                                      </td>
+                                                  </tr>
+                                              </tbody>
+                                          </table>
+                                      </div>
+                                  </div>
+                          </div>
+                      </div><!-- .animated -->
+                  </div><!-- .content -->
+                  <!--/ Fixed Header -->
+
 
                     <hr class="my-5">
                     
-                    <!-- Fixed Header -->
-                    <div class="content mt-3">
-                        <div class="animated fadeIn">
-                            <div class="row">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <strong class="card-title">Liste des tansactions</strong>
-                                        </div>
-                                        <div class="card-body table-responsive mb-3">
-                                            <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>Id de transaction</th>
-                                                        <th>Moyen de paiement</th>
-                                                        <th>Nom & Prénom</th>
-                                                        <th>Montant</th>
-                                                        <th>Date</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>#001</td>
-                                                        <td>258904758598</td>
-                                                        <td>
-                                                            <span class="accordion-button-image">
-                                                                <img src="../../assets/img/icons/payments/visa-light.png" class="img-fluid w-px-50 h-px-30" alt="visa-card" />
-                                                            </span>
-                                                        </td>
-                                                        <th>Yank Luddy</th>
-                                                        <td>500 000F CFA</td>
-                                                        <td>03/03/2024</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>#002</td>
-                                                        <td>2004348588</td>
-                                                        <td>
-                                                            <span class="accordion-button-image">
-                                                                <img src="../../assets/img/icons/payments/master-light.png" class="img-fluid w-px-50 h-px-30" alt="master-card"/>
-                                                              </span>
-                                                        </td>
-                                                        <th>Djonou NOUAGOVI</th>
-                                                        <td>1 000 000F CFA</td>
-                                                        <td>03/02/2024</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                            </div>
-                        </div><!-- .animated -->
-                    </div><!-- .content -->
-                    <!--/ Fixed Header -->
                       
                       <!-- Modal -->
                       <!-- Edit User Modal -->
@@ -431,59 +351,6 @@
                       </div>
                       <!--/ Edit User Modal -->
                       
-                      <!-- Add New Credit Card Modal -->
-                    <div class="modal fade" id="addNewCCModal" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered1 modal-simple modal-add-new-cc">
-                        <div class="modal-content p-3 p-md-5">
-                            <div class="modal-body">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            <div class="text-center mb-4">
-                                <h3>Add New Card</h3>
-                                <p>Add new card to complete payment</p>
-                            </div>
-                            <form id="addNewCCForm" class="row g-3" onsubmit="return false">
-                                <div class="col-12">
-                                <label class="form-label w-100" for="modalAddCard">Card Number</label>
-                                <div class="input-group input-group-merge">
-                                    <input id="modalAddCard" name="modalAddCard" class="form-control credit-card-mask" type="text" placeholder="1356 3215 6548 7898" aria-describedby="modalAddCard2" />
-                                    <span class="input-group-text cursor-pointer p-1" id="modalAddCard2"><span class="card-type"></span></span>
-                                </div>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                <label class="form-label" for="modalAddCardName">Name</label>
-                                <input type="text" id="modalAddCardName" class="form-control" placeholder="John Doe" />
-                                </div>
-                                <div class="col-6 col-md-3">
-                                <label class="form-label" for="modalAddCardExpiryDate">Exp. Date</label>
-                                <input type="text" id="modalAddCardExpiryDate" class="form-control expiry-date-mask" placeholder="MM/YY" />
-                                </div>
-                                <div class="col-6 col-md-3">
-                                <label class="form-label" for="modalAddCardCvv">CVV Code</label>
-                                <div class="input-group input-group-merge">
-                                    <input type="text" id="modalAddCardCvv" class="form-control cvv-code-mask" maxlength="3" placeholder="654" />
-                                    <span class="input-group-text cursor-pointer" id="modalAddCardCvv2"><i class="bx bx-help-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Card Verification Value"></i></span>
-                                </div>
-                                </div>
-                                <div class="col-12">
-                                <label class="switch">
-                                    <input type="checkbox" class="switch-input">
-                                    <span class="switch-toggle-slider">
-                                    <span class="switch-on"></span>
-                                    <span class="switch-off"></span>
-                                    </span>
-                                    <span class="switch-label">Save card for future billing?</span>
-                                </label>
-                                </div>
-                                <div class="col-12 text-center">
-                                <button type="submit" class="btn btn-primary me-sm-3 me-1 mt-3">Submit</button>
-                                <button type="reset" class="btn btn-label-secondary btn-reset mt-3" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-                                </div>
-                            </form>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    <!--/ Add New Credit Card Modal -->
  
                   </div>
                   <!-- / Content -->

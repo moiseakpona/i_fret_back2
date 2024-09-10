@@ -95,55 +95,55 @@ const date_naissance = btn.getAttribute('data-date_naissance');
 
 
 
-                                                            <!-- Boucle pour afficher les frets associés et les utilisateurs correspondants -->
-                                                            @foreach ($frets as $fret)
+<!-- Boucle pour afficher les frets associés et les utilisateurs correspondants -->
+@foreach ($frets as $fret)
 
-                                                              <!-- Section chargeur -->
-                                                              <div class="table-responsive">
-                                                                <table class="table ">
-                                                                  <thead>
-                                                                    <h4>Chargeur :</h4>
-                                                                  </thead>
-                                                                  <tbody>
-                                                                    @foreach ($utilisateursFrets as $utilisateur)
-                                                                      <tr>
-                                                                        <div class="mb-3">
-                                                                          <td><label for="truckBrand" style="font-weight: 600; ">Profil :</label></td> 
-                                                                          <td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2"><img src="../../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle"></div></div><div class="d-flex flex-column"><a href="{{ route('utilisateurs.details_chargeur') }}" spellcheck="false"><span class="fw-medium">{{ $utilisateur->nom }} {{ $utilisateur->prenom }}</span></a><small class="text-muted">Transporteur</small></div></div></td> 
-                                                                        </div>
-                                                                      </tr>
-                                                                      <tr>
-                                                                        <div class="mb-3">
-                                                                          <td><label for="truckBrand" style="font-weight: 600">Contact</label></td>
-                                                                          <td><span id="truckBrand" style="font-weight: 600; color:green;">{{ $utilisateur->numero_tel }}</span></td>
-                                                                        </div>
-                                                                      </tr>
-                                                                    @endforeach
-                                                                    <tr>
-                                                                      <div class="mb-3">
-                                                                        <td><label for="truckBrand" style="font-weight: 600">Description Fret(s)</label></td>
-                                                                        <td><span id="truckBrand" style="font-weight: 600; color:green;">{{ $fret->description }}</span></td>
-                                                                      </div>
-                                                                    </tr>
-                                                                    <tr>
-                                                                      <div class="mb-3">
-                                                                        <td><label for="truckBrand" style="font-weight: 600">Lieu de depart</label></td>
-                                                                        <td><span id="truckBrand" style="font-weight: 600; color:green;">{{ $fret->lieu_depart }}</span></td>
-                                                                      </div>
-                                                                    </tr>
-                                                                    <tr>
-                                                                      <div class="mb-3">
-                                                                        <td><label for="truckBrand" style="font-weight: 600">Lieu d'arrivée</label></td>
-                                                                        <td><span id="truckBrand" style="font-weight: 600; color:green;">{{ $fret->lieu_arrive }}</span></td>
-                                                                      </div>
-                                                                    </tr>
-                                                                  </tbody>
-                                                                </table>
-                                                              </div>
+  <!-- Section chargeur -->
+  <div class="table-responsive">
+    <table class="table ">
+      <thead>
+        <h4>Chargeur :</h4>
+      </thead>
+      <tbody>
+        @foreach ($utilisateursFrets as $utilisateur)
+          <tr>
+            <div class="mb-3">
+              <td><label for="truckBrand" style="font-weight: 600; ">Profil :</label></td> 
+              <td class="sorting_1"><div class="d-flex justify-content-start align-items-center customer-name"><div class="avatar-wrapper"><div class="avatar me-2"><img src="../../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle"></div></div><div class="d-flex flex-column"><a href="{{ route('utilisateurs.details_chargeur') }}" spellcheck="false"><span class="fw-medium">{{ $utilisateur->nom }} {{ $utilisateur->prenom }}</span></a><small class="text-muted">Transporteur</small></div></div></td> 
+            </div>
+          </tr>
+          <tr>
+            <div class="mb-3">
+              <td><label for="truckBrand" style="font-weight: 600">Contact</label></td>
+              <td><span id="truckBrand" style="font-weight: 600; color:green;">{{ $utilisateur->numero_tel }}</span></td>
+            </div>
+          </tr>
+        @endforeach
+        <tr>
+          <div class="mb-3">
+            <td><label for="truckBrand" style="font-weight: 600">Description Fret(s)</label></td>
+            <td><span id="truckBrand" style="font-weight: 600; color:green;">{{ $fret->description }}</span></td>
+          </div>
+        </tr>
+        <tr>
+          <div class="mb-3">
+            <td><label for="truckBrand" style="font-weight: 600">Lieu de depart</label></td>
+            <td><span id="truckBrand" style="font-weight: 600; color:green;">{{ $fret->lieu_depart }}</span></td>
+          </div>
+        </tr>
+        <tr>
+          <div class="mb-3">
+            <td><label for="truckBrand" style="font-weight: 600">Lieu d'arrivée</label></td>
+            <td><span id="truckBrand" style="font-weight: 600; color:green;">{{ $fret->lieu_arrive }}</span></td>
+          </div>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-                                                              <hr class="my-5">
+  <hr class="my-5">
 
-                                                              @endforeach
+  @endforeach
 
 
 

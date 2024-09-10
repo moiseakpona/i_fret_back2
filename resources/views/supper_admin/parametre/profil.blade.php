@@ -139,25 +139,6 @@
                               </form>
 
                             </div>
-                            <!-- /Account -->
-                          </div>
-                          <div class="card">
-                            <h5 class="card-header">Supprimer le compte</h5>
-                            <div class="card-body">
-                              <div class="mb-3 col-12 mb-0">
-                                <div class="alert alert-warning">
-                                  <h6 class="alert-heading fw-medium mb-1">Êtes-vous sûr de vouloir supprimer votre compte ?</h6>
-                                  <p class="mb-0">Une fois votre compte supprimé, vous ne pourrez plus revenir en arrière. Soyez-en sûr, s'il vous plaît.</p>
-                                </div>
-                              </div>
-                              <form id="formAccountDeactivation" onsubmit="return false">
-                                <div class="form-check mb-3">
-                                  <input class="form-check-input" type="checkbox" name="accountActivation" id="accountActivation" />
-                                  <label class="form-check-label" for="accountActivation">Je confirme la désactivation de mon compte</label>
-                                </div>
-                                <button type="submit" class="btn btn-danger deactivate-account">Désactiver le compte</button>
-                              </form>
-                            </div>
                           </div>
                         </div>
                       </div>
