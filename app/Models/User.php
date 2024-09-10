@@ -30,16 +30,7 @@ class User extends Authenticatable
         'password',
     ];
 
-      // Relation avec les demandes
-      public function demandes()
-      {
-          return $this->hasMany(Demande::class, 'chauffeur_id');
-      }
-
-      public function transactions()
-      {
-          return $this->hasMany(Transaction::class);
-      }
+   
 
     /**
      * The attributes that should be hidden for serialization.
@@ -60,4 +51,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // Modèle User
+public function soumissions()
+{
+    return $this->hasMany(Soumissionnaire::class, 'chargeur_id'); // Ajuste le champ si nécessaire
+}
+
 }

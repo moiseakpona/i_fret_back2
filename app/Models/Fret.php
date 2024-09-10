@@ -14,27 +14,31 @@ class Fret extends Model
         'lieu_depart',
         'lieu_arrive',
         'info_comp',
+        'type_camion',
+        'type_marchandise',
         'montant',
         'numero_tel',
         'statut',
         'kkiapay_transaction_id',
         'statut_paiement',
-      
     ];
 
-    // Relations éventuelles avec d'autres tables
+    // Relation avec le modèle User
     public function user()
     {
         return $this->belongsTo(User::class, 'numero_tel', 'numero_tel');
     }
 
-    public function demande()
-    {
-        return $this->belongsTo(Demande::class, 'id_demande', 'id');
-    }
+    public function Chauffeur()
+{
+    return $this->belongsTo(User::class, 'numero_tel', 'numero_tel');
+}
 
-    public function transactions()
-    {
-        return $this->hasMany(Transaction::class, 'fret_id');
-    }
+// Relation avec le modèle Soumissionnaire
+public function soumissionnaires()
+{
+    return $this->hasMany(Soumissionnaire::class);
+}
+
+
 }

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('matricule')->unique();
             $table->string('matricule_commentaire')->nullable();
+            $table->string('type_vehicule')->unique();
             $table->string('photo_camion')->nullable(); // Store the image path
             $table->string('photo_camion_commentaire')->nullable();
             $table->string('carte_grise')->nullable(); // Store the image path

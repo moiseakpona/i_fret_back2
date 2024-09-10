@@ -26,8 +26,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('/who',[AuthController::class,'who']);
     Route::post('/payment/init', [AuthController::class, 'processPayment']);
-    Route::post('/payment/notification', [AuthController::class, 'paymentNotification']);
+    Route::post('/initfrets', [AuthController::class, 'createfret']);
     Route::get('/camions',[AuthController::class,'getUserCamions']);
+    Route::get('/camions/validated', [AuthController::class, 'getValidatedCamionsByTransporteur']);
+
     Route::get('/camions/{matricule}', [AuthController::class, 'getCamionDetails']);
     Route::put('/updateCamion/{matricule}',  [AuthController::class, 'mettreAJourCamion']);
     Route::put('/edit-profil',  [AuthController::class, 'edit']);
@@ -36,11 +38,16 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/enregistrementCamion', [AuthController::class,'enregistrerCamion']);
     Route::get('/frets', [AuthController::class, 'notif']);
     Route::get('/frets/{id}', [AuthController::class, 'descripNotif']);
+    Route::get('/soumissions', [AuthController::class, 'getSoumissionsForConnectedUser']);
+    Route::get('/check/{fretId}', [AuthController::class, 'checkTransporteurValide']);
+    Route::get('/frets/soumissions/{id}', [AuthController::class, 'getSoumissionsForFret']);
     Route::get('/fretsA/{fretId}', [AuthController::class, 'getFretDetails']);
     Route::get('/voyages', [AuthController::class, 'getVoyages']);
-    Route::get('/voyages/{demandeId}', [AuthController::class, 'getVoyageDetails']);
+    Route::get('/voyages/{fretId}', [AuthController::class, 'getVoyageDetails']);
     Route::post('/send', [AuthController::class, 'send']);
     Route::post('/soumissionnaires', [AuthController::class, 'soumission']);
+    Route::post('/updatemontantfret', [AuthController::class, 'updateMontantFret']);
+    
     Route::get('/chauffeurs', [AuthController::class, 'getChauffeurs']);
     Route::get('/receive', [AuthController::class, 'receiveMe']);
     Route::post('/store-transaction', [AuthController::class, 'storeTransaction']);
