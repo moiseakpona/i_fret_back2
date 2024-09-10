@@ -12,6 +12,7 @@ class Vehicule extends Model
     protected $fillable = [
         'matricule',
         'matricule_commentaire',
+        'type_vehicule',
         'photo_camion',
         'photo_camion_commentaire',
         'carte_grise',

@@ -56,43 +56,43 @@ class UtilisateurController extends Controller
     // }
 
 
-    public function demande(Request $request)
-    {
-        // Valide les données envoyées par le formulaire
-        $request->validate([
-            'id_fret' => 'required|array',
-            'type_vehicule' => 'required|string',
-            'montant' => 'required|string',
-            'lieu_depart' => 'required|string',
-            'lieu_arrive' => 'required|string',
-        ]);
+    // public function demande(Request $request)
+    // {
+    //     // Valide les données envoyées par le formulaire
+    //     $request->validate([
+    //         'id_fret' => 'required|array',
+    //         'type_vehicule' => 'required|string',
+    //         'montant' => 'required|string',
+    //         'lieu_depart' => 'required|string',
+    //         'lieu_arrive' => 'required|string',
+    //     ]);
     
-        // Crée une nouvelle demande
-        $demande = new Demande();
-        $demande->type_vehicule = $request->type_vehicule;
-        $demande->montant = $request->montant;
-        $demande->lieu_depart = $request->lieu_depart;
-        $demande->lieu_arrive = $request->lieu_arrive;
-        $demande->statut = 'En cours';
+    //     // Crée une nouvelle demande
+    //     $demande = new Demande();
+    //     $demande->type_vehicule = $request->type_vehicule;
+    //     $demande->montant = $request->montant;
+    //     $demande->lieu_depart = $request->lieu_depart;
+    //     $demande->lieu_arrive = $request->lieu_arrive;
+    //     $demande->statut = 'En cours';
     
-        // Sauvegarde la demande
-        if (!$demande->save()) {
-            // Si la sauvegarde échoue, redirige avec un message d'erreur
-            return redirect()->back()->with('error', 'Une erreur s\'est produite lors de la création de la demande.');
-        }
+    //     // Sauvegarde la demande
+    //     if (!$demande->save()) {
+    //         // Si la sauvegarde échoue, redirige avec un message d'erreur
+    //         return redirect()->back()->with('error', 'Une erreur s\'est produite lors de la création de la demande.');
+    //     }
     
-        // Récupère l'ID de la nouvelle demande
-        $nouvelleDemandeId = $demande->id;
+    //     // Récupère l'ID de la nouvelle demande
+    //     $nouvelleDemandeId = $demande->id;
     
-        // Met à jour chaque fret pour associer l'ID de la nouvelle demande
-        Fret::whereIn('id', $request->id_fret)->update(['id_demande' => $nouvelleDemandeId]);
+    //     // Met à jour chaque fret pour associer l'ID de la nouvelle demande
+    //     Fret::whereIn('id', $request->id_fret)->update(['id_demande' => $nouvelleDemandeId]);
     
-        // Met à jour le statut des frets sélectionnés
-        Fret::whereIn('id', $request->id_fret)->update(['statut' => 'En cours']);
+    //     // Met à jour le statut des frets sélectionnés
+    //     Fret::whereIn('id', $request->id_fret)->update(['statut' => 'En cours']);
     
-        // Redirige avec un message de succès
-        return redirect()->back()->with('message', 'Les informations ont été enregistrées avec succès.');
-    }
+    //     // Redirige avec un message de succès
+    //     return redirect()->back()->with('message', 'Les informations ont été enregistrées avec succès.');
+   // }
 
 
     // public function message(Request $request, $numero)
