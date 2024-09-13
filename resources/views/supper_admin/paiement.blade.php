@@ -111,10 +111,10 @@
                                                             </div>
                                                         </td>
                                                         
-                                                        <td>{{ $resultats['fret']->description }} <br> ( {{ $resultats['fret']->info_comp }} ) </td>
+                                                        <td>{{ $resultats['fret']->description }} <br> ({{ $resultats['fret']->info_comp }}) </td>
                                                         <td>{{ $resultats['fret']->lieu_depart }} <br> à <br> {{ $resultats['fret']->lieu_arrive }} </td>
                                                         <td>{{ $resultats['soumissionnaire']->montant }} F CFA</td>
-                                                        <td>{{ $resultats['fret']->montant }} F CFA</td>
+                                                        <td>{{ $resultats['fret']->montant }} F CFA <br> ({{ $resultats['fret']->kkiapay_transaction_id }})</td>
                                                         <td>{{ $resultats['soumissionnaire']->montant - $resultats['fret']->montant }} F CFA</td>
                                                         <td>
                                                             @if ($resultats['soumissionnaire']->statut_paiement === 'payé')
