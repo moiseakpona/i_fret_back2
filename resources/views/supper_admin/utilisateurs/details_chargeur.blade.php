@@ -146,7 +146,7 @@
                                     <div class="card-info">
                                         <h4 class="card-title mb-3">Total payer</h4>
                                         <div class="d-flex align-items-end mb-1 gap-1">
-                                        <h4 class="text-primary mb-0">200 345F CFA</h4>
+                                        <h4 class="text-primary mb-0">{{ $totalMontantPaye }} F CFA</h4>
                                         <p class="mb-0"></p>
                                         </div>
                                         <p class="text-muted mb-0 text-truncate">Total des transactions effectuées via l'application</p>
@@ -166,7 +166,7 @@
                                     <div class="card-info">
                                         <h4 class="card-title mb-3">Total demande</h4>
                                         <div class="d-flex align-items-end mb-1 gap-1">
-                                        <h4 class="text-primary mb-0">34</h4>
+                                        <h4 class="text-primary mb-0">{{ $fretCount }}</h4>
                                         <p class="mb-0"></p>
                                         </div>
                                         <p class="text-muted mb-0 text-truncate">Nombre total de de demande effectuées</p>
@@ -179,7 +179,7 @@
                         </div>
                         <!--/ Customer Content -->
                       </div>
-
+{{-- 
                     <!-- Fixed Header -->
                     <div class="content mt-3">
                         <div class="animated fadeIn">
@@ -228,7 +228,7 @@
                             </div>
                         </div><!-- .animated -->
                     </div><!-- .content -->
-                    <!--/ Fixed Header -->
+                    <!--/ Fixed Header --> --}}
 
                     <hr class="my-5">
                       

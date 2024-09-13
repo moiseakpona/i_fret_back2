@@ -24,6 +24,7 @@ return new class extends Migration
             $table->unsignedBigInteger('fret_id')->nullable();
             $table->foreign('fret_id')->references('id')->on('frets');
             $table->string('statut')->nullable();
+            $table->string('statut_paiement')->nullable();
             $table->timestamps();
         });
     }

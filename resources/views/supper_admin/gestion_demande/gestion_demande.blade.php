@@ -53,7 +53,11 @@
                                                           <td>{{ $demande->lieu_arrive }}</td>
                                                           <td>{{ $demande->montant }}</td>
                                                           <td>
-                                                            <span class="badge bg-label-warning me-1">En cours</span>
+                                                            @if ($demande->statut === 'Finalisé')
+                                                                <span class="badge bg-label-success me-1">{{ $demande->statut }}</span>
+                                                            @else
+                                                                <span class="badge bg-label-info me-1">{{ $demande->statut }}</span>
+                                                            @endif
                                                           </td>
                                                           <td>
                                                             <div class="dropdown">

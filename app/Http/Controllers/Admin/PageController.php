@@ -50,14 +50,26 @@ class PageController extends Controller
           return view('supper_admin.utilisateurs.chargeur', ['liste_chargeur' => $liste_chargeur]);
     }
 
+
     public function details_chargeur(Request $request, $numero)
     {
         // Récupérer l'utilisateur avec le numéro de téléphone spécifié
         $chargeur = User::where('numero_tel', $numero)->first();
 
+        // Compter le nombre de frets payés liés à cet utilisateur
+        $fretCount = Fret::where('numero_tel', $chargeur->numero_tel)
+                        ->where('statut_paiement', 'payé')
+                        ->count();
+
+        // Calculer le montant total des frets où le statut de paiement est égal à "payé"
+        $totalMontantPaye = Fret::where('numero_tel', $chargeur->numero_tel)
+                                ->where('statut_paiement', 'payé')
+                                ->sum('montant');
+
         // Retourner la vue details du chargeur
-        return view('supper_admin.utilisateurs.details_chargeur', ['chargeur' => $chargeur]);
+        return view('supper_admin.utilisateurs.details_chargeur', ['chargeur' => $chargeur, 'fretCount' => $fretCount, 'totalMontantPaye' => $totalMontantPaye]);
     }
+
 
     public function transporteur()
     {
@@ -96,9 +108,6 @@ class PageController extends Controller
         // Récupérer l'utilisateur avec le numéro de téléphone spécifié
         $transporteur = User::where('numero_tel', $numero)->first();
 
-        // Récupérer l'utilisateur avec le numéro de téléphone spécifié
-        $transporteur = User::where('numero_tel', $numero)->first();
-
         // Récupérer les détails de transporteur correspondant
         $details = DetailChauffeur::where('numero_tel', $transporteur->numero_tel)->first();
 
@@ -112,12 +121,24 @@ class PageController extends Controller
                                         ->where('statut', 'Validé')
                                         ->count();
 
+        // Compter le nombre de fois que le transporteur à été retenu pour une demande de transport
+        $voyageCount = soumissionnaire::where('numero_tel_transport', $numero)
+                        ->where('statut', 'Retenu')
+                        ->count();
+
+        // Calculer le montant total d'argent recu par le transporteur
+        $totalMontantRecu = soumissionnaire::where('numero_tel_transport', $numero)
+                        ->where('statut', 'Retenu')
+                        ->sum('montant');
+        
         // Retourner la vue details du Transporteur avec les données nécessaires
         return view('supper_admin.utilisateurs.details_transporteur', [
             'transporteur' => $transporteur,
             'details' => $details,
             'vehiculesRejetes' => $vehiculesRejetes,
             'vehiculesValides' => $vehiculesValides,
+            'voyageCount' => $voyageCount,
+            'totalMontantRecu' => $totalMontantRecu,
         ]);
     }
 
@@ -155,8 +176,13 @@ class PageController extends Controller
         // Récupérer les détails de chauffeur correspondant
         $details = DetailChauffeur::where('numero_tel', $chauffeur->numero_tel)->first();
 
+        // Compter le nombre de de voyage zffectué par le chaiffeur
+        $voyageCount = soumissionnaire::where('numero_tel_chauffeur', $numero)
+                        ->where('statut', 'Retenu')
+                        ->count();
+
         // Retourner la vue details du Chauffeur
-        return view('supper_admin.utilisateurs.details_chauffeur', ['chauffeur' => $chauffeur, 'details' => $details]);
+        return view('supper_admin.utilisateurs.details_chauffeur', ['chauffeur' => $chauffeur, 'details' => $details, 'voyageCount' => $voyageCount]);
     }
 
 
@@ -525,10 +551,31 @@ class PageController extends Controller
     public function gestion_demande()
     {
         // Récupérer la liste des demandes
-        $demandes = Fret::where('statut', 'Retenue')->get();
+        $demandes = Fret::where('statut', '!=', 'En attente')->get();
 
         // Retourner la vue Gestion demande
         return view('supper_admin.gestion_demande.gestion_demande', ['demandes' => $demandes]);
+    }
+
+
+    public function finaliser($id)
+    {
+        // Chercher le fret par son ID
+        $fret = Fret::find($id);
+
+        if ($fret) {
+            // Mettre à jour le statut
+            $fret->statut = 'Finalisé';
+
+            // Enregistrer les modifications
+            $fret->save();
+
+            // Retourner un message de succès
+            return redirect()->back()->with('message', 'Le statut de la demande a été mis à jour avec succès.');
+        }
+
+        // Retourner un message d'erreur si le soumissionnaire n'est pas trouvé
+        return redirect()->back()->with('error', 'Une erreur s est produite.');
     }
 
 
@@ -536,7 +583,7 @@ class PageController extends Controller
     public function gestion_fret()
     {
         // Récupérer la liste des frets de statut "en attente"
-        $frets = Fret::where('statut', 'En attent')->get();
+        $frets = Fret::get();
 
         // Tableau pour stocker les informations sur les utilisateurs correspondant à chaque fret
         $utilisateursFrets = [];
@@ -601,9 +648,75 @@ class PageController extends Controller
 
     public function paiement()
     {
-        // Retourner la vue Traking
-        return view('supper_admin.paiement');
+        // Récupérer les frets dont le statut_paiement est "payé"
+        $frets = Fret::where('statut_paiement', 'payé')->get();
+
+        $resultat = [];
+
+        // Parcourir chaque fret pour vérifier la table soumissionnaire
+        foreach ($frets as $fret) {
+            // Chercher le soumissionnaire correspondant au fret avec statut "retenu"
+            $soumissionnaire = Soumissionnaire::where('fret_id', $fret->id)
+                                            ->where('statut', 'retenu')
+                                            ->first();
+
+            if ($soumissionnaire) {
+                // Récupérer le numéro de téléphone du transporteur
+                $numeroTelTransport = $soumissionnaire->numero_tel_transport;
+
+                // Chercher le transporteur correspondant dans la table users
+                $transporteur = User::where('numero_tel', $numeroTelTransport)->first();
+
+                // Récupérer le numéro de téléphone du transporteur
+                $numeroTelChauffeur = $soumissionnaire->numero_tel_chauffeur;
+
+                // Chercher le transporteur correspondant dans la table users
+                $chauffeur = User::where('numero_tel', $numeroTelChauffeur)->first();
+
+                // Récupérer également le numéro de téléphone du fret
+                $numeroTelFret = $fret->numero_tel;
+
+                // Chercher l'utilisateur correspondant dans la table users (propriétaire du fret)
+                $chargeur = User::where('numero_tel', $numeroTelFret)->first();
+
+                if ($transporteur && $chauffeur && $chargeur) {
+                    // Ajouter le fret, le soumissionnaire et l'utilisateur dans le résultat
+                    $resultat[] = [
+                        'fret' => $fret,
+                        'soumissionnaire' => $soumissionnaire,
+                        'transporteur' => $transporteur,
+                        'chauffeur' => $chauffeur,
+                        'chargeur' => $chargeur
+                    ];
+                }
+            }
+        }
+
+        return view('supper_admin.paiement', ['resultats' => $resultat]);// Retourner le tableau des frets avec leur soumissionnaire retenu
     }
+
+
+    public function payer($id)
+    {
+        // Chercher le soumissionnaire par son ID
+        $soumissionnaire = Soumissionnaire::find($id);
+
+        if ($soumissionnaire) {
+            // Mettre à jour le statut_paiement
+            $soumissionnaire->statut_paiement = 'payé';
+
+            // Enregistrer les modifications
+            $soumissionnaire->save();
+
+            // Retourner un message de succès
+            return redirect()->back()->with('message', 'Le statut du paiement a été mis à jour avec succès.');
+        }
+
+        // Retourner un message d'erreur si le soumissionnaire n'est pas trouvé
+        return redirect()->back()->with('error', 'Une erreur s est produite.');
+    }
+
+
 
     public function password()
     {
@@ -646,7 +759,7 @@ class PageController extends Controller
 
 
     public function detail_demande(Request $request, $id)
-{
+    {
     // Récupérer le fret correspondant à l'ID spécifié
     $fret = Fret::find($id);
 
@@ -657,7 +770,7 @@ class PageController extends Controller
 
     // Récupérer les soumissionnaires dont fret_id est égal à l'ID récupéré et statut_soumission est égal à "Retenue"
     $soumissionnaires = Soumissionnaire::where('fret_id', $id)
-                                        ->where('statut', 'Retenue')
+                                        ->where('statut', 'Retenu')
                                         ->get();
 
     // Tableau pour stocker les résultats
@@ -688,7 +801,7 @@ class PageController extends Controller
         'chargeur' => $chargeur,
         'resultatSoumi' => $resultatSoumi
     ]);
-}
+    }
 
     
 
@@ -702,30 +815,30 @@ class PageController extends Controller
 
 
 
-    public function valider($id)
-    {
-        // Chercher le soumissionnaire par ID
-        $soumissionnaire = Soumissionnaire::find($id);
+    // public function valider($id)
+    // {
+    //     // Chercher le soumissionnaire par ID
+    //     $soumissionnaire = Soumissionnaire::find($id);
 
-        if ($soumissionnaire) {
-            // Récupérer l'ID de la demande
-            $demande_id = $soumissionnaire->demande_id;
+    //     if ($soumissionnaire) {
+    //         // Récupérer l'ID de la demande
+    //         $demande_id = $soumissionnaire->demande_id;
 
-            // Mettre à jour le champ statut_demande et statut_soumission du soumissionnaire actuel
-            $soumissionnaire->statut_demande = 'En cours';
-            $soumissionnaire->statut_soumission = 'Retenue';
-            $soumissionnaire->save();
+    //         // Mettre à jour le champ statut_demande et statut_soumission du soumissionnaire actuel
+    //         $soumissionnaire->statut_demande = 'En cours';
+    //         $soumissionnaire->statut_soumission = 'Retenue';
+    //         $soumissionnaire->save();
 
-            // Mettre à jour le statut_soumission de tous les autres soumissionnaires ayant le même demande_id
-            Soumissionnaire::where('demande_id', $demande_id)
-                ->where('id', '!=', $id)
-                ->update(['statut_soumission' => 'Rejeté']);
+    //         // Mettre à jour le statut_soumission de tous les autres soumissionnaires ayant le même demande_id
+    //         Soumissionnaire::where('demande_id', $demande_id)
+    //             ->where('id', '!=', $id)
+    //             ->update(['statut_soumission' => 'Rejeté']);
 
-            return redirect()->back()->with('message', 'Le statut de la demande a été mis à jour avec succès.');
-        } else {
-            return redirect()->back()->with('error', 'Soumissionnaire non trouvé.');
-        }
-    }
+    //         return redirect()->back()->with('message', 'Le statut de la demande a été mis à jour avec succès.');
+    //     } else {
+    //         return redirect()->back()->with('error', 'Soumissionnaire non trouvé.');
+    //     }
+    // }
 
 
 

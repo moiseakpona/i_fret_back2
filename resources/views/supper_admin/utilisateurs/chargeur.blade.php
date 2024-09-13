@@ -51,7 +51,7 @@
                                                       <th>Contact</th>
                                                       <th>Data de naissance</th>
                                                       <th>Ville</th>
-                                                      <th>Date d'inputDescription</th>
+                                                      <th>Date d'inscription</th>
                                                   </tr>
                                               </thead>
                                               <tbody>

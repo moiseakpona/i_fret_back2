@@ -111,6 +111,8 @@ Route::get('/supper_admin/gestion_fret', [PageController::class, 'gestion_fret']
 Route::get('/supper_admin/fret_diponible', [PageController::class, 'fret_diponible'])->name('fret_diponible');
 // Route pour enregistrer une demande de fret
 Route::post('/supper_admin/gestion_fret/demande', [UtilisateurController::class, 'demande'])->name('demande');
+// Route pour marquer la fin de l'execution d'une demande 
+Route::post('/supper_admin/gestion_demande/finaliser/{id}', [PageController::class, 'finaliser'])->name('finaliser');
 
 
 // Route pour afficher la page du Traking 
@@ -119,6 +121,8 @@ Route::get('/supper_admin/traking', [PageController::class, 'traking'])->name('t
 
 // Route pour afficher la page du Paiement 
 Route::get('/supper_admin/paiement', [PageController::class, 'paiement'])->name('paiement');
+// Route pour marquer le paiement de des transporteur 
+Route::post('/supper_admin/paiement/payer/{id}', [PageController::class, 'payer'])->name('payer');
 
 
 // Affiche des pages paramètre de l'admin 
@@ -140,8 +144,8 @@ Route::get('/supper_admin/gestion_demande/soumissionnaire/{id}', [PageController
 Route::get('/supper_admin/gestion_demande/detail_demande/{id}', [PageController::class, 'detail_demande'])->name('detail_demande');
 // Route pour afficher la page details des contenus pour valider  les camions
 Route::get('/supper_admin/camions/details_val_camion', [PageController::class, 'details_val_camion'])->name('details_val_camion');
-// Route pour valider un vehicule  
-Route::get('/supper_admin/gestion_demande/soumissionnaire/valider/{id}', [PageController::class, 'valider'])->name('valider');
+// // Route pour valider un vehicule  
+// Route::get('/supper_admin/gestion_demande/soumissionnaire/valider/{id}', [PageController::class, 'valider'])->name('valider');
 
 
 

@@ -77,8 +77,21 @@
                                                         <td>{{ $chauffeurAvecDetails['chauffeur']->numero_tel }}</td>
                                                         <th>{{ $chauffeurAvecDetails['chauffeur']->date_naissance }}</th>
                                                         <td>{{ $chauffeurAvecDetails['chauffeur']->ville }}</td>
-                                                        <td>{{ $chauffeurAvecDetails['details']->num_permis }}</td>
-                                                        <td><a href="{{ $chauffeurAvecDetails['details']->permis }}" target="_blank">Permis de conduire</a></td>
+                                                        <td>
+                                                            @if ($chauffeurAvecDetails['details'])
+                                                                {{ $chauffeurAvecDetails['details']->num_permis }}
+                                                            @else
+                                                                N/A
+                                                            @endif
+                                                        </td>
+                                                        
+                                                        <td>
+                                                            @if ($chauffeurAvecDetails['details'] && $chauffeurAvecDetails['details']->permis)
+                                                                <a href="{{ $chauffeurAvecDetails['details']->permis }}" target="_blank">Permis de conduire</a>
+                                                            @else
+                                                                N/A
+                                                            @endif
+                                                        </td>
                                                     </tr>
                                                     @endforeach
                                                     

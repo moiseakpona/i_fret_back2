@@ -55,6 +55,7 @@
                                               <th></th>
                                               <th>Description</th>
                                               <th>Information Complementaire</th>
+                                              <td>Type de Véhicules</td>
                                               <th>Lieu de départ</th>
                                               <th>Lieu d'arrivée</th>
                                               <th>Statut</th>
@@ -73,12 +74,19 @@
                                                 <span class="tf-icon bx bx-plus bx-xs me-1"></span>
                                               </button>
                                             </td>
-                                              <td>{{ $fret->id }}. {{ $fret->description }}</td>
+                                              <td>{{ $fret->description }}</td>
                                               <td>{{ $fret->info_comp }}</td>
+                                              <td>{{ $fret->type_camion }}</td>
                                               <td>{{ $fret->lieu_depart }}</td>
                                               <td>{{ $fret->lieu_arrive }}</td>
                                               <td>
-                                                <span class="badge bg-label-warning me-1">{{ $fret->statut }}</span>
+                                                @if ($fret->statut === 'Finalisé')
+                                                    <span class="badge bg-label-success me-1">{{ $fret->statut }}</span>
+                                                @elseif ($fret->statut === 'En attente')
+                                                    <span class="badge bg-label-warning me-1">{{ $fret->statut }}</span>
+                                                @else
+                                                    <span class="badge bg-label-info me-1">{{ $fret->statut }}</span>
+                                                @endif
                                               </td>
                                               <td>
                                                   <div class="dropdown">

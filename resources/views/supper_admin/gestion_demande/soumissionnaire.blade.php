@@ -103,12 +103,12 @@
                                                             <td><span class="badge bg-label-success me-1">A jour</span></td>
                                                             <td><span class="badge bg-label-success me-1">A jour</span></td>
                                                             <td>
-                                                              @if ($soumissionnaire->statut_soumission == 'Retenue')
-                                                                  <span class="badge bg-label-success me-1">{{ $soumissionnaire->statut_soumission }}</span>
-                                                              @elseif ($soumissionnaire->statut_soumission == 'Rejetée')
-                                                                  <span class="badge bg-label-danger me-1">{{ $soumissionnaire->statut_soumission }}</span>
-                                                              @elseif ($soumissionnaire->statut_soumission == 'En cours')
-                                                                <span class="badge bg-label-warning me-1">{{ $soumissionnaire->statut_soumission }}</span>
+                                                              @if ($soumissionnaire->statut == 'Retenu')
+                                                                  <span class="badge bg-label-success me-1">{{ $soumissionnaire->statut }}</span>
+                                                              @elseif ($soumissionnaire->statut == 'Rejetée')
+                                                                  <span class="badge bg-label-danger me-1">{{ $soumissionnaire->statut }}</span>
+                                                              @elseif ($soumissionnaire->statut == 'En cours')
+                                                                <span class="badge bg-label-warning me-1">{{ $soumissionnaire->statut }}</span>
                                                               @endif
                                                           </td>
                                                         </tr>
@@ -212,7 +212,6 @@
 
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                                        <button type="button" class="btn btn-primary valider-btn">Valider camion</button>
                                     </div>
                                 </div>
                             </div>
@@ -253,14 +252,6 @@
                             // Update the valider button with the soumissionnaire ID
                             document.querySelector('.valider-btn').setAttribute('data-soumissionnaire-id', soumissionnaireId);
                         });
-                      });
-
-                      document.querySelector('.valider-btn').addEventListener('click', () => {
-                        const soumissionnaireId = document.querySelector('.valider-btn').getAttribute('data-soumissionnaire-id');
-                        if (confirm('Êtes-vous sûr de vouloir valider ce camion?')) {
-                            // Redirect to a specific route with the soumissionnaire ID
-                            window.location.href = `/supper_admin/gestion_demande/soumissionnaire/valider/${soumissionnaireId}`;
-                        }
                       });
                       </script>
 

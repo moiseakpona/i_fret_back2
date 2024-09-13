@@ -42,7 +42,9 @@
                             {{ $chauffeur->created_at }}
                           </p>
                         </div>
-                        <button type="button" class="btn btn-label-danger delete-customer" data-bs-toggle="modal" data-bs-target="#confirmationModal">Supprimer le compte</button>
+                        @if(auth()->user()->type_compte != 'comptable')
+                          <button type="button" class="btn btn-label-danger delete-customer" data-bs-toggle="modal" data-bs-target="#confirmationModal">Supprimer le compte</button>
+                        @endif
                       </div>
 
 
@@ -113,15 +115,24 @@
                                         <td style="font-weight: 600">{{ $chauffeur->ville }}</td>
                                       </tr>
                                       <tr>
-                                        <td>N° Permis </td>
+                                        <td>N° Permis</td>
                                         <td>:</td>
                                         @if ($details)
-                                          <td style="font-weight: 600">{{ $details->num_permis }}</td>
+                                            <td style="font-weight: 600">{{ $details->num_permis }}</td>
                                         @else
-                                          <td style="font-weight: 600">N/A</td>
+                                            <td style="font-weight: 600">N/A</td>
                                         @endif
-                                        <td style="font-weight: 600">{{ $details->num_permis }}</td>
-                                      </tr>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Permis de conduire</td>
+                                        <td>:</td>
+                                        @if ($details)
+                                            <td style="font-weight: 600"><a href="{{ $details->permis }}" target="_blank">Fichier</a></td>
+                                        @else
+                                            <td style="font-weight: 600">N/A</td>
+                                        @endif
+                                    </tr>
                                       <tr>
                                         <td> Permis de conduire </td>
                                         <td>:</td>
@@ -136,8 +147,9 @@
                                 </div>
                                 
                                 <div class="d-flex justify-content-center mt-3">
-                                  <a href="javascript:;" class="btn btn-primary me-3" data-bs-target="#editUser" data-bs-toggle="modal">Modifier Profil</a>
-                      
+                                  @if(auth()->user()->type_compte != 'comptable')
+                                    <a href="javascript:;" class="btn btn-primary me-3" data-bs-target="#editUser" data-bs-toggle="modal">Modifier Profil</a>
+                                  @endif
                                 </div>
                               </div>
                             </div>
@@ -164,7 +176,7 @@
                                     <div class="card-info">
                                         <h4 class="card-title mb-3">Total voyages</h4>
                                         <div class="d-flex align-items-end mb-1 gap-1">
-                                        <h4 class="text-primary mb-0">27</h4>
+                                        <h4 class="text-primary mb-0">{{ $voyageCount }}</h4>
                                         <p class="mb-0"></p>
                                         </div>
                                         <p class="text-muted mb-0 text-truncate">Nombre total de voyages effectués</p>
@@ -172,7 +184,7 @@
                                     </div>
                                 </div>
                                 </div>
-                                <div class="col-md-6 mb-4">
+                                {{-- <div class="col-md-6 mb-4">
                                 <div class="card h-100">
                                     <div class="card-body">
                                     <div class="card-icon mb-3">
@@ -191,14 +203,14 @@
                                     </div>
                                     </div>
                                 </div>
-                                </div>
+                                </div> --}}
                             </div>
                             <!-- / customer cards -->
                         </div>
                         <!--/ Customer Content -->
                       </div>
 
-                    <!-- Fixed Header -->
+                    {{-- <!-- Fixed Header -->
                     <div class="content mt-3">
                         <div class="animated fadeIn">
                             <div class="row">
@@ -252,8 +264,10 @@
                             </div>
                         </div><!-- .animated -->
                     </div><!-- .content -->
-                    <!--/ Fixed Header -->
+                    <!--/ Fixed Header --> --}}
                     
+
+                    <hr class="my-5">
                       
                       <!-- Modal -->
                       <!-- Edit User Modal -->

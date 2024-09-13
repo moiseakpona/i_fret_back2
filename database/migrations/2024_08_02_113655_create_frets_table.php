@@ -12,14 +12,6 @@ return new class extends Migration
     public function up()
     {
         Schema::create('frets', function (Blueprint $table) {
-<<<<<<< HEAD
-            $table->id();
-            $table->string('description');
-            $table->string('lieu_depart');
-            $table->string('lieu_arrive');
-            $table->string('info_comp');
-            $table->string('numero_tel');
-=======
             $table->id(); // ID auto-incrémenté
             $table->string('description')->nullable();
             $table->string('lieu_depart')->nullable();
@@ -34,9 +26,7 @@ return new class extends Migration
             $table->string('statut_paiement')->nullable(); // Statut du paiement
             $table->timestamps(); // Champs created_at et updated_at
           
-
             // Index pour les clés étrangères (si besoin)
->>>>>>> abeec9d4ba179dda72ae7ca75eca1fd5eed56ec9
             $table->foreign('numero_tel')->references('numero_tel')->on('users');
         });
     }
