@@ -108,12 +108,13 @@
                                   <tr>
                                     <td>Visite Technique</td>
                                     <td><a href="{{ $vehicule->visite_technique }}" target="_blank">{{ $vehicule->visite_technique }}</a></td>
-                                    <td style="font-weight: 600; color:red;">{{ $vehicule->visite_exp }}</td>
+                                    <td>{{ $vehicule->visite_exp }}</td>
                                   </tr>
                                   <tr>
                                     <td>Assurance</td>
                                     <td><a href="{{ $vehicule->assurance }}" target="_blank">{{ $vehicule->assurance }}</a></td>
-                                    <td style="font-weight: 600; color:red;">{{ $vehicule->assurance_exp }}</td>
+                                    <td>{{ $vehicule->assurance_exp }}</td>
+                                    {{-- style="font-weight: 600; color:red;" --}}
                                   </tr>
                                 </tbody>
                               </table>

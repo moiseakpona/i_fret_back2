@@ -59,10 +59,18 @@
                                                  <tr>
                                                    <td>{{ $valides->matricule }}</td>
                                                    <td>
-                                                     <span class="badge bg-label-success me-1">A jour</span>
+                                                    @if (\Carbon\Carbon::parse($valides->visite_exp)->isPast())
+                                                        <span class="badge bg-label-danger me-1">Expirée</span>
+                                                    @else
+                                                        <span class="badge bg-label-success me-1">À jour</span>
+                                                    @endif
                                                    </td>
                                                    <td>
-                                                     <span class="badge bg-label-danger me-1">Expiré(e)</span>
+                                                    @if (\Carbon\Carbon::parse($valides->assurance_exp)->isPast())
+                                                        <span class="badge bg-label-danger me-1">Expirée</span>
+                                                    @else
+                                                        <span class="badge bg-label-success me-1">À jour</span>
+                                                    @endif
                                                    </td>
                                                    <td>
                                                     <span class="badge bg-label-success me-1">{{ $valides->statut }}</span>
