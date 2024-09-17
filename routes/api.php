@@ -40,6 +40,8 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/frets/{id}', [AuthController::class, 'descripNotif']);
     Route::get('/soumissions', [AuthController::class, 'getSoumissionsForConnectedUser']);
     Route::get('/check/{fretId}', [AuthController::class, 'checkTransporteurValide']);
+    Route::post('/frets/{id}/update-status', [AuthController::class, 'updateFretStatus']);
+    Route::post('/update-fret-transaction-id/{fretId}', [AuthController::class, 'updateTransactionId']);
     Route::get('/frets/soumissions/{id}', [AuthController::class, 'getSoumissionsForFret']);
     Route::get('/fretsA/{fretId}', [AuthController::class, 'getFretDetails']);
     Route::get('/voyages', [AuthController::class, 'getVoyages']);

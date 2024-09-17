@@ -115,7 +115,7 @@
                                                         <td>{{ $resultats['fret']->lieu_depart }} <br> à <br> {{ $resultats['fret']->lieu_arrive }} </td>
                                                         <td>{{ $resultats['soumissionnaire']->montant }} F CFA</td>
                                                         <td>{{ $resultats['fret']->montant }} F CFA</td>
-                                                        <td>{{ $resultats['soumissionnaire']->montant - $resultats['fret']->montant }} F CFA</td>
+                                                        <td>{{ $resultats['fret']->montant - $resultats['soumissionnaire']->montant }} F CFA</td>
                                                         <td>
                                                             @if ($resultats['soumissionnaire']->statut_paiement === 'payé')
                                                                 <span class="badge bg-label-success me-1">{{ $resultats['soumissionnaire']->statut_paiement }}</span>
