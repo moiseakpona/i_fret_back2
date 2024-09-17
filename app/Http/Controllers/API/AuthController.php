@@ -59,6 +59,7 @@ class AuthController extends Controller
             'type_marchandise' => $request->input ('type_marchandise'),
             'numero_tel' => $user->numero_tel,
             'statut' => 'en attente', // exemple de statut initial
+            'statut_paiement' => 'Non payé', // Initialiser à "Non payé"
            
         ]);
 
@@ -70,6 +71,71 @@ class AuthController extends Controller
             'fret' => $fret,
         ], 201);
     }
+
+   // Controller Method
+public function updateTransactionId($fretId, Request $request)
+{
+    // Valider la requête
+    $validated = $request->validate([
+        'kkiapay_transaction_id' => 'nullable|string|max:255', // Champ nullable
+    ]);
+
+    // Trouver le fret par ID
+    $fret = Fret::find($fretId);
+
+    if (!$fret) {
+        return response()->json(['message' => 'Fret not found'], 404);
+    }
+
+    // Mettre à jour le champ kkiapay_transaction_id si présent
+    if ($validated['kkiapay_transaction_id']) {
+        $fret->kkiapay_transaction_id = $validated['kkiapay_transaction_id'];
+    }
+
+    // Mettre à jour le statut de paiement
+    $fret->statut = 'En cours'; // Changer le statut à 'en cours'
+    $fret->statut_paiement = 'payé'; // Assurez-vous que 'payé' est la valeur correcte pour votre application
+
+    // Sauvegarder les changements dans la table 'fret'
+    $fret->save();
+
+    // Mettre à jour le statut dans la table 'soumissionnaire'
+    $soumissionnaires = Soumissionnaire::where('fret_id', $fretId)
+        ->where('statut', 'en attente')
+        ->get();
+
+    foreach ($soumissionnaires as $soumissionnaire) {
+        $soumissionnaire->statut = 'retenu'; // Assurez-vous que 'retenu' est la valeur correcte pour votre application
+        $soumissionnaire->statut_paiement = 'Non payé'; // Assurez-vous que 'non payé' est la valeur correcte par défaut
+        $soumissionnaire->save();
+    }
+
+    return response()->json(['message' => 'Transaction ID and statuses updated successfully'], 200);
+}
+
+         // Mettre à jour le statut du paiement et l'ID de la transaction Kkiapay
+     public function updateFretStatus(Request $request, $id)
+     {
+         // Valider les données reçues
+         $request->validate([
+             'kkiapay_transaction_id' => 'required|string',
+             'statut_paiement' => 'required|string|in:Payé,Non payé',
+         ]);
+ 
+         // Trouver le fret par son ID
+         $fret = Fret::findOrFail($id);
+ 
+         // Mettre à jour les champs kkiapay_transaction_id et statut_paiement
+         $fret->update([
+             'kkiapay_transaction_id' => $request->input('kkiapay_transaction_id'),
+             'statut_paiement' => $request->input('statut_paiement'),
+         ]);
+ 
+         return response()->json([
+             'message' => 'Statut du fret mis à jour avec succès',
+             'fret' => $fret,
+         ], 200);
+     }
 
     
     public function register(Request $request)
@@ -783,8 +849,7 @@ public function getValidatedCamionsByTransporteur()
                 'type_camion'  => $fret-> type_camion,
                 'type_marchandise'  => $fret-> type_marchandise,
                 'numero_tel' => $fret->numero_tel,
-                'type_camion' => $fret->type_camion, // Ajouter le type de camion
-                'type_marchandise' => $fret->type_marchandise, // Ajouter le type de marchandise
+                
                 'statut' => $fret->statut,
                 'created_at' => $fret->created_at,
                 'updated_at' => $fret->updated_at,

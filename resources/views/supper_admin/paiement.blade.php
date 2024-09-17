@@ -114,8 +114,13 @@
                                                         <td>{{ $resultats['fret']->description }} <br> ({{ $resultats['fret']->info_comp }}) </td>
                                                         <td>{{ $resultats['fret']->lieu_depart }} <br> à <br> {{ $resultats['fret']->lieu_arrive }} </td>
                                                         <td>{{ $resultats['soumissionnaire']->montant }} F CFA</td>
+<<<<<<< HEAD
                                                         <td>{{ $resultats['fret']->montant }} F CFA <br> ({{ $resultats['fret']->kkiapay_transaction_id }})</td>
                                                         <td>{{ $resultats['soumissionnaire']->montant - $resultats['fret']->montant }} F CFA</td>
+=======
+                                                        <td>{{ $resultats['fret']->montant }} F CFA</td>
+                                                        <td>{{ $resultats['fret']->montant - $resultats['soumissionnaire']->montant }} F CFA</td>
+>>>>>>> 7caedfce696207659af37b4f0cde41ce06bb386f
                                                         <td>
                                                             @if ($resultats['soumissionnaire']->statut_paiement === 'payé')
                                                                 <span class="badge bg-label-success me-1">{{ $resultats['soumissionnaire']->statut_paiement }}</span>
