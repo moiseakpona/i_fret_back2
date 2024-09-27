@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('statut')->nullable(); // Statut du fret
             $table->string('kkiapay_transaction_id')->nullable(); // ID de la transaction Kkiapay
             $table->string('statut_paiement')->nullable(); // Statut du paiement
+            $table->string('image')->nullable(); // Chemin du fichier image
             $table->timestamps(); // Champs created_at et updated_at
           
             // Index pour les clés étrangères (si besoin)

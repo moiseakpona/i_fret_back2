@@ -43,35 +43,42 @@ class AuthController extends Controller
             'info_comp' => 'nullable|string',
             'type_camion' => 'required|string',
             'type_marchandise' => 'required|string',
-            // 'numero_tel' ne doit pas être dans la validation car il est récupéré automatiquement
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Valider l'image
         ]);
-
+    
         // Récupérer l'utilisateur authentifié
         $user = Auth::user();
-
+    
+        // Traiter l'image si elle est fournie
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imagePath = $image->store('fret_images', 'public'); // Stocker l'image dans un dossier public
+        }
+    
         // Créer le fret avec les données fournies et le numéro de téléphone de l'utilisateur
         $fret = new Fret([
             'description' => $request->input('description'),
             'lieu_depart' => $request->input('lieu_depart'),
             'lieu_arrive' => $request->input('lieu_arrive'),
             'info_comp' => $request->input('info_comp'),
-            'type_camion' => $request->input ('type_camion'),
-            'type_marchandise' => $request->input ('type_marchandise'),
+            'type_camion' => $request->input('type_camion'),
+            'type_marchandise' => $request->input('type_marchandise'),
             'numero_tel' => $user->numero_tel,
-            'statut' => 'en attente', // exemple de statut initial
-            'statut_paiement' => 'Non payé', // Initialiser à "Non payé"
-           
+            'statut' => 'en attente',
+            'statut_paiement' => 'Non payé',
+            'image' => $imagePath, // Ajouter le chemin de l'image
         ]);
-
+    
         // Sauvegarder le fret
         $fret->save();
-
+    
         return response()->json([
             'message' => 'Fret initié avec succès',
             'fret' => $fret,
         ], 201);
     }
-
+    
    // Controller Method
 public function updateTransactionId($fretId, Request $request)
 {
@@ -334,12 +341,16 @@ public function updateTransactionId($fretId, Request $request)
     public function getVoyageDetails($fretId)
     {
         try {
-            // Rechercher le soumissionnaire par fretId
             $soumissionnaire = Soumissionnaire::with(['vehicule', 'chauffeur', 'fret'])
                 ->where('fret_id', $fretId)
-                ->firstOrFail();
-
-            // Transformer les données pour inclure toutes les informations nécessaires
+                ->first();
+                
+            if (!$soumissionnaire) {
+                // Handle the case where no soumissionnaire is found for the given fretId
+                return response()->json(['error' => 'No soumissionnaire found for this fretId'], 404);
+            }
+    
+            // Transform the data to include necessary info
             $voyageDetails = [
                 'id' => $soumissionnaire->id,
                 'localisation' => $soumissionnaire->localisation,
@@ -350,31 +361,37 @@ public function updateTransactionId($fretId, Request $request)
                 'numero_tel_chauffeur' => $soumissionnaire->numero_tel_chauffeur,
                 'chauffeur_nom' => $soumissionnaire->chauffeur->nom ?? 'N/A',
                 'chauffeur_prenom' => $soumissionnaire->chauffeur->prenom ?? 'N/A',
-                /* 'chauffeur_numero_tel' => $soumissionnaire->chauffeur->numero_tel ?? 'N/A', */
-          
                 'fret_id' => $soumissionnaire->fret_id,
-                'fret_details' => $soumissionnaire->fret ? $soumissionnaire->fret->toArray() : [], // Récupère tous les champs de la table fret
-                'montant_propose' => $soumissionnaire->montant, // Récupération du montant proposé dans la table soumissionnaire
+                'fret_details' => $soumissionnaire->fret ? $soumissionnaire->fret->toArray() : [],
+                'montant_propose' => $soumissionnaire->montant,
                 'statut' => $soumissionnaire->statut,
                 'date_creation' => $soumissionnaire->created_at->format('Y-m-d H:i:s'),
             ];
-
+    
             return response()->json($voyageDetails, 200);
         } catch (Exception $e) {
             return response()->json(['error' => 'Erreur lors de la récupération des détails du voyage.'], 500);
         }
     }
+    
 
     public function getFretDetails($fretId)
     {
         try {
             $fret = Fret::where('id', $fretId)
-                ->with(['user']) // Inclure la relation avec l'utilisateur
+                ->with(['user']) // Inclure la relation utilisateur
                 ->firstOrFail();
     
             $chauffeur = User::where('numero_tel', $fret->numero_tel)
-                              ->where('type_compte', 'chauffeur')
-                              ->first();
+                ->where('type_compte', 'chauffeur')
+                ->first();
+    
+            // Construire l'URL complète de l'image (si elle existe)
+            $imageUrl = null;
+            if ($fret->image) {
+                // Inclure le dossier fret_images explicitement
+                $imageUrl = asset('storage/fret_images/' . basename($fret->image));  
+            }
     
             $fretDetails = [
                 'id' => $fret->id,
@@ -394,6 +411,7 @@ public function updateTransactionId($fretId, Request $request)
                     'prenom' => $chauffeur ? $chauffeur->prenom : 'N/A',
                     'numero_tel' => $chauffeur ? $chauffeur->numero_tel : 'N/A',
                 ],
+                'image_url' => $imageUrl, // Ajouter l'URL de l'image ici
             ];
     
             return response()->json($fretDetails, 200);
@@ -402,10 +420,12 @@ public function updateTransactionId($fretId, Request $request)
                 'fret_id' => $fretId,
                 'error' => $e->getMessage()
             ]);
-            
+    
             return response()->json(['error' => 'Erreur lors de la récupération des détails du fret.'], 500);
         }
     }
+    
+
     
 
     public function enregistrerCamion(Request $request)
@@ -825,41 +845,45 @@ public function getValidatedCamionsByTransporteur()
         }
     
         try {
-            // Récupérer le fret correspondant à l'ID avec les informations de la demande
-           /*  $fret = Fret::with('fret')->findOrFail($fretId); */
-
             // Récupérer le fret correspondant à l'ID avec les informations du chauffeur
-        $fret = Fret::where('id', $fretId)
-        ->with(['Chauffeur' => function($query) {
-            // Filtrer les chauffeurs par type_compte
-            $query->where('type_compte', 'Chauffeur'); // Remplace 'chauffeur' par la valeur appropriée
-        }])
-        ->firstOrFail();
+            $fret = Fret::where('id', $fretId)
+                ->with(['Chauffeur' => function($query) {
+                    // Filtrer les chauffeurs par type_compte
+                    $query->where('type_compte', 'Chauffeur');
+                }])
+                ->firstOrFail();
     
-            // Retourner les détails du fret en réponse JSON avec le type de véhicule
+            // Construire l'URL complète de l'image (si elle existe)
+            $imageUrl = null;
+            if ($fret->image) {
+                // Inclure le dossier fret_images explicitement
+                $imageUrl = asset('storage/fret_images/' . basename($fret->image));
+            }
+    
+            // Retourner les détails du fret en réponse JSON avec le type de véhicule et l'image
             return response()->json([
                 'message' => 'Détails du fret récupérés avec succès',
                 'data' => [
                     'id' => $fret->id,
-                'lieu_depart' => $fret->lieu_depart,
-                'lieu_arrive' => $fret->lieu_arrive,
-                'montant' => $fret->montant,
-                'description' => $fret->description,
-                'info_comp'  => $fret-> info_comp,
-                'type_camion'  => $fret-> type_camion,
-                'type_marchandise'  => $fret-> type_marchandise,
-                'numero_tel' => $fret->numero_tel,
-                
-                'statut' => $fret->statut,
-                'created_at' => $fret->created_at,
-                'updated_at' => $fret->updated_at,
+                    'lieu_depart' => $fret->lieu_depart,
+                    'lieu_arrive' => $fret->lieu_arrive,
+                    'montant' => $fret->montant,
+                    'description' => $fret->description,
+                    'info_comp'  => $fret->info_comp,
+                    'type_camion'  => $fret->type_camion,
+                    'type_marchandise'  => $fret->type_marchandise,
+                    'numero_tel' => $fret->numero_tel,
+                    'statut' => $fret->statut,
+                    'created_at' => $fret->created_at,
+                    'updated_at' => $fret->updated_at,
+                    'image_url' => $imageUrl, // Ajouter l'URL de l'image ici
                 ]
             ], 201); // 201 = OK
         } catch (\Exception $e) {
             return response()->json(['error' => 'Fret non trouvé'], 404);
         }
     }
-
+    
 
     public function getSoumissionsForFret($fretId)
     {

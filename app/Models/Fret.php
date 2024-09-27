@@ -21,24 +21,22 @@ class Fret extends Model
         'statut',
         'kkiapay_transaction_id',
         'statut_paiement',
+        'image', // Nouveau champ pour l'image
     ];
 
-    // Relation avec le modèle User
+    // Relations avec le modèle User
     public function user()
     {
         return $this->belongsTo(User::class, 'numero_tel', 'numero_tel');
     }
 
     public function Chauffeur()
-{
-    return $this->belongsTo(User::class, 'numero_tel', 'numero_tel');
-}
+    {
+        return $this->belongsTo(User::class, 'numero_tel', 'numero_tel');
+    }
 
-// Relation avec le modèle Soumissionnaire
-public function soumissionnaires()
-{
-    return $this->hasMany(Soumissionnaire::class);
-}
-
-
+    public function soumissionnaires()
+    {
+        return $this->hasMany(Soumissionnaire::class);
+    }
 }
