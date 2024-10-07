@@ -44,6 +44,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/update-fret-transaction-id/{fretId}', [AuthController::class, 'updateTransactionId']);
     Route::get('/frets/soumissions/{id}', [AuthController::class, 'getSoumissionsForFret']);
     Route::get('/frets/{fretId}', [AuthController::class, 'getFretDetails']);
+    Route::post('/frets/{fretId}/update-feedback-statut', [AuthController::class, 'updateFeedbackAndStatut']);
     Route::get('/voyages', [AuthController::class, 'getVoyages']);
     Route::get('/voyages/{fretId}', [AuthController::class, 'getVoyageDetails']);
     Route::post('/send', [AuthController::class, 'send']);

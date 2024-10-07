@@ -373,7 +373,30 @@ public function updateTransactionId($fretId, Request $request)
             return response()->json(['error' => 'Erreur lors de la récupération des détails du voyage.'], 500);
         }
     }
-    
+
+    public function updateFeedbackAndStatut(Request $request, $fretId)
+    {
+        // Valider les données envoyées
+        $validated = $request->validate([
+            'feedback' => 'required|string', // Le feedback doit être une chaîne
+        ]);
+
+        // Trouver le fret par son ID
+        $fret = Fret::findOrFail($fretId);
+
+        // Mettre à jour le feedback et le statut
+        $fret->feedback = $validated['feedback'];
+        $fret->statut = 'Finalisé';
+
+        // Sauvegarder les modifications dans la base de données
+        $fret->save();
+
+        return response()->json([
+            'message' => 'Feedback et statut mis à jour avec succès.',
+            'fret' => $fret
+        ]);
+    }
+
 
     public function getFretDetails($fretId)
     {
